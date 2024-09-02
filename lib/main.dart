@@ -1,37 +1,54 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:responsive_sizer/responsive_sizer.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:toastification/toastification.dart';
 
-void main() {
-  runApp(const MyApp());
+import 'Presentation/Preferences/SharedPrefs/SharedUtility.dart';
+import 'Presentation/Routes/routes.dart';
+import 'Presentation/Utils/color_constants.dart';
+
+void main() async {
+  await WidgetsFlutterBinding.ensureInitialized();
+  final sharedPreferences = await SharedPreferences.getInstance();
+
+  runApp(ProviderScope(
+    overrides: [
+      sharedPreferencesProvider.overrideWithValue(sharedPreferences),
+    ],
+    child: ResponsiveSizer(
+      builder: (context, orientation, screenType) {
+        return ToastificationWrapper(
+            child: MaterialApp(
+          home: const MyApp(),
+        ));
+      },
+    ),
+  ));
 }
 
-class MyApp extends StatelessWidget {
+class MyApp extends ConsumerWidget {
   const MyApp({super.key});
 
   // This widget is the root of your application.
   @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Flutter Demo',
+  Widget build(BuildContext context, WidgetRef ref) {
+    return MaterialApp.router(
+      debugShowCheckedModeBanner: false,
+      routerConfig: ref.watch(goRouterProvider),
+      title: 'SFPL',
       theme: ThemeData(
-        // This is the theme of your application.
-        //
-        // TRY THIS: Try running your application with "flutter run". You'll see
-        // the application has a purple toolbar. Then, without quitting the app,
-        // try changing the seedColor in the colorScheme below to Colors.green
-        // and then invoke "hot reload" (save your changes or press the "hot
-        // reload" button in a Flutter-supported IDE, or press "r" if you used
-        // the command line to start the app).
-        //
-        // Notice that the counter didn't reset back to zero; the application
-        // state is not lost during the reload. To reset the state, use hot
-        // restart instead.
-        //
-        // This works for code too, not just values: Most code changes can be
-        // tested with just a hot reload.
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
-        useMaterial3: true,
-      ),
-      home: const MyHomePage(title: 'Flutter Demo Home Page'),
+          fontFamily: GoogleFonts.quicksand().fontFamily,
+          colorScheme: ColorScheme.fromSeed(
+              seedColor: ColorConstants.primaryColorDriver),
+          useMaterial3: true,
+          appBarTheme: AppBarTheme(
+              color: Colors.white,
+              titleTextStyle: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: Adaptive.sp(18),
+                  color: Colors.black))),
     );
   }
 }
