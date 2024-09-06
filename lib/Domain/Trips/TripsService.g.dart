@@ -1,24 +1,24 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'DioProvider.dart';
+part of 'TripsService.dart';
 
 // **************************************************************************
 // RiverpodGenerator
 // **************************************************************************
 
-String _$dioHash() => r'0bc82ab40457e5fb756e159604505dfaf36694e4';
+String _$tripsListHash() => r'979c649dfb4d77139b4f92122a7c2a333cb04bf6';
 
-/// See also [dio].
-@ProviderFor(dio)
-final dioProvider = AutoDisposeProvider<Dio>.internal(
-  dio,
-  name: r'dioProvider',
+/// See also [tripsList].
+@ProviderFor(tripsList)
+final tripsListProvider = AutoDisposeFutureProvider<TripDataResponse>.internal(
+  tripsList,
+  name: r'tripsListProvider',
   debugGetCreateSourceHash:
-      const bool.fromEnvironment('dart.vm.product') ? null : _$dioHash,
+      const bool.fromEnvironment('dart.vm.product') ? null : _$tripsListHash,
   dependencies: null,
   allTransitiveDependencies: null,
 );
 
-typedef DioRef = AutoDisposeProviderRef<Dio>;
+typedef TripsListRef = AutoDisposeFutureProviderRef<TripDataResponse>;
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member

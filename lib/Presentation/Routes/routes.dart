@@ -38,11 +38,17 @@ GoRouter goRouter(GoRouterRef ref) {
               GoRoute(
                   path: RoutesStrings.verifyOtp,
                   name: RoutesStrings.verifyOtp,
-                  builder: (context, state) => const Verifyotp()),
+                  builder: (context, state) {
+                    final data = state.extra! as Map<String, dynamic>;
+                    return Verifyotp(
+                      mobileNumber: data['mobile'],
+                    );
+                  }),
+              GoRoute(
+                  path: RoutesStrings.register,
+                  name: RoutesStrings.register,
+                  builder: (context, state) => const Registrationscreen())
             ]),
-        GoRoute(
-            path: RoutesStrings.register,
-            name: RoutesStrings.register,
-            builder: (context, state) => const Registrationscreen()),
+
       ]);
 }

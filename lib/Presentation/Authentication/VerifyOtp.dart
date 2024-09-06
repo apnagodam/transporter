@@ -1,15 +1,18 @@
-
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:pinput/pinput.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
+import 'package:transporter/Presentation/Preferences/SharedPrefs/SharedUtility.dart';
 
+import '../../Domain/Authentication/AuthenticationService.dart';
 import '../Routes/routes_strings.dart';
 import '../Utils/color_constants.dart';
 
 class Verifyotp extends ConsumerStatefulWidget {
-  const Verifyotp({super.key});
+  const Verifyotp({super.key, required this.mobileNumber});
+
+  final String mobileNumber;
 
   @override
   ConsumerState<Verifyotp> createState() => _VerifyotpState();
@@ -28,8 +31,10 @@ class _VerifyotpState extends ConsumerState<Verifyotp> {
               height: Adaptive.h(25),
             ),
             Center(
-              child: Icon(Icons.app_registration,color: ColorConstants.primaryColorDriver,)
-            ),
+                child: Icon(
+              Icons.app_registration,
+              color: ColorConstants.primaryColorDriver,
+            )),
             Center(
               child: Text(
                 "Verification",
@@ -46,7 +51,7 @@ class _VerifyotpState extends ConsumerState<Verifyotp> {
               child: Text(
                 "Enter the code sent to the number",
                 style: TextStyle(
-                    color:  ColorConstants.primaryColorDriver,
+                    color: ColorConstants.primaryColorDriver,
                     fontWeight: FontWeight.w500,
                     fontSize: Adaptive.sp(18)),
               ),
@@ -58,7 +63,7 @@ class _VerifyotpState extends ConsumerState<Verifyotp> {
               child: Text(
                 "${1234567}",
                 style: TextStyle(
-                    color:  ColorConstants.primaryColorDriver,
+                    color: ColorConstants.primaryColorDriver,
                     fontWeight: FontWeight.bold,
                     fontSize: Adaptive.sp(16)),
               ),
@@ -77,31 +82,40 @@ class _VerifyotpState extends ConsumerState<Verifyotp> {
                       padding: const EdgeInsets.all(20),
                       decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(8),
-                          color:  ColorConstants.primaryColorDriver.withOpacity(0.1),
+                          color: ColorConstants.primaryColorDriver
+                              .withOpacity(0.1),
                           border: Border.all(
-                              color:  ColorConstants.primaryColorDriver
+                              color: ColorConstants.primaryColorDriver
                                   .withOpacity(0.1)))),
                   focusedPinTheme: PinTheme(
                       padding: const EdgeInsets.all(20),
                       decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(8),
-                          color:  ColorConstants.primaryColorDriver.withOpacity(0.1),
+                          color: ColorConstants.primaryColorDriver
+                              .withOpacity(0.1),
                           border: Border.all(
-                              color:  ColorConstants.primaryColorDriver))),
+                              color: ColorConstants.primaryColorDriver))),
                   onCompleted: (pin) {
                     if (pin.length == 6) {
-                      context.go(RoutesStrings.dashboard);
                       // Debouncer(delay: const Duration(milliseconds: 500))
                       //     .call(() {
-                      //   ref
-                      //       .watch(verifyOtpProvider(
-                      //               panCard: widget.panCard, otp: pin)
-                      //           .future)
-                      //       .then((value) {
-                      //     if (value.status.toString() == "1") {
-                      //       context.go(RoutesStrings.dashboard);
-                      //     }
-                      //   });
+                      ref
+                          .watch(verifyOtpProvider(
+                                  number: widget.mobileNumber, otp: pin)
+                              .future)
+                          .then((value) {
+                        if (value.status.toString() == "1") {
+                          ref
+                              .watch(sharedUtilityProvider)
+                              .setToken(value.authorization ?? "");
+
+                          ref
+                              .watch(sharedUtilityProvider)
+                              .setUser(value.userDetails);
+
+                          context.go(RoutesStrings.dashboard);
+                        }
+                      });
                       // });
                     }
                   },

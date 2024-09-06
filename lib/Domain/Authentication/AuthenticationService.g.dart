@@ -6,7 +6,7 @@ part of 'AuthenticationService.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$verifyOtpHash() => r'22b73d3eca7a3f7977567273356a098f3d311be8';
+String _$verifyOtpHash() => r'd0b62b86030ae4bc456bd00b5da0b9ffdf15df18';
 
 /// Copied from Dart SDK
 class _SystemHash {
@@ -170,6 +170,133 @@ class _VerifyOtpProviderElement
   String? get number => (origin as VerifyOtpProvider).number;
   @override
   String? get otp => (origin as VerifyOtpProvider).otp;
+}
+
+String _$sendOtpHash() => r'19a07a13cbbdc3d970cc12f24e730f8c2435cdce';
+
+/// See also [sendOtp].
+@ProviderFor(sendOtp)
+const sendOtpProvider = SendOtpFamily();
+
+/// See also [sendOtp].
+class SendOtpFamily extends Family<AsyncValue<BaseApiResponse>> {
+  /// See also [sendOtp].
+  const SendOtpFamily();
+
+  /// See also [sendOtp].
+  SendOtpProvider call({
+    String? number,
+  }) {
+    return SendOtpProvider(
+      number: number,
+    );
+  }
+
+  @override
+  SendOtpProvider getProviderOverride(
+    covariant SendOtpProvider provider,
+  ) {
+    return call(
+      number: provider.number,
+    );
+  }
+
+  static const Iterable<ProviderOrFamily>? _dependencies = null;
+
+  @override
+  Iterable<ProviderOrFamily>? get dependencies => _dependencies;
+
+  static const Iterable<ProviderOrFamily>? _allTransitiveDependencies = null;
+
+  @override
+  Iterable<ProviderOrFamily>? get allTransitiveDependencies =>
+      _allTransitiveDependencies;
+
+  @override
+  String? get name => r'sendOtpProvider';
+}
+
+/// See also [sendOtp].
+class SendOtpProvider extends AutoDisposeFutureProvider<BaseApiResponse> {
+  /// See also [sendOtp].
+  SendOtpProvider({
+    String? number,
+  }) : this._internal(
+          (ref) => sendOtp(
+            ref as SendOtpRef,
+            number: number,
+          ),
+          from: sendOtpProvider,
+          name: r'sendOtpProvider',
+          debugGetCreateSourceHash:
+              const bool.fromEnvironment('dart.vm.product')
+                  ? null
+                  : _$sendOtpHash,
+          dependencies: SendOtpFamily._dependencies,
+          allTransitiveDependencies: SendOtpFamily._allTransitiveDependencies,
+          number: number,
+        );
+
+  SendOtpProvider._internal(
+    super._createNotifier, {
+    required super.name,
+    required super.dependencies,
+    required super.allTransitiveDependencies,
+    required super.debugGetCreateSourceHash,
+    required super.from,
+    required this.number,
+  }) : super.internal();
+
+  final String? number;
+
+  @override
+  Override overrideWith(
+    FutureOr<BaseApiResponse> Function(SendOtpRef provider) create,
+  ) {
+    return ProviderOverride(
+      origin: this,
+      override: SendOtpProvider._internal(
+        (ref) => create(ref as SendOtpRef),
+        from: from,
+        name: null,
+        dependencies: null,
+        allTransitiveDependencies: null,
+        debugGetCreateSourceHash: null,
+        number: number,
+      ),
+    );
+  }
+
+  @override
+  AutoDisposeFutureProviderElement<BaseApiResponse> createElement() {
+    return _SendOtpProviderElement(this);
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return other is SendOtpProvider && other.number == number;
+  }
+
+  @override
+  int get hashCode {
+    var hash = _SystemHash.combine(0, runtimeType.hashCode);
+    hash = _SystemHash.combine(hash, number.hashCode);
+
+    return _SystemHash.finish(hash);
+  }
+}
+
+mixin SendOtpRef on AutoDisposeFutureProviderRef<BaseApiResponse> {
+  /// The parameter `number` of this provider.
+  String? get number;
+}
+
+class _SendOtpProviderElement
+    extends AutoDisposeFutureProviderElement<BaseApiResponse> with SendOtpRef {
+  _SendOtpProviderElement(super.provider);
+
+  @override
+  String? get number => (origin as SendOtpProvider).number;
 }
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member

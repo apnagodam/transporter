@@ -1,13 +1,17 @@
+import 'dart:convert';
+
 import 'package:assorted_layout_widgets/assorted_layout_widgets.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
+import 'package:transporter/Data/Model/BaseApiResponse.dart';
+import 'package:transporter/Domain/Authentication/AuthenticationService.dart';
 
+import '../../Domain/Dio/DioProvider.dart';
 import '../Routes/routes_strings.dart';
 import '../Utils/Widgets/Widgets.dart';
-
 
 class Loginscreen extends ConsumerStatefulWidget {
   const Loginscreen({super.key});
@@ -75,7 +79,32 @@ class _LoginscreenState extends ConsumerState<Loginscreen> {
                           child: ElevatedButton(
                             onPressed: () {
                               if (loginForm.currentState!.validate()) {
-                                context.goNamed(RoutesStrings.verifyOtp);
+                                // context.goNamed(RoutesStrings.verifyOtp);
+                                // context.goNamed(RoutesStrings.verifyOtp,
+                                //     extra: {
+                                //       'mobile': mobileNumberController.text
+                                //           .toString()
+                                //     });
+                                ref.watch(sendOtpProvider(number: mobileNumberController.text
+                                    .toString() ).future).then((value){
+                                  if (value.status.toString() == "1") {
+                                    context.goNamed(RoutesStrings.verifyOtp,
+                                        extra: {
+                                          'mobile': mobileNumberController.text
+                                              .toString(),
+                                        "app_type":"Transporter",
+                                        "otp_type":"",
+                                        "token":"hyu",
+                                        });
+
+                                    successToast(
+                                        context, value.message.toString());
+                                  } else {
+                                    errorToast(
+                                        context, value.message.toString());
+                                  }
+                                });
+
                               } else {}
                             },
                             child: Text(
@@ -119,5 +148,12 @@ class _LoginscreenState extends ConsumerState<Loginscreen> {
                 ],
               )))),
     );
+  }
+
+  Future<BaseApiResponse> sendOtp(WidgetRef ref, {String? number}) async {
+    var response = await ref
+        .watch(dioProvider)
+        .post(ApiClient.login, queryParameters: {'number': number});
+    return baseApiResponseFromMap(jsonEncode(response.data));
   }
 }

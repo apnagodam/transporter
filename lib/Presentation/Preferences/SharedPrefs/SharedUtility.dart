@@ -3,6 +3,8 @@ import 'dart:convert';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../../../Data/Model/LoginResponseModel.dart';
+
 final sharedPreferencesProvider = Provider<SharedPreferences>((ref) {
   throw UnimplementedError();
 });
@@ -26,14 +28,15 @@ class SharedUtility {
   void setToken(String token) {
     sharedPreferences.setString('token', token);
   }
-  //
-  // Data? getUser() {
-  //   return sharedPreferences.get('user') != null
-  //       ? Data.fromMap(jsonDecode(sharedPreferences.getString('user') ?? ""))
-  //       : null;
-  // }
-  //
-  // void setUser(Data? userMap) {
-  //   sharedPreferences.setString('user', jsonEncode(userMap!.toMap()));
-  // }
+
+  UserDetails? getUser() {
+    return sharedPreferences.get('user') != null
+        ? UserDetails.fromMap(
+        jsonDecode(sharedPreferences.getString('user') ?? ""))
+        : null;
+  }
+
+  void setUser(UserDetails? userMap) {
+    sharedPreferences.setString('user', jsonEncode(userMap!.toMap()));
+  }
 }

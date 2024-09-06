@@ -3,7 +3,7 @@ class RoutesStrings {
   static const login = '/login';
   static const verifyOtp = 'verifyOtp';
   static const onBoarding = '/onBoarding';
-  static const register = '/register';
+  static const register = 'register';
 
   static const applyForLoan = 'applyForLoan';
 
