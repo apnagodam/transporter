@@ -8,9 +8,11 @@ part 'DioProvider.g.dart';
 
 @riverpod
 Dio dio(DioRef ref) {
-  return Dio(BaseOptions(baseUrl: ApiClient.baseUrl, headers: {
+  return Dio(BaseOptions(baseUrl: ApiClient.testBaseUrl, headers: {
     "Authorization": "${ref.watch(sharedUtilityProvider).getToken()}",
-  }))
+  },connectTimeout: const Duration(minutes: 1),
+      receiveTimeout: const Duration(minutes: 1),
+      sendTimeout: const Duration(minutes: 1)))
     ..interceptors.add(PrettyDioLogger(
       requestHeader: true,
       requestBody: true,
@@ -23,7 +25,9 @@ Dio dio(DioRef ref) {
 }
 
 class ApiClient {
-  static const baseUrl = "https://apnagodam.com/test/transport_api/";
+  static const baseUrl = "https://apnagodam.com/transport_api/";
+    static const testBaseUrl = "https://apnagodam.com/test/transport_api/";
+
 
 /*
 state and district api
@@ -52,6 +56,10 @@ Trips api
 *
 */
   static const getTrips = 'transporter_trip_request';
+  static const updateTruckDriver='driver_truck_update';
+  static const startTrip = 'trip_start_update';
+  static const biltyPdfData = 'bilty_data';
+  static const tripEnd ='transporter_trip_end';
 
 /*
 Truck Driver api
@@ -60,18 +68,14 @@ Truck Driver api
 *
 */
   static const getTruckDriver = 'truck_driver_list';
+
 }
 
 class ImageClient {
-  static const employeeImageUrl =
-      "https://apnagodam.com/resources/assets/upload/employees/";
-  static const frontEndAssetsUrl =
-      "https://apnagodam.com/resources/frontend_asse-ts/uploads/";
+  
   static const assetsImageUrl =
-      "https://apnagodam.com/resources/assets/upload/";
-  static const displegedImageUrl =
-      "https://apnagodam.com/resources/assets/upload/displedge/";
+      "https://apnagodam.com/test/resources/assets/upload/transporter/";
 
-  static const conveyanceImageUrl =
-      'https://apnagodam.com/test/resources/assets/upload/conveyance/';
+
+  static const secondKantaImage ='https://apnagodam.com/test/resources/assets/upload/second_kanta_parchi/';
 }

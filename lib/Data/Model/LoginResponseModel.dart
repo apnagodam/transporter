@@ -37,9 +37,9 @@ class LoginResponseModel {
 }
 
 class UserDetails {
-  int? id;
-  int? userId;
-  int? transportConstitution;
+  dynamic? id;
+  dynamic? userId;
+  dynamic? transportConstitution;
   String? name;
   String? firmName;
   dynamic email;
@@ -47,7 +47,7 @@ class UserDetails {
   String? address;
   String? district;
   String? state;
-  int? pincode;
+  dynamic? pincode;
   String? bankName;
   String? bankBranch;
   String? bankAccNo;
@@ -59,7 +59,7 @@ class UserDetails {
   String? aadharBackImage;
   String? pancardNo;
   dynamic aadharNo;
-  int? proof;
+  dynamic? proof;
   String? firmProofNumber;
   String? proprietorshipProof;
   dynamic partnershipDeed;
@@ -68,13 +68,13 @@ class UserDetails {
   dynamic boardResolution;
   dynamic proofDirector;
   dynamic noDirector;
-  int? empId;
-  int? approveBy;
-  int? approve;
-  int? verifyBy;
-  int? verify;
-  int? wallet;
-  int? status;
+  dynamic? empId;
+  dynamic? approveBy;
+  dynamic? approve;
+  dynamic? verifyBy;
+  dynamic? verify;
+  dynamic? wallet;
+  dynamic? status;
   DateTime? createdAt;
   DateTime? updatedAt;
   String? imageUrl;

@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:pinput/pinput.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
+import 'package:transporter/Domain/Dio/DioProvider.dart';
 import 'package:transporter/Presentation/Preferences/SharedPrefs/SharedUtility.dart';
 
 import '../../Domain/Authentication/AuthenticationService.dart';
@@ -61,7 +62,7 @@ class _VerifyotpState extends ConsumerState<Verifyotp> {
             ),
             Center(
               child: Text(
-                "${1234567}",
+                "${widget.mobileNumber}",
                 style: TextStyle(
                     color: ColorConstants.primaryColorDriver,
                     fontWeight: FontWeight.bold,
@@ -108,10 +109,12 @@ class _VerifyotpState extends ConsumerState<Verifyotp> {
                           ref
                               .watch(sharedUtilityProvider)
                               .setToken(value.authorization ?? "");
-
                           ref
                               .watch(sharedUtilityProvider)
                               .setUser(value.userDetails);
+
+                          ref.invalidate(dioProvider);
+
 
                           context.go(RoutesStrings.dashboard);
                         }

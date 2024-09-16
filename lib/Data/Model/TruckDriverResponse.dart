@@ -37,7 +37,7 @@ class TruckDriverResponse {
 }
 
 class DriverDatum {
-  int? id;
+  dynamic? id;
   String? driverName;
 
   DriverDatum({
@@ -49,7 +49,9 @@ class DriverDatum {
     id: json["id"],
     driverName: json["driver_name"],
   );
-
+bool districtFilterByName(String filter) {
+    return this.driverName.toString().toLowerCase().trim().contains(filter);
+  }
   Map<String, dynamic> toMap() => {
     "id": id,
     "driver_name": driverName,
@@ -57,7 +59,7 @@ class DriverDatum {
 }
 
 class TruckDatum {
-  int? id;
+  dynamic? id;
   String? truckNumber;
 
   TruckDatum({
@@ -69,7 +71,9 @@ class TruckDatum {
     id: json["id"],
     truckNumber: json["truck_number"],
   );
-
+bool districtFilterByName(String filter) {
+    return this.truckNumber.toString().toLowerCase().trim().contains(filter);
+  }
   Map<String, dynamic> toMap() => {
     "id": id,
     "truck_number": truckNumber,

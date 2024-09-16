@@ -34,10 +34,11 @@ class _LoginscreenState extends ConsumerState<Loginscreen> {
               child: ColumnSuper(
                 alignment: Alignment.center,
                 children: [
+
                   Align(
                     alignment: Alignment.center,
                     child: Text(
-                      'Login',
+                      'Trasporter Login',
                       style: largeTitleTextStyle,
                     ),
                   ),
@@ -85,8 +86,12 @@ class _LoginscreenState extends ConsumerState<Loginscreen> {
                                 //       'mobile': mobileNumberController.text
                                 //           .toString()
                                 //     });
+                                
+                                ref.watch(isLoading.notifier).state = true;
                                 ref.watch(sendOtpProvider(number: mobileNumberController.text
                                     .toString() ).future).then((value){
+                                                                      ref.watch(isLoading.notifier).state = false;
+
                                   if (value.status.toString() == "1") {
                                     context.goNamed(RoutesStrings.verifyOtp,
                                         extra: {
@@ -124,27 +129,27 @@ class _LoginscreenState extends ConsumerState<Loginscreen> {
                   SizedBox(
                     height: 10,
                   ),
-                  Align(
-                    alignment: Alignment.bottomCenter,
-                    child: Text.rich(
-                      TextSpan(
-                          text: 'Do not have an Account?',
-                          style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                          ),
-                          children: [
-                            TextSpan(
-                              text: " Register",
-                              recognizer: TapGestureRecognizer()
-                                ..onTap = () =>
-                                    context.goNamed(RoutesStrings.register),
-                              style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                          ]),
-                    ),
-                  )
+                  // Align(
+                  //   alignment: Alignment.bottomCenter,
+                  //   child: Text.rich(
+                  //     TextSpan(
+                  //         text: 'Do not have an Account?',
+                  //         style: TextStyle(
+                  //           fontWeight: FontWeight.bold,
+                  //         ),
+                  //         children: [
+                  //           TextSpan(
+                  //             text: " Register",
+                  //             recognizer: TapGestureRecognizer()
+                  //               ..onTap = () =>
+                  //                   context.goNamed(RoutesStrings.register),
+                  //             style: TextStyle(
+                  //               fontWeight: FontWeight.bold,
+                  //             ),
+                  //           ),
+                  //         ]),
+                  //   ),
+                  // )
                 ],
               )))),
     );

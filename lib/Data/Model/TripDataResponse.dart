@@ -33,7 +33,7 @@ class TripDataResponse {
 }
 
 class Datum {
-  int? id;
+  dynamic? id;
   String? requestDate;
   String? tripDate;
   String? tripId;
@@ -43,25 +43,26 @@ class Datum {
   String? userPhone;
   String? fromAddress;
   String? toAddress;
-  int? rate;
+  dynamic rate;
   String? commodity;
   String? weight;
-  int? noOfBags;
+  dynamic noOfBags;
   String? recevingWeight;
-  int? recevingBags;
+  dynamic recevingBags;
   String? biltyImage;
   String? kantaImage;
   String? goodsInvoiceImage;
   String? recevingKantaImage;
   dynamic frightInvoiceImage;
   String? inOutTypes;
-  int? status;
+  dynamic status;
   String? tripStart;
   String? tripEnd;
   String? driverName;
   String? driverPhone;
   String? truckNumber;
   String? kantaImageUrl;
+  dynamic poId;
 
   Datum({
     this.id,
@@ -93,6 +94,7 @@ class Datum {
     this.driverPhone,
     this.truckNumber,
     this.kantaImageUrl,
+    this.poId
   });
 
   factory Datum.fromMap(Map<String, dynamic> json) => Datum(
@@ -125,6 +127,7 @@ class Datum {
     driverPhone: json["driver_phone"],
     truckNumber: json["truck_number"],
     kantaImageUrl: json["kanta_image_url"],
+    poId: json['po_id']
   );
 
   Map<String, dynamic> toMap() => {
@@ -157,5 +160,6 @@ class Datum {
     "driver_phone": driverPhone,
     "truck_number": truckNumber,
     "kanta_image_url": kantaImageUrl,
+    "po_id":poId
   };
 }

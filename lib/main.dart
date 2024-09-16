@@ -18,7 +18,7 @@ void main() async {
     ],
     child: ResponsiveSizer(
       builder: (context, orientation, screenType) {
-        return ToastificationWrapper(
+        return const ToastificationWrapper(
             child: MaterialApp(
           home: const MyApp(),
         ));
@@ -36,12 +36,14 @@ class MyApp extends ConsumerWidget {
     return MaterialApp.router(
       debugShowCheckedModeBanner: false,
       routerConfig: ref.watch(goRouterProvider),
-      title: 'SFPL',
+      title: 'Transporter',
       theme: ThemeData(
           fontFamily: GoogleFonts.quicksand().fontFamily,
           colorScheme: ColorScheme.fromSeed(
               seedColor: ColorConstants.primaryColorDriver),
           useMaterial3: true,
+                    scaffoldBackgroundColor: Colors.white,
+
           appBarTheme: AppBarTheme(
               color: Colors.white,
               titleTextStyle: TextStyle(

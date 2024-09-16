@@ -2,6 +2,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:go_router/go_router.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
+import 'package:transporter/Presentation/Profile/ProfileScreen.dart';
 import 'package:transporter/Presentation/Routes/routes_strings.dart';
 
 import '../Authentication/LoginScreen.dart';
@@ -29,6 +30,12 @@ GoRouter goRouter(GoRouterRef ref) {
           path: RoutesStrings.dashboard,
           name: RoutesStrings.dashboard,
           builder: (context, state) => const Dashboard(),
+          routes: [
+             GoRoute(
+                  path: RoutesStrings.profile,
+                  name: RoutesStrings.profile,
+                  builder: (context, state) =>const Profilescreen()),
+          ]
         ),
         GoRoute(
             path: RoutesStrings.login,

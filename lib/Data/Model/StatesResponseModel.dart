@@ -33,7 +33,7 @@ class StatesResponseModel {
 }
 
 class Datum {
-  int? id;
+  dynamic? id;
   String? name;
   String? code;
   String? countryId;
