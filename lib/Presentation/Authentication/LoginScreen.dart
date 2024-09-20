@@ -29,7 +29,7 @@ class _LoginscreenState extends ConsumerState<Loginscreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: SafeArea(
-          child: defaultPadding(Form(
+          child: defaultPadding(Center(child: Form(
               key: loginForm,
               child: ColumnSuper(
                 alignment: Alignment.center,
@@ -38,7 +38,7 @@ class _LoginscreenState extends ConsumerState<Loginscreen> {
                   Align(
                     alignment: Alignment.center,
                     child: Text(
-                      'Trasporter Login',
+                      'Transporter Login',
                       style: largeTitleTextStyle,
                     ),
                   ),
@@ -76,82 +76,87 @@ class _LoginscreenState extends ConsumerState<Loginscreen> {
                   ref.watch(isLoading)
                       ? showLoader(context)
                       : SizedBox(
-                          width: MediaQuery.of(context).size.width,
-                          child: ElevatedButton(
-                            onPressed: () {
-                              if (loginForm.currentState!.validate()) {
-                                // context.goNamed(RoutesStrings.verifyOtp);
-                                // context.goNamed(RoutesStrings.verifyOtp,
-                                //     extra: {
-                                //       'mobile': mobileNumberController.text
-                                //           .toString()
-                                //     });
-                                
-                                ref.watch(isLoading.notifier).state = true;
-                                ref.watch(sendOtpProvider(number: mobileNumberController.text
-                                    .toString() ).future).then((value){
-                                                                      ref.watch(isLoading.notifier).state = false;
+                    width: MediaQuery.of(context).size.width,
+                    child: ElevatedButton(
+                      onPressed: () {
+                        if (loginForm.currentState!.validate()) {
+                          // context.goNamed(RoutesStrings.verifyOtp);
+                          // context.goNamed(RoutesStrings.verifyOtp,
+                          //     extra: {
+                          //       'mobile': mobileNumberController.text
+                          //           .toString()
+                          //     });
 
-                                  if (value.status.toString() == "1") {
-                                    context.goNamed(RoutesStrings.verifyOtp,
-                                        extra: {
-                                          'mobile': mobileNumberController.text
-                                              .toString(),
-                                        "app_type":"Transporter",
-                                        "otp_type":"",
-                                        "token":"hyu",
-                                        });
+                          showLoader(context);
 
-                                    successToast(
-                                        context, value.message.toString());
-                                  } else {
-                                    errorToast(
-                                        context, value.message.toString());
-                                  }
-                                });
+                          ref.watch(sendOtpProvider(number: mobileNumberController.text
+                              .toString() ).future).then((value){
 
-                              } else {}
-                            },
-                            child: Text(
-                              "Login",
-                              style: TextStyle(
-                                  color: Colors.white,
-                                  shadows: [
-                                    const Shadow(
-                                        color: Colors.white, blurRadius: 0.3)
-                                  ],
-                                  fontWeight: FontWeight.w700,
-                                  fontSize: Adaptive.sp(16)),
-                            ),
-                            style: defaultButtonStyle,
-                          ),
-                        ),
+                                hideLoader(context);
+
+                            if (value.status.toString() == "1") {
+                              context.goNamed(RoutesStrings.verifyOtp,
+                                  extra: {
+                                    'mobile': mobileNumberController.text
+                                        .toString(),
+                                    "app_type":"Transporter",
+                                    "otp_type":"",
+                                    "token":"hyu",
+                                  });
+
+                              successToast(
+                                  context, value.message.toString());
+                            } else {
+                              errorToast(
+                                  context, value.message.toString());
+                            }
+                          }).onError((e,s){
+                            errorToast(context, e.toString());
+                            hideLoader(context);
+                          });
+
+                        } else {}
+                      },
+                      child: Text(
+                        "Login",
+                        style: TextStyle(
+                            color: Colors.white,
+                            shadows: [
+                              const Shadow(
+                                  color: Colors.white, blurRadius: 0.3)
+                            ],
+                            fontWeight: FontWeight.w700,
+                            fontSize: Adaptive.sp(16)),
+                      ),
+                      style: defaultButtonStyle,
+                    ),
+                  ),
                   SizedBox(
                     height: 10,
                   ),
-                  // Align(
-                  //   alignment: Alignment.bottomCenter,
-                  //   child: Text.rich(
-                  //     TextSpan(
-                  //         text: 'Do not have an Account?',
-                  //         style: TextStyle(
-                  //           fontWeight: FontWeight.bold,
-                  //         ),
-                  //         children: [
-                  //           TextSpan(
-                  //             text: " Register",
-                  //             recognizer: TapGestureRecognizer()
-                  //               ..onTap = () =>
-                  //                   context.goNamed(RoutesStrings.register),
-                  //             style: TextStyle(
-                  //               fontWeight: FontWeight.bold,
-                  //             ),
-                  //           ),
-                  //         ]),
-                  //   ),
-                  // )
+                  Align(
+                    alignment: Alignment.bottomCenter,
+                    child: Text.rich(
+                      TextSpan(
+                          text: 'Do not have an Account?',
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                          ),
+                          children: [
+                            TextSpan(
+                              text: " Register",
+                              recognizer: TapGestureRecognizer()
+                                ..onTap = () =>
+                                    context.goNamed(RoutesStrings.register),
+                              style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ]),
+                    ),
+                  )
                 ],
-              )))),
+              )),))),
     );
   }
 

@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:assorted_layout_widgets/assorted_layout_widgets.dart';
+import 'package:dotted_border/dotted_border.dart';
 import 'package:dropdown_search/dropdown_search.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -143,13 +144,55 @@ class _RegistrationscreenState extends ConsumerState<Registrationscreen> {
         const SizedBox(
           height: 10,
         ),
-        SizedBox(
-          width: MediaQuery.of(context).size.width,
-          child: ElevatedButton(
-              // style: StyleConstants.buttonBordersStyle(
-              //     borderColor: Col,
-              //     backgroundColor: Colors.white),
-              onPressed: () async {
+
+    DottedBorder(
+        borderType: BorderType.RRect,
+        dashPattern: const [5, 5, 5, 5],
+        color: ColorConstants.primaryColorDriver,
+        child: Padding(
+          padding: const Pad(all: 20),
+          child: Center(
+            child: ref.watch(licenseImage) != null
+                ? Stack(
+              children: [
+                Image.file(ref.watch(licenseImage) ?? File('')),
+                Container(
+                  decoration: BoxDecoration(color: Colors.black.withOpacity(0.6), shape: BoxShape.circle),
+                  child: IconButton(
+                      onPressed: () {
+                        ref.invalidate(licenseImage);
+                      },
+                      icon: const Icon(
+                        Icons.close,
+                        color: Colors.white,
+                      )),
+                )
+              ],
+            )
+                : InkWell(
+              child: ColumnSuper(children: [
+                Icon(
+                  Icons.cloud_upload,
+                  color: ColorConstants.primaryColorDriver,
+                ),
+                SizedBox(
+                  height: 5,
+                ),
+                Text(
+                  "Select License Image ",
+                  textAlign: TextAlign.center,
+                  style: TextStyle(color: ColorConstants.primaryColorDriver, fontWeight: FontWeight.bold, fontSize: Adaptive.sp(16)),
+                ),
+                SizedBox(
+                  height: 5,
+                ),
+                Text(
+                  "Upload Document Image,\n  Supports JPG, JPEG, PNG",
+                  textAlign: TextAlign.center,
+                  style: TextStyle(color: ColorConstants.primaryColorDriver, fontWeight: FontWeight.w700, fontSize: Adaptive.sp(13)),
+                )
+              ]),
+              onTap: () async {
                 await imagePicker
                     .pickImage(source: ImageSource.gallery)
                     .then((value) async {
@@ -158,18 +201,14 @@ class _RegistrationscreenState extends ConsumerState<Registrationscreen> {
                   }
                 });
               },
-              child: Text(
-                "Select license Image",
-                style: StyleConstants.normalStyle(),
-              )),
-        ),
-        if (ref.watch(licenseImage) != null)
-          Image.file(ref.watch(licenseImage) ?? File(""))
-        else
-          SizedBox(),
-        const SizedBox(
-          height: 10,
-        ),
+            ),
+          ),
+        )),
+    SizedBox(
+      height: 10,
+    ),
+
+
         ref.watch(stateListProvider).when(
             data: (states) => DropdownSearch<Datum?>(
                   popupProps: PopupProps.menu(
@@ -489,13 +528,54 @@ class _RegistrationscreenState extends ConsumerState<Registrationscreen> {
         const SizedBox(
           height: 10,
         ),
-        SizedBox(
-          width: MediaQuery.of(context).size.width,
-          child: ElevatedButton(
-              style: StyleConstants.buttonBordersStyle(
-                  borderColor: ColorConstants.primaryColorWSP,
-                  backgroundColor: Colors.white),
-              onPressed: () async {
+    DottedBorder(
+        borderType: BorderType.RRect,
+        dashPattern: const [5, 5, 5, 5],
+        color: ColorConstants.primaryColorDriver,
+        child: Padding(
+          padding: const Pad(all: 20),
+          child: Center(
+            child: ref.watch(panImage) != null
+                ? Stack(
+              children: [
+                Image.file(ref.watch(panImage) ?? File('')),
+                Container(
+                  decoration: BoxDecoration(color: Colors.black.withOpacity(0.6), shape: BoxShape.circle),
+                  child: IconButton(
+                      onPressed: () {
+                        ref.invalidate(panImage);
+                      },
+                      icon: const Icon(
+                        Icons.close,
+                        color: Colors.white,
+                      )),
+                )
+              ],
+            )
+                : InkWell(
+              child: ColumnSuper(children: [
+                Icon(
+                  Icons.cloud_upload,
+                  color: ColorConstants.primaryColorDriver,
+                ),
+                SizedBox(
+                  height: 5,
+                ),
+                Text(
+                  "Select PAN Image ",
+                  textAlign: TextAlign.center,
+                  style: TextStyle(color: ColorConstants.primaryColorDriver, fontWeight: FontWeight.bold, fontSize: Adaptive.sp(16)),
+                ),
+                SizedBox(
+                  height: 5,
+                ),
+                Text(
+                  "Upload Document Image,\n  Supports JPG, JPEG, PNG",
+                  textAlign: TextAlign.center,
+                  style: TextStyle(color: ColorConstants.primaryColorDriver, fontWeight: FontWeight.w700, fontSize: Adaptive.sp(13)),
+                )
+              ]),
+              onTap: () async {
                 await imagePicker
                     .pickImage(source: ImageSource.gallery)
                     .then((value) async {
@@ -504,25 +584,63 @@ class _RegistrationscreenState extends ConsumerState<Registrationscreen> {
                   }
                 });
               },
-              child: Text(
-                "Select Pan Image",
-                style: StyleConstants.normalStyle(),
-              )),
-        ),
-        if (ref.watch(panImage) != null)
-          Image.file(ref.watch(panImage) ?? File(""))
-        else
-          SizedBox(),
-        const SizedBox(
-          height: 10,
-        ),
-        SizedBox(
-          width: MediaQuery.of(context).size.width,
-          child: ElevatedButton(
-              style: StyleConstants.buttonBordersStyle(
-                  borderColor: ColorConstants.primaryColorWSP,
-                  backgroundColor: Colors.white),
-              onPressed: () async {
+            ),
+          ),
+        )),
+    SizedBox(
+      height: 10,
+    ),
+
+
+
+    DottedBorder(
+        borderType: BorderType.RRect,
+        dashPattern: const [5, 5, 5, 5],
+        color: ColorConstants.primaryColorDriver,
+        child: Padding(
+          padding: const Pad(all: 20),
+          child: Center(
+            child: ref.watch(aadharImage) != null
+                ? Stack(
+              children: [
+                Image.file(ref.watch(aadharImage) ?? File('')),
+                Container(
+                  decoration: BoxDecoration(color: Colors.black.withOpacity(0.6), shape: BoxShape.circle),
+                  child: IconButton(
+                      onPressed: () {
+                        ref.invalidate(aadharImage);
+                      },
+                      icon: const Icon(
+                        Icons.close,
+                        color: Colors.white,
+                      )),
+                )
+              ],
+            )
+                : InkWell(
+              child: ColumnSuper(children: [
+                Icon(
+                  Icons.cloud_upload,
+                  color: ColorConstants.primaryColorDriver,
+                ),
+                SizedBox(
+                  height: 5,
+                ),
+                Text(
+                  "Select Aadhar Image ",
+                  textAlign: TextAlign.center,
+                  style: TextStyle(color: ColorConstants.primaryColorDriver, fontWeight: FontWeight.bold, fontSize: Adaptive.sp(16)),
+                ),
+                SizedBox(
+                  height: 5,
+                ),
+                Text(
+                  "Upload Document Image,\n  Supports JPG, JPEG, PNG",
+                  textAlign: TextAlign.center,
+                  style: TextStyle(color: ColorConstants.primaryColorDriver, fontWeight: FontWeight.w700, fontSize: Adaptive.sp(13)),
+                )
+              ]),
+              onTap: () async {
                 await imagePicker
                     .pickImage(source: ImageSource.gallery)
                     .then((value) async {
@@ -531,25 +649,61 @@ class _RegistrationscreenState extends ConsumerState<Registrationscreen> {
                   }
                 });
               },
-              child: Text(
-                "Select Aadhar Image",
-                style: StyleConstants.normalStyle(),
-              )),
-        ),
-        if (ref.watch(aadharImage) != null)
-          Image.file(ref.watch(aadharImage) ?? File(""))
-        else
-          SizedBox(),
-        const SizedBox(
-          height: 10,
-        ),
-        SizedBox(
-          width: MediaQuery.of(context).size.width,
-          child: ElevatedButton(
-              style: StyleConstants.buttonBordersStyle(
-                  borderColor: ColorConstants.primaryColorWSP,
-                  backgroundColor: Colors.white),
-              onPressed: () async {
+            ),
+          ),
+        )),
+    SizedBox(
+      height: 10,
+    ),
+
+    DottedBorder(
+        borderType: BorderType.RRect,
+        dashPattern: const [5, 5, 5, 5],
+        color: ColorConstants.primaryColorDriver,
+        child: Padding(
+          padding: const Pad(all: 20),
+          child: Center(
+            child: ref.watch(chequeImage) != null
+                ? Stack(
+              children: [
+                Image.file(ref.watch(chequeImage) ?? File('')),
+                Container(
+                  decoration: BoxDecoration(color: Colors.black.withOpacity(0.6), shape: BoxShape.circle),
+                  child: IconButton(
+                      onPressed: () {
+                        ref.invalidate(chequeImage);
+                      },
+                      icon: const Icon(
+                        Icons.close,
+                        color: Colors.white,
+                      )),
+                )
+              ],
+            )
+                : InkWell(
+              child: ColumnSuper(children: [
+                Icon(
+                  Icons.cloud_upload,
+                  color: ColorConstants.primaryColorDriver,
+                ),
+                SizedBox(
+                  height: 5,
+                ),
+                Text(
+                  "Select Cheque Image ",
+                  textAlign: TextAlign.center,
+                  style: TextStyle(color: ColorConstants.primaryColorDriver, fontWeight: FontWeight.bold, fontSize: Adaptive.sp(16)),
+                ),
+                SizedBox(
+                  height: 5,
+                ),
+                Text(
+                  "Upload Document Image,\n  Supports JPG, JPEG, PNG",
+                  textAlign: TextAlign.center,
+                  style: TextStyle(color: ColorConstants.primaryColorDriver, fontWeight: FontWeight.w700, fontSize: Adaptive.sp(13)),
+                )
+              ]),
+              onTap: () async {
                 await imagePicker
                     .pickImage(source: ImageSource.gallery)
                     .then((value) async {
@@ -558,25 +712,123 @@ class _RegistrationscreenState extends ConsumerState<Registrationscreen> {
                   }
                 });
               },
-              child: Text(
-                "Select Cheque/Passbook Image",
-                style: StyleConstants.normalStyle(),
-              )),
-        ),
-        if (ref.watch(chequeImage) != null)
-          Image.file(ref.watch(chequeImage) ?? File(""))
-        else
-          SizedBox(),
-        const SizedBox(
-          height: 10,
-        ),
-        SizedBox(
-          width: MediaQuery.of(context).size.width,
-          child: ElevatedButton(
-              style: StyleConstants.buttonBordersStyle(
-                  borderColor: ColorConstants.primaryColorWSP,
-                  backgroundColor: Colors.white),
-              onPressed: () async {
+            ),
+          ),
+        )),
+    SizedBox(
+      height: 10,
+    ),
+    DottedBorder(
+        borderType: BorderType.RRect,
+        dashPattern: const [5, 5, 5, 5],
+        color: ColorConstants.primaryColorDriver,
+        child: Padding(
+          padding: const Pad(all: 20),
+          child: Center(
+            child: ref.watch(aadharImage) != null
+                ? Stack(
+              children: [
+                Image.file(ref.watch(aadharImage) ?? File('')),
+                Container(
+                  decoration: BoxDecoration(color: Colors.black.withOpacity(0.6), shape: BoxShape.circle),
+                  child: IconButton(
+                      onPressed: () {
+                        ref.invalidate(aadharImage);
+                      },
+                      icon: const Icon(
+                        Icons.close,
+                        color: Colors.white,
+                      )),
+                )
+              ],
+            )
+                : InkWell(
+              child: ColumnSuper(children: [
+                Icon(
+                  Icons.cloud_upload,
+                  color: ColorConstants.primaryColorDriver,
+                ),
+                SizedBox(
+                  height: 5,
+                ),
+                Text(
+                  "Select Aadhar Image ",
+                  textAlign: TextAlign.center,
+                  style: TextStyle(color: ColorConstants.primaryColorDriver, fontWeight: FontWeight.bold, fontSize: Adaptive.sp(16)),
+                ),
+                SizedBox(
+                  height: 5,
+                ),
+                Text(
+                  "Upload Document Image,\n  Supports JPG, JPEG, PNG",
+                  textAlign: TextAlign.center,
+                  style: TextStyle(color: ColorConstants.primaryColorDriver, fontWeight: FontWeight.w700, fontSize: Adaptive.sp(13)),
+                )
+              ]),
+              onTap: () async {
+                await imagePicker
+                    .pickImage(source: ImageSource.gallery)
+                    .then((value) async {
+                  if (value != null) {
+                    ref.watch(aadharImage.notifier).state = File(value.path);
+                  }
+                });
+              },
+            ),
+          ),
+        )),
+    SizedBox(
+      height: 10,
+    ),
+
+    DottedBorder(
+        borderType: BorderType.RRect,
+        dashPattern: const [5, 5, 5, 5],
+        color: ColorConstants.primaryColorDriver,
+        child: Padding(
+          padding: const Pad(all: 20),
+          child: Center(
+            child: ref.watch(profileImage) != null
+                ? Stack(
+              children: [
+                Image.file(ref.watch(profileImage) ?? File('')),
+                Container(
+                  decoration: BoxDecoration(color: Colors.black.withOpacity(0.6), shape: BoxShape.circle),
+                  child: IconButton(
+                      onPressed: () {
+                        ref.invalidate(profileImage);
+                      },
+                      icon: const Icon(
+                        Icons.close,
+                        color: Colors.white,
+                      )),
+                )
+              ],
+            )
+                : InkWell(
+              child: ColumnSuper(children: [
+                Icon(
+                  Icons.cloud_upload,
+                  color: ColorConstants.primaryColorDriver,
+                ),
+                SizedBox(
+                  height: 5,
+                ),
+                Text(
+                  "Select Cheque Image ",
+                  textAlign: TextAlign.center,
+                  style: TextStyle(color: ColorConstants.primaryColorDriver, fontWeight: FontWeight.bold, fontSize: Adaptive.sp(16)),
+                ),
+                SizedBox(
+                  height: 5,
+                ),
+                Text(
+                  "Upload Document Image,\n  Supports JPG, JPEG, PNG",
+                  textAlign: TextAlign.center,
+                  style: TextStyle(color: ColorConstants.primaryColorDriver, fontWeight: FontWeight.w700, fontSize: Adaptive.sp(13)),
+                )
+              ]),
+              onTap: () async {
                 await imagePicker
                     .pickImage(source: ImageSource.gallery)
                     .then((value) async {
@@ -585,15 +837,14 @@ class _RegistrationscreenState extends ConsumerState<Registrationscreen> {
                   }
                 });
               },
-              child: Text(
-                "Select Profile Image",
-                style: StyleConstants.normalStyle(),
-              )),
-        ),
-        if (ref.watch(profileImage) != null)
-          Image.file(ref.watch(profileImage) ?? File(""))
-        else
-          SizedBox(),
+            ),
+          ),
+        )),
+    SizedBox(
+      height: 10,
+    ),
+
+
         ElevatedButton(
             style: StyleConstants.buttonBordersStyle(
                 borderColor: Colors.white,

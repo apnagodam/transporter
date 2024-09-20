@@ -6,7 +6,7 @@ part of 'BiltyPdf.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$createBiltyPdfHash() => r'8790e90239e6479c34ea82e791a6d10732495852';
+String _$createBiltyPdfHash() => r'5fd3e59007fc36b85cd7b4949ff987289b157477';
 
 /// Copied from Dart SDK
 class _SystemHash {

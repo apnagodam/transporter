@@ -11,12 +11,17 @@ defaultPadding(Widget child) => Padding(
       child: child,
     );
 
-showLoader(BuildContext context) => SizedBox(
-      height: MediaQuery.of(context).size.height,
-      child: const Center(
-        child: CupertinoActivityIndicator(),
-      ),
-    );
+showLoader(BuildContext context) => showDialog(
+    context: context,
+    builder: (context) => SizedBox(
+          height: MediaQuery.of(context).size.height,
+          child: const Center(
+            child: CupertinoActivityIndicator(),
+          ),
+        ));
+
+hideLoader(BuildContext context) =>
+    Navigator.of(context, rootNavigator: true).pop();
 
 var largeTitleTextStyle = TextStyle(
   fontSize: Adaptive.sp(21),

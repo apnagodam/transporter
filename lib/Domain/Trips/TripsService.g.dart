@@ -6,7 +6,7 @@ part of 'TripsService.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$tripsListHash() => r'979c649dfb4d77139b4f92122a7c2a333cb04bf6';
+String _$tripsListHash() => r'054c4e10cd41d72e70fd3361536b5f2ac720845a';
 
 /// See also [tripsList].
 @ProviderFor(tripsList)
@@ -20,7 +20,7 @@ final tripsListProvider = AutoDisposeFutureProvider<TripDataResponse>.internal(
 );
 
 typedef TripsListRef = AutoDisposeFutureProviderRef<TripDataResponse>;
-String _$truckDriverHash() => r'f77449b931748bc0e18b4e67a336372de97fc55c';
+String _$truckDriverHash() => r'ce39ae8996d578c94d24a14bea9ebfd2a3cb4033';
 
 /// See also [truckDriver].
 @ProviderFor(truckDriver)
@@ -35,7 +35,7 @@ final truckDriverProvider =
 );
 
 typedef TruckDriverRef = AutoDisposeFutureProviderRef<TruckDriverResponse>;
-String _$tripDataHash() => r'770a451fbfb02629062c177bca28d408cce61782';
+String _$tripDataHash() => r'add8b20142a24bdf15a6e8697f749561d2011c27';
 
 /// Copied from Dart SDK
 class _SystemHash {
@@ -184,7 +184,7 @@ class _TripDataProviderElement
   String? get tripRequestid => (origin as TripDataProvider).tripRequestid;
 }
 
-String _$updateTruckDriverHash() => r'3b5d0722663c9ec93788f31100609408aabc35f0';
+String _$updateTruckDriverHash() => r'ceb6e8735ca0099ece2ac699991764a75cd390b8';
 
 /// See also [updateTruckDriver].
 @ProviderFor(updateTruckDriver)
@@ -350,7 +350,7 @@ class _UpdateTruckDriverProviderElement
       (origin as UpdateTruckDriverProvider).tripRequestId;
 }
 
-String _$startTripHash() => r'befe443952e5b4d9098f6e24ea914e63d8ea52dc';
+String _$startTripHash() => r'6c49a131d6e45fd590b874bc859996f120d284a8';
 
 /// See also [startTrip].
 @ProviderFor(startTrip)
@@ -479,7 +479,7 @@ class _StartTripProviderElement
   String? get tripRequestId => (origin as StartTripProvider).tripRequestId;
 }
 
-String _$endTripHash() => r'727924de373ccd1cf74ddabf8a4c0ddd294d9724';
+String _$endTripHash() => r'ec219c6b3daf2f21f1549efe30941d11fb0134cb';
 
 /// See also [endTrip].
 @ProviderFor(endTrip)
