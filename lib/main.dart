@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:one_context/one_context.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
 import 'package:toastification/toastification.dart';
 
@@ -18,8 +19,10 @@ void main() async {
     ],
     child: ResponsiveSizer(
       builder: (context, orientation, screenType) {
-        return const ToastificationWrapper(
+        return  ToastificationWrapper(
             child: MaterialApp(
+              builder: OneContext().builder,
+              navigatorKey: OneContext().key,
           home: const MyApp(),
         ));
       },
@@ -35,6 +38,7 @@ class MyApp extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     return MaterialApp.router(
       debugShowCheckedModeBanner: false,
+
       routerConfig: ref.watch(goRouterProvider),
       title: 'Transporter',
       theme: ThemeData(

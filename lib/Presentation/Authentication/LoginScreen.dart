@@ -28,24 +28,26 @@ class _LoginscreenState extends ConsumerState<Loginscreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: false,
+
       body: SafeArea(
           child: defaultPadding(Form(
               key: loginForm,
-              child: ColumnSuper(
-                alignment: Alignment.center,
+              child: SizedBox(height:MediaQuery.of(context).size.height,child: Align(alignment: Alignment.center,child: Column(
+                mainAxisSize: MainAxisSize.max,
+                mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-
+                  Image.asset('assets/logo.png',fit: BoxFit.contain,),
                   Align(
                     alignment: Alignment.center,
                     child: Text(
-                      'Trasporter Login',
+                      'Transporter Login',
                       style: largeTitleTextStyle,
                     ),
                   ),
                   const SizedBox(
                     height: 20,
                   ),
-
                   TextFormField(
                     validator: (value) {
                       if (value == null ||
@@ -76,57 +78,53 @@ class _LoginscreenState extends ConsumerState<Loginscreen> {
                   ref.watch(isLoading)
                       ? showLoader(context)
                       : SizedBox(
-                          width: MediaQuery.of(context).size.width,
-                          child: ElevatedButton(
-                            onPressed: () {
-                              if (loginForm.currentState!.validate()) {
-                                // context.goNamed(RoutesStrings.verifyOtp);
-                                // context.goNamed(RoutesStrings.verifyOtp,
-                                //     extra: {
-                                //       'mobile': mobileNumberController.text
-                                //           .toString()
-                                //     });
-                                
-                                ref.watch(isLoading.notifier).state = true;
-                                ref.watch(sendOtpProvider(number: mobileNumberController.text
-                                    .toString() ).future).then((value){
-                                                                      ref.watch(isLoading.notifier).state = false;
+                    width: MediaQuery.of(context).size.width,
+                    child: ElevatedButton(
+                      onPressed: () {
+                        if (loginForm.currentState!.validate()) {
+                          // context.goNamed(RoutesStrings.verifyOtp);
+                          // context.goNamed(RoutesStrings.verifyOtp,
+                          //     extra: {
+                          //       'mobile': mobileNumberController.text
+                          //           .toString()
+                          //     });
 
-                                  if (value.status.toString() == "1") {
-                                    context.goNamed(RoutesStrings.verifyOtp,
-                                        extra: {
-                                          'mobile': mobileNumberController.text
-                                              .toString(),
-                                        "app_type":"Transporter",
-                                        "otp_type":"",
-                                        "token":"hyu",
-                                        });
+                          ref.watch(isLoading.notifier).state = true;
+                          ref.watch(sendOtpProvider(number: mobileNumberController.text
+                              .toString() ).future).then((value){
+                            ref.watch(isLoading.notifier).state = false;
 
-                                    successToast(
-                                        context, value.message.toString());
-                                  } else {
-                                    errorToast(
-                                        context, value.message.toString());
-                                  }
-                                });
+                            if (value.status.toString() == "1") {
+                              context.goNamed(RoutesStrings.verifyOtp,
+                                  extra: {
+                                    'mobile': mobileNumberController.text
+                                        .toString(),
+                                    "app_type":"Transporter",
+                                    "otp_type":"",
+                                    "token":"hyu",
+                                  });
 
-                              } else {}
-                            },
-                            child: Text(
-                              "Login",
-                              style: TextStyle(
-                                  color: Colors.white,
-                                  shadows: [
-                                    const Shadow(
-                                        color: Colors.white, blurRadius: 0.3)
-                                  ],
-                                  fontWeight: FontWeight.w700,
-                                  fontSize: Adaptive.sp(16)),
-                            ),
-                            style: defaultButtonStyle,
-                          ),
-                        ),
-                  SizedBox(
+
+                            }
+                          });
+
+                        } else {}
+                      },
+                      child: Text(
+                        "Login",
+                        style: TextStyle(
+                            color: Colors.white,
+                            shadows: [
+                              const Shadow(
+                                  color: Colors.white, blurRadius: 0.3)
+                            ],
+                            fontWeight: FontWeight.w700,
+                            fontSize: Adaptive.sp(16)),
+                      ),
+                      style: defaultButtonStyle,
+                    ),
+                  ),
+                  const SizedBox(
                     height: 10,
                   ),
                   // Align(
@@ -151,7 +149,7 @@ class _LoginscreenState extends ConsumerState<Loginscreen> {
                   //   ),
                   // )
                 ],
-              )))),
+              ),),)))),
     );
   }
 

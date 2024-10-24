@@ -1,6 +1,7 @@
 import 'package:dio/dio.dart';
 import 'package:pretty_dio_logger/pretty_dio_logger.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
+import 'package:transporter/Domain/Dio/DioInterceptor.dart';
 
 import '../../Presentation/Preferences/SharedPrefs/SharedUtility.dart';
 
@@ -8,20 +9,12 @@ part 'DioProvider.g.dart';
 
 @riverpod
 Dio dio(DioRef ref) {
-  return Dio(BaseOptions(baseUrl: ApiClient.testBaseUrl, headers: {
+  return Dio(BaseOptions(baseUrl: ApiClient.baseUrl, headers: {
     "Authorization": "${ref.watch(sharedUtilityProvider).getToken()}",
   },connectTimeout: const Duration(minutes: 1),
       receiveTimeout: const Duration(minutes: 1),
       sendTimeout: const Duration(minutes: 1)))
-    ..interceptors.add(PrettyDioLogger(
-      requestHeader: true,
-      requestBody: true,
-      responseBody: true,
-      responseHeader: false,
-      error: true,
-      compact: true,
-      maxWidth: 90,
-    ));
+    ..interceptors.add(DioInterceptor(ref));
 }
 
 class ApiClient {
@@ -74,8 +67,8 @@ Truck Driver api
 class ImageClient {
   
   static const assetsImageUrl =
-      "https://apnagodam.com/test/resources/assets/upload/transporter/";
+      "https://apnagodam.com/resources/assets/upload/transporter/";
 
 
-  static const secondKantaImage ='https://apnagodam.com/test/resources/assets/upload/second_kanta_parchi/';
+  static const secondKantaImage ='https://apnagodam.com/resources/assets/upload/second_kanta_parchi/';
 }

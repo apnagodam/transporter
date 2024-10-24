@@ -11,6 +11,15 @@ defaultPadding(Widget child) => Padding(
       child: child,
     );
 
+keyboardPadding(Widget child, BuildContext context) => Padding(
+      padding: Pad(
+          top: 10,
+          left: 10,
+          right: 10,
+          bottom: MediaQuery.of(context).viewInsets.bottom),
+      child: child,
+    );
+
 showLoader(BuildContext context) => SizedBox(
       height: MediaQuery.of(context).size.height,
       child: const Center(

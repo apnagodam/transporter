@@ -69,6 +69,7 @@ dependencies:
   pdf: ^3.11.1
   easy_pdf_viewer: ^1.0.8
   pretty_dio_logger: ^1.4.0
+  one_context: ^4.0.0
 dev_dependencies:
   flutter_test:
     sdk: flutter
