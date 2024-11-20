@@ -19,7 +19,7 @@ Dio dio(DioRef ref) {
 
 class ApiClient {
   static const baseUrl = "https://apnagodam.com/transport_api/";
-    static const testBaseUrl = "https://apnagodam.com/test/transport_api/";
+    static const testBaseUrl = "https://test.apnagodam.com/transport_api/";
 
 
 /*

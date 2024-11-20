@@ -94,7 +94,7 @@ class _LoginscreenState extends ConsumerState<Loginscreen> {
                               .toString() ).future).then((value){
                             ref.watch(isLoading.notifier).state = false;
 
-                            if (value.status.toString() == "1") {
+                            if (value['status'].toString() == "1") {
                               context.goNamed(RoutesStrings.verifyOtp,
                                   extra: {
                                     'mobile': mobileNumberController.text

@@ -10,8 +10,8 @@ BaseApiResponse baseApiResponseFromMap(String str) =>
 String baseApiResponseToMap(BaseApiResponse data) => json.encode(data.toMap());
 
 class BaseApiResponse {
-  String? status;
-  String? message;
+  dynamic status;
+  dynamic message;
 
   BaseApiResponse({
     this.status,

@@ -46,6 +46,9 @@ class DioInterceptor extends InterceptorsWrapper {
         errorToast(OneContext().context!, "${error.message}");
         debugPrint(" \x1B[31m${error.message}\x1B[0m");
 
+      case DioExceptionType.unknown:
+        errorToast(OneContext().context!, "${error.message}");
+        debugPrint(" \x1B[31m${error.message}\x1B[0m");
       default:
         errorToast(OneContext().context!, "${error.message}");
         debugPrint(" \x1B[31m${error.message}\x1B[0m");

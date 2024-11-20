@@ -18,9 +18,9 @@ Future<LoginResponseModel> verifyOtp(VerifyOtpRef ref,
 
 
 @riverpod
-Future<BaseApiResponse> sendOtp(SendOtpRef ref, {String? number}) async {
+Future<Map<String,dynamic>> sendOtp(SendOtpRef ref, {String? number}) async {
   var response = await ref
       .watch(dioProvider)
       .post(ApiClient.login, queryParameters: {'number': number});
-  return baseApiResponseFromMap(response.data);
+  return response.data;//9568777786
 }

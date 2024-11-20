@@ -172,14 +172,14 @@ class _VerifyOtpProviderElement
   String? get otp => (origin as VerifyOtpProvider).otp;
 }
 
-String _$sendOtpHash() => r'19a07a13cbbdc3d970cc12f24e730f8c2435cdce';
+String _$sendOtpHash() => r'3e58320171c8221a2d1a4cfea0697afc367f1e26';
 
 /// See also [sendOtp].
 @ProviderFor(sendOtp)
 const sendOtpProvider = SendOtpFamily();
 
 /// See also [sendOtp].
-class SendOtpFamily extends Family<AsyncValue<BaseApiResponse>> {
+class SendOtpFamily extends Family<AsyncValue<Map<String, dynamic>>> {
   /// See also [sendOtp].
   const SendOtpFamily();
 
@@ -217,7 +217,7 @@ class SendOtpFamily extends Family<AsyncValue<BaseApiResponse>> {
 }
 
 /// See also [sendOtp].
-class SendOtpProvider extends AutoDisposeFutureProvider<BaseApiResponse> {
+class SendOtpProvider extends AutoDisposeFutureProvider<Map<String, dynamic>> {
   /// See also [sendOtp].
   SendOtpProvider({
     String? number,
@@ -251,7 +251,7 @@ class SendOtpProvider extends AutoDisposeFutureProvider<BaseApiResponse> {
 
   @override
   Override overrideWith(
-    FutureOr<BaseApiResponse> Function(SendOtpRef provider) create,
+    FutureOr<Map<String, dynamic>> Function(SendOtpRef provider) create,
   ) {
     return ProviderOverride(
       origin: this,
@@ -268,7 +268,7 @@ class SendOtpProvider extends AutoDisposeFutureProvider<BaseApiResponse> {
   }
 
   @override
-  AutoDisposeFutureProviderElement<BaseApiResponse> createElement() {
+  AutoDisposeFutureProviderElement<Map<String, dynamic>> createElement() {
     return _SendOtpProviderElement(this);
   }
 
@@ -286,13 +286,14 @@ class SendOtpProvider extends AutoDisposeFutureProvider<BaseApiResponse> {
   }
 }
 
-mixin SendOtpRef on AutoDisposeFutureProviderRef<BaseApiResponse> {
+mixin SendOtpRef on AutoDisposeFutureProviderRef<Map<String, dynamic>> {
   /// The parameter `number` of this provider.
   String? get number;
 }
 
 class _SendOtpProviderElement
-    extends AutoDisposeFutureProviderElement<BaseApiResponse> with SendOtpRef {
+    extends AutoDisposeFutureProviderElement<Map<String, dynamic>>
+    with SendOtpRef {
   _SendOtpProviderElement(super.provider);
 
   @override

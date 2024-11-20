@@ -113,7 +113,6 @@ class _VerifyotpState extends ConsumerState<Verifyotp> {
                               number: widget.mobileNumber, otp: pin)
                               .future)
                               .then((value) {
-                            hideLoader(context);
 
                             if (value.status.toString() == "1") {
                               ref
@@ -130,7 +129,6 @@ class _VerifyotpState extends ConsumerState<Verifyotp> {
                             }
                           }).onError((e, s) {
                             errorToast(context, e.toString());
-                            hideLoader(context);
 
                           });
                           // });
