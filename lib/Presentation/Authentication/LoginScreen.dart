@@ -75,9 +75,7 @@ class _LoginscreenState extends ConsumerState<Loginscreen> {
                   const SizedBox(
                     height: 10,
                   ),
-                  ref.watch(isLoading)
-                      ? showLoader(context)
-                      : SizedBox(
+                  SizedBox(
                     width: MediaQuery.of(context).size.width,
                     child: ElevatedButton(
                       onPressed: () {
@@ -127,27 +125,27 @@ class _LoginscreenState extends ConsumerState<Loginscreen> {
                   const SizedBox(
                     height: 10,
                   ),
-                  // Align(
-                  //   alignment: Alignment.bottomCenter,
-                  //   child: Text.rich(
-                  //     TextSpan(
-                  //         text: 'Do not have an Account?',
-                  //         style: TextStyle(
-                  //           fontWeight: FontWeight.bold,
-                  //         ),
-                  //         children: [
-                  //           TextSpan(
-                  //             text: " Register",
-                  //             recognizer: TapGestureRecognizer()
-                  //               ..onTap = () =>
-                  //                   context.goNamed(RoutesStrings.register),
-                  //             style: TextStyle(
-                  //               fontWeight: FontWeight.bold,
-                  //             ),
-                  //           ),
-                  //         ]),
-                  //   ),
-                  // )
+                  Align(
+                    alignment: Alignment.bottomCenter,
+                    child: Text.rich(
+                      TextSpan(
+                          text: 'Do not have an Account?',
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                          ),
+                          children: [
+                            TextSpan(
+                              text: " Register",
+                              recognizer: TapGestureRecognizer()
+                                ..onTap = () =>
+                                    context.goNamed(RoutesStrings.register),
+                              style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ]),
+                    ),
+                  )
                 ],
               ),),)))),
     );

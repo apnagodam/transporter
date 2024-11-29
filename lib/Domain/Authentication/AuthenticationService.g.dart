@@ -172,7 +172,7 @@ class _VerifyOtpProviderElement
   String? get otp => (origin as VerifyOtpProvider).otp;
 }
 
-String _$sendOtpHash() => r'3e58320171c8221a2d1a4cfea0697afc367f1e26';
+String _$sendOtpHash() => r'9bbe040a284373e285e20dc0bb3f7d901fc37776';
 
 /// See also [sendOtp].
 @ProviderFor(sendOtp)
@@ -298,6 +298,136 @@ class _SendOtpProviderElement
 
   @override
   String? get number => (origin as SendOtpProvider).number;
+}
+
+String _$registerUserHash() => r'4e5c8a00d61875818f8d123f8d5ab668fcfaca5f';
+
+/// See also [registerUser].
+@ProviderFor(registerUser)
+const registerUserProvider = RegisterUserFamily();
+
+/// See also [registerUser].
+class RegisterUserFamily extends Family<AsyncValue<Map<String, dynamic>>> {
+  /// See also [registerUser].
+  const RegisterUserFamily();
+
+  /// See also [registerUser].
+  RegisterUserProvider call({
+    Map<String, dynamic>? data,
+  }) {
+    return RegisterUserProvider(
+      data: data,
+    );
+  }
+
+  @override
+  RegisterUserProvider getProviderOverride(
+    covariant RegisterUserProvider provider,
+  ) {
+    return call(
+      data: provider.data,
+    );
+  }
+
+  static const Iterable<ProviderOrFamily>? _dependencies = null;
+
+  @override
+  Iterable<ProviderOrFamily>? get dependencies => _dependencies;
+
+  static const Iterable<ProviderOrFamily>? _allTransitiveDependencies = null;
+
+  @override
+  Iterable<ProviderOrFamily>? get allTransitiveDependencies =>
+      _allTransitiveDependencies;
+
+  @override
+  String? get name => r'registerUserProvider';
+}
+
+/// See also [registerUser].
+class RegisterUserProvider
+    extends AutoDisposeFutureProvider<Map<String, dynamic>> {
+  /// See also [registerUser].
+  RegisterUserProvider({
+    Map<String, dynamic>? data,
+  }) : this._internal(
+          (ref) => registerUser(
+            ref as RegisterUserRef,
+            data: data,
+          ),
+          from: registerUserProvider,
+          name: r'registerUserProvider',
+          debugGetCreateSourceHash:
+              const bool.fromEnvironment('dart.vm.product')
+                  ? null
+                  : _$registerUserHash,
+          dependencies: RegisterUserFamily._dependencies,
+          allTransitiveDependencies:
+              RegisterUserFamily._allTransitiveDependencies,
+          data: data,
+        );
+
+  RegisterUserProvider._internal(
+    super._createNotifier, {
+    required super.name,
+    required super.dependencies,
+    required super.allTransitiveDependencies,
+    required super.debugGetCreateSourceHash,
+    required super.from,
+    required this.data,
+  }) : super.internal();
+
+  final Map<String, dynamic>? data;
+
+  @override
+  Override overrideWith(
+    FutureOr<Map<String, dynamic>> Function(RegisterUserRef provider) create,
+  ) {
+    return ProviderOverride(
+      origin: this,
+      override: RegisterUserProvider._internal(
+        (ref) => create(ref as RegisterUserRef),
+        from: from,
+        name: null,
+        dependencies: null,
+        allTransitiveDependencies: null,
+        debugGetCreateSourceHash: null,
+        data: data,
+      ),
+    );
+  }
+
+  @override
+  AutoDisposeFutureProviderElement<Map<String, dynamic>> createElement() {
+    return _RegisterUserProviderElement(this);
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return other is RegisterUserProvider && other.data == data;
+  }
+
+  @override
+  int get hashCode {
+    var hash = _SystemHash.combine(0, runtimeType.hashCode);
+    hash = _SystemHash.combine(hash, data.hashCode);
+
+    return _SystemHash.finish(hash);
+  }
+}
+
+mixin RegisterUserRef on AutoDisposeFutureProviderRef<Map<String, dynamic>> {
+  /// The parameter `data` of this provider.
+  Map<String, dynamic>? get data;
+}
+
+class _RegisterUserProviderElement
+    extends AutoDisposeFutureProviderElement<Map<String, dynamic>>
+    with RegisterUserRef {
+  _RegisterUserProviderElement(super.provider);
+
+  @override
+  Map<String, dynamic>? get data => (origin as RegisterUserProvider).data;
 }
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member

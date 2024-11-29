@@ -15,6 +15,7 @@ class DioInterceptor extends InterceptorsWrapper {
   @override
   void onError(DioException error, ErrorInterceptorHandler handler) {
     OneContext().popAllDialogs();
+    OneContext().hideProgressIndicator();
     switch (error.type) {
       case DioExceptionType.connectionTimeout:
         errorToast(
@@ -62,16 +63,19 @@ class DioInterceptor extends InterceptorsWrapper {
     debugPrint(" \x1B[32m${options.baseUrl}${options.path}\x1B[0m");
     debugPrint(" \x1B[32m${options.headers}\x1B[0m");
     debugPrint(" \x1B[32m${options.queryParameters}\x1B[0m");
+    OneContext().showProgressIndicator();
+
     super.onRequest(options, handler);
   }
 
   @override
   void onResponse(Response response, ResponseInterceptorHandler handler) {
+    OneContext().hideProgressIndicator();
+
     if (response.statusCode == 500) {
       errorToast(
           OneContext().context!, "Please Check your internet connection!");
     }
-
     if (response.data['status'].toString() == "3") {
       ref.watch(sharedPreferencesProvider).clear();
       ref.watch(goRouterProvider).go("/login");
@@ -80,7 +84,7 @@ class DioInterceptor extends InterceptorsWrapper {
       errorToast(OneContext().context!, "${response.data['message']}");
       debugPrint(" \x1B[31m${response.data}\x1B[0m");
     } else if (response.data['status'].toString() == "1") {
-      errorToast(OneContext().context!, "${response.data['message']}");
+      successToast(OneContext().context!, "${response.data['message']}");
       debugPrint(" \x1B[32m${response.data}\x1B[0m");
     }
 

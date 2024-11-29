@@ -839,7 +839,7 @@ class _DashboardState extends ConsumerState<Dashboard> {
                                                                                 if (ref.watch(driverProvider) == null) {
                                                                                   errorToast(context, 'Please select driver');
                                                                                 } else {
-                                                                                  ref.watch(updateTruckDriverProvider(driverId: "${ref.watch(driverProvider)?.id ?? 0}", truckId: "${ref.watch(driverProvider)?.id ?? 0}", tripRequestId: "${data.data?[index].id}").future).then((value) {
+                                                                                  ref.watch(updateTruckDriverProvider(driverId: "${ref.watch(driverProvider)?.id ?? 0}", truckId: "${ref.watch(truckProvider)?.id ?? 0}", tripRequestId: "${data.data?[index].id}").future).then((value) {
                                                                                     if (value['status'].toString() == "1") {
                                                                                       ref.invalidate(tripsListProvider);
                                                                                       ref.watch(goRouterProvider).pop(modalContext);
@@ -896,7 +896,6 @@ class _DashboardState extends ConsumerState<Dashboard> {
                                                       if (value['status']
                                                               .toString() ==
                                                           "1") {
-
                                                         ref.invalidate(
                                                             tripsListProvider);
                                                       }

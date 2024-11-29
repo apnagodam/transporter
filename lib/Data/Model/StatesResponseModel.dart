@@ -10,8 +10,8 @@ String statesResponseModelToMap(StatesResponseModel data) => json.encode(data.to
 
 class StatesResponseModel {
   List<Datum>? data;
-  String? status;
-  String? message;
+  dynamic status;
+  dynamic message;
 
   StatesResponseModel({
     this.data,
@@ -34,9 +34,9 @@ class StatesResponseModel {
 
 class Datum {
   dynamic? id;
-  String? name;
-  String? code;
-  String? countryId;
+  dynamic name;
+  dynamic code;
+  dynamic countryId;
 
   Datum({
     this.id,
