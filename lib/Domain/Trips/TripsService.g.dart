@@ -184,6 +184,22 @@ class _TripDataProviderElement
   String? get tripRequestid => (origin as TripDataProvider).tripRequestid;
 }
 
+String _$tripsHistoryHash() => r'632e0f77f1dfcba30c8bb3c84b8cd07dc67e88be';
+
+/// See also [tripsHistory].
+@ProviderFor(tripsHistory)
+final tripsHistoryProvider =
+    AutoDisposeStreamProvider<TransporterTripHistoryModel>.internal(
+  tripsHistory,
+  name: r'tripsHistoryProvider',
+  debugGetCreateSourceHash:
+      const bool.fromEnvironment('dart.vm.product') ? null : _$tripsHistoryHash,
+  dependencies: null,
+  allTransitiveDependencies: null,
+);
+
+typedef TripsHistoryRef
+    = AutoDisposeStreamProviderRef<TransporterTripHistoryModel>;
 String _$updateTruckDriverHash() => r'ceb6e8735ca0099ece2ac699991764a75cd390b8';
 
 /// See also [updateTruckDriver].

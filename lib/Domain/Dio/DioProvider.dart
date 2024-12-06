@@ -9,7 +9,7 @@ part 'DioProvider.g.dart';
 @riverpod
 Dio dio(DioRef ref) {
   return Dio(BaseOptions(
-      baseUrl: ApiClient.baseUrl,
+      baseUrl: ApiClient.testBaseUrl,
       headers: {
         "Authorization": "${ref.watch(sharedUtilityProvider).getToken()}",
       },
@@ -28,8 +28,7 @@ Dio dioStates(DioStatesRef ref) {
       },
       connectTimeout: const Duration(minutes: 1),
       receiveTimeout: const Duration(minutes: 1),
-      sendTimeout: const Duration(minutes: 1)))
-    ;
+      sendTimeout: const Duration(minutes: 1)));
 }
 
 class ApiClient {
@@ -50,6 +49,7 @@ state and district api
 
   static const getStates = "get_state_name_new";
   static const getDistricts = 'district-list-new';
+
 /*
 bank api
 *
@@ -80,6 +80,7 @@ Trips api
   static const startTrip = 'trip_start_update';
   static const biltyPdfData = 'bilty_data';
   static const tripEnd = 'transporter_trip_end';
+  static const getTripsHistory = 'trip_history';
 
 /*
 Truck Driver api

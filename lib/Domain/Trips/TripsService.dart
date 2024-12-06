@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:transporter/Data/Model/BiltyResponseModel.dart';
+import 'package:transporter/Data/Model/TransporterTripHistoryModel.dart';
 import 'package:transporter/Data/Model/TripDataResponse.dart';
 import 'package:transporter/Data/Model/TruckDriverResponse.dart';
 import 'package:transporter/Domain/Dio/DioProvider.dart';
@@ -45,6 +46,12 @@ Future<BiltyResponseData> tripData(TripDataRef ref,
     ref.watch(goRouterProvider).go(RoutesStrings.login);
   }
   return body;
+}
+
+@riverpod
+Stream<TransporterTripHistoryModel> tripsHistory(TripsHistoryRef ref) async* {
+  var response = await ref.watch(dioProvider).post(ApiClient.getTripsHistory);
+  yield transporterTripHistoryModelFromMap(jsonEncode(response.data));
 }
 
 @riverpod

@@ -81,10 +81,10 @@ class DioInterceptor extends InterceptorsWrapper {
       ref.watch(goRouterProvider).go("/login");
       debugPrint(" \x1B[31m${response.data}\x1B[0m");
     } else if (response.data['status'].toString() == "0") {
-      errorToast(OneContext().context!, "${response.data['message']}");
+      errorToast(OneContext().context!, "${response.data['message'] ?? response.data['Message']}");
       debugPrint(" \x1B[31m${response.data}\x1B[0m");
     } else if (response.data['status'].toString() == "1") {
-      successToast(OneContext().context!, "${response.data['message']}");
+      successToast(OneContext().context!, "${response.data['message']?? response.data['Message']}");
       debugPrint(" \x1B[32m${response.data}\x1B[0m");
     }
 

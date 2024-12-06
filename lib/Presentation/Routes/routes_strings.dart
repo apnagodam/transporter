@@ -8,6 +8,7 @@ class RoutesStrings {
   static const applyForLoan = 'applyForLoan';
 
   static const profile = 'profile';
+  static const tripsHistory = 'tripsHistory';
   static const sanctionedAmount = 'sanctionedAmount';
   static const addMoney = 'addMoney';
   static const moneyRequests = 'moneyRequests';

@@ -84,6 +84,29 @@ class _DashboardState extends ConsumerState<Dashboard> {
                     )),
               ],
             ),
+            ExpansionTile(
+              backgroundColor: Colors.white,
+              collapsedBackgroundColor: Colors.white,
+              title: Text(
+                'Trips',
+                style: TextStyle(
+                    fontWeight: FontWeight.bold, fontSize: Adaptive.sp(16)),
+              ),
+              children: [
+                ListTile(
+                  title: Text(
+                    'Trips History',
+                    style: TextStyle(
+                        fontWeight: FontWeight.w600, fontSize: Adaptive.sp(16)),
+
+                  ),
+                  onTap: (){
+                      ref.watch(goRouterProvider).goNamed(RoutesStrings.tripsHistory);
+                  },
+                )
+              ],
+            )
+
             // CupertinoActionSheet(
             //   actions: [
             //     // CupertinoActionSheetAction(
@@ -217,6 +240,7 @@ class _DashboardState extends ConsumerState<Dashboard> {
             //                 fontWeight: FontWeight.w500))),
             //   ],
             // ),
+            ,
             CupertinoActionSheet(
               actions: [
                 CupertinoActionSheetAction(
