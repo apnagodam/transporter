@@ -5,6 +5,7 @@ import 'package:assorted_layout_widgets/assorted_layout_widgets.dart';
 import 'package:button_animations/button_animations.dart';
 import 'package:dotted_border/dotted_border.dart';
 import 'package:dropdown_search/dropdown_search.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:easy_pdf_viewer/easy_pdf_viewer.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -12,7 +13,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:insta_image_viewer/insta_image_viewer.dart';
-import 'package:intl/intl.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
 import 'package:transporter/Data/Model/TruckDriverResponse.dart';
@@ -88,20 +88,21 @@ class _DashboardState extends ConsumerState<Dashboard> {
               backgroundColor: Colors.white,
               collapsedBackgroundColor: Colors.white,
               title: Text(
-                'Trips',
+                'trips'.tr(),
                 style: TextStyle(
                     fontWeight: FontWeight.bold, fontSize: Adaptive.sp(16)),
               ),
               children: [
                 ListTile(
                   title: Text(
-                    'Trips History',
+                    'tripsHistory'.tr(),
                     style: TextStyle(
                         fontWeight: FontWeight.w600, fontSize: Adaptive.sp(16)),
-
                   ),
-                  onTap: (){
-                      ref.watch(goRouterProvider).goNamed(RoutesStrings.tripsHistory);
+                  onTap: () {
+                    ref
+                        .watch(goRouterProvider)
+                        .goNamed(RoutesStrings.tripsHistory);
                   },
                 )
               ],
@@ -249,7 +250,7 @@ class _DashboardState extends ConsumerState<Dashboard> {
                       context.go(RoutesStrings.login);
                     },
                     child: Text(
-                      'Logout',
+                      'logout'.tr(),
                       style: TextStyle(
                           fontSize: Adaptive.sp(16),
                           color: Colors.red,
@@ -288,7 +289,7 @@ class _DashboardState extends ConsumerState<Dashboard> {
                                             Padding(
                                               padding: Pad(all: 10),
                                               child: Text(
-                                                'Trip Id : ${data.data?[index].tripId ?? "--"}',
+                                                '${'tripId'.tr()}: ${data.data?[index].tripId ?? "--"}',
                                                 style: TextStyle(
                                                     color: Colors.black,
                                                     fontSize: Adaptive.sp(16),
@@ -309,7 +310,7 @@ class _DashboardState extends ConsumerState<Dashboard> {
                                       ),
                                       RowSuper(fill: true, children: [
                                         Text(
-                                          'From',
+                                          'from'.tr(),
                                           textAlign: TextAlign.start,
                                           style: TextStyle(
                                               color: ColorConstants
@@ -332,7 +333,7 @@ class _DashboardState extends ConsumerState<Dashboard> {
                                       ),
                                       RowSuper(fill: true, children: [
                                         Text(
-                                          'To',
+                                          'to'.tr(),
                                           textAlign: TextAlign.start,
                                           style: TextStyle(
                                               color: ColorConstants
@@ -355,7 +356,7 @@ class _DashboardState extends ConsumerState<Dashboard> {
                                       ),
                                       RowSuper(fill: true, children: [
                                         Text(
-                                          'Vehicle Number',
+                                          'vehicleNumber'.tr(),
                                           textAlign: TextAlign.start,
                                           style: TextStyle(
                                               color: ColorConstants
@@ -378,7 +379,7 @@ class _DashboardState extends ConsumerState<Dashboard> {
                                       ),
                                       RowSuper(fill: true, children: [
                                         Text(
-                                          'Driver name',
+                                          'driverName'.tr(),
                                           textAlign: TextAlign.start,
                                           style: TextStyle(
                                               color: ColorConstants
@@ -401,7 +402,7 @@ class _DashboardState extends ConsumerState<Dashboard> {
                                       ),
                                       RowSuper(fill: true, children: [
                                         Text(
-                                          'Driver phone',
+                                          'driverPhone'.tr(),
                                           textAlign: TextAlign.start,
                                           style: TextStyle(
                                               color: ColorConstants
@@ -424,7 +425,7 @@ class _DashboardState extends ConsumerState<Dashboard> {
                                       ),
                                       RowSuper(fill: true, children: [
                                         Text(
-                                          'Customer',
+                                          'customer'.tr(),
                                           textAlign: TextAlign.start,
                                           style: TextStyle(
                                               color: ColorConstants
@@ -452,7 +453,7 @@ class _DashboardState extends ConsumerState<Dashboard> {
                                           alignment: Alignment.center,
                                           children: [
                                             Text(
-                                              'Customer Phone',
+                                              'customerPhone'.tr(),
                                               textAlign: TextAlign.start,
                                               style: TextStyle(
                                                   color: ColorConstants
@@ -478,7 +479,7 @@ class _DashboardState extends ConsumerState<Dashboard> {
                                           alignment: Alignment.center,
                                           children: [
                                             Text(
-                                              'Rate per Qtl. (Freight Rate)',
+                                              'ratePerQtl'.tr(),
                                               textAlign: TextAlign.start,
                                               style: TextStyle(
                                                   color: ColorConstants
@@ -487,7 +488,7 @@ class _DashboardState extends ConsumerState<Dashboard> {
                                                   fontWeight: FontWeight.w800),
                                             ),
                                             Text(
-                                              '${currencyFormat.format(int.parse("${data.data?[index].rate ?? 0}"))} / per Qtl.',
+                                              '${currencyFormat.format(int.parse("${data.data?[index].rate ?? 0}"))} / perQtl'.tr(),
                                               textAlign: TextAlign.end,
                                               style: TextStyle(
                                                   color: ColorConstants
@@ -504,7 +505,7 @@ class _DashboardState extends ConsumerState<Dashboard> {
                                           alignment: Alignment.center,
                                           children: [
                                             Text(
-                                              'Commodity',
+                                              'commodity'.tr(),
                                               textAlign: TextAlign.start,
                                               style: TextStyle(
                                                   color: ColorConstants
@@ -530,7 +531,7 @@ class _DashboardState extends ConsumerState<Dashboard> {
                                           alignment: Alignment.center,
                                           children: [
                                             Text(
-                                              'Final Weight(Qtl.)',
+                                              'finalWeight'.tr(),
                                               textAlign: TextAlign.start,
                                               style: TextStyle(
                                                   color: ColorConstants
@@ -539,7 +540,7 @@ class _DashboardState extends ConsumerState<Dashboard> {
                                                   fontWeight: FontWeight.w800),
                                             ),
                                             Text(
-                                              '${data.data?[index].weight ?? "Pending"}',
+                                              '${data.data?[index].weight ?? "pending".tr()}',
                                               textAlign: TextAlign.end,
                                               style: TextStyle(
                                                   color: ColorConstants
@@ -556,7 +557,7 @@ class _DashboardState extends ConsumerState<Dashboard> {
                                           alignment: Alignment.center,
                                           children: [
                                             Text(
-                                              'Final No of Bags',
+                                              'finalNoOfBags'.tr(),
                                               textAlign: TextAlign.start,
                                               style: TextStyle(
                                                   color: ColorConstants
@@ -565,7 +566,7 @@ class _DashboardState extends ConsumerState<Dashboard> {
                                                   fontWeight: FontWeight.w800),
                                             ),
                                             Text(
-                                              '${data.data?[index].noOfBags ?? "Pending"}',
+                                              '${data.data?[index].noOfBags ?? "pending".tr()}',
                                               textAlign: TextAlign.end,
                                               style: TextStyle(
                                                   color: ColorConstants
@@ -582,7 +583,7 @@ class _DashboardState extends ConsumerState<Dashboard> {
                                           alignment: Alignment.center,
                                           children: [
                                             Text(
-                                              'Receiving Weight(Qtl.)',
+                                              'receivingWeight'.tr(),
                                               textAlign: TextAlign.start,
                                               style: TextStyle(
                                                   color: ColorConstants
@@ -591,7 +592,7 @@ class _DashboardState extends ConsumerState<Dashboard> {
                                                   fontWeight: FontWeight.w800),
                                             ),
                                             Text(
-                                              '${data.data?[index].recevingWeight ?? "Pending"}',
+                                              '${data.data?[index].recevingWeight ?? "pending".tr()}',
                                               textAlign: TextAlign.end,
                                               style: TextStyle(
                                                   color: ColorConstants
@@ -608,7 +609,7 @@ class _DashboardState extends ConsumerState<Dashboard> {
                                           alignment: Alignment.center,
                                           children: [
                                             Text(
-                                              'Receiving Bags',
+                                              'receivingBags'.tr(),
                                               textAlign: TextAlign.start,
                                               style: TextStyle(
                                                   color: ColorConstants
@@ -617,7 +618,7 @@ class _DashboardState extends ConsumerState<Dashboard> {
                                                   fontWeight: FontWeight.w800),
                                             ),
                                             Text(
-                                              '${data.data?[index].recevingBags ?? "Pending"}',
+                                              '${data.data?[index].recevingBags ?? "pending".tr()}',
                                               textAlign: TextAlign.end,
                                               style: TextStyle(
                                                   color: ColorConstants
@@ -634,7 +635,7 @@ class _DashboardState extends ConsumerState<Dashboard> {
                                           alignment: Alignment.center,
                                           children: [
                                             Text(
-                                              '${data.data?[index].weight == null ? 'Provisional Billty ' : "Final Billty "}',
+                                              '${data.data?[index].weight == null ? 'provBilty'.tr() : "provBilty".tr()}',
                                               textAlign: TextAlign.start,
                                               style: TextStyle(
                                                   color: ColorConstants
@@ -696,7 +697,7 @@ class _DashboardState extends ConsumerState<Dashboard> {
                                               alignment: Alignment.center,
                                               children: [
                                                   Text(
-                                                    'Goods Invoice Image',
+                                                    'goodsInvoiceImage'.tr(),
                                                     textAlign: TextAlign.start,
                                                     style: TextStyle(
                                                         color: ColorConstants
@@ -731,7 +732,7 @@ class _DashboardState extends ConsumerState<Dashboard> {
                                           alignment: Alignment.center,
                                           children: [
                                             Text(
-                                              'Kanta Image',
+                                              'kantaImage'.tr(),
                                               textAlign: TextAlign.start,
                                               style: TextStyle(
                                                   color: ColorConstants
@@ -763,7 +764,7 @@ class _DashboardState extends ConsumerState<Dashboard> {
                                           alignment: Alignment.center,
                                           children: [
                                             Text(
-                                              'Receiving Kanta Parchi',
+                                              'receivingKanta'.tr(),
                                               textAlign: TextAlign.start,
                                               style: TextStyle(
                                                   color: ColorConstants
@@ -858,10 +859,10 @@ class _DashboardState extends ConsumerState<Dashboard> {
                                                                               borderWidth: 1,
                                                                               onTap: () async {
                                                                                 if (ref.watch(truckProvider) == null) {
-                                                                                  errorToast(context, 'Please select truck');
+                                                                                  errorToast(context, 'selectTruck'.tr());
                                                                                 }
                                                                                 if (ref.watch(driverProvider) == null) {
-                                                                                  errorToast(context, 'Please select driver');
+                                                                                  errorToast(context, 'selectDriver'.tr());
                                                                                 } else {
                                                                                   ref.watch(updateTruckDriverProvider(driverId: "${ref.watch(driverProvider)?.id ?? 0}", truckId: "${ref.watch(truckProvider)?.id ?? 0}", tripRequestId: "${data.data?[index].id}").future).then((value) {
                                                                                     if (value['status'].toString() == "1") {
@@ -872,7 +873,7 @@ class _DashboardState extends ConsumerState<Dashboard> {
                                                                                 }
                                                                               },
                                                                               child: Text(
-                                                                                "Submit",
+                                                                                "submit".tr(),
                                                                                 textAlign: TextAlign.center,
                                                                                 style: TextStyle(color: Colors.white, fontSize: Adaptive.sp(14), fontWeight: FontWeight.w800),
                                                                               ),
@@ -881,7 +882,7 @@ class _DashboardState extends ConsumerState<Dashboard> {
                                                                     ))));
                                               },
                                               child: Text(
-                                                "Add Truck / Driver",
+                                                "selectTruck / selectDriver".tr(),
                                                 textAlign: TextAlign.center,
                                                 style: TextStyle(
                                                     color: Colors.white,
@@ -926,7 +927,7 @@ class _DashboardState extends ConsumerState<Dashboard> {
                                                     });
                                                   },
                                                   child: Text(
-                                                    "Start Trip",
+                                                    "startTrip".tr(),
                                                     textAlign: TextAlign.center,
                                                     style: TextStyle(
                                                         color: Colors.white,
@@ -984,11 +985,11 @@ class _DashboardState extends ConsumerState<Dashboard> {
                                                                                     keyboardType: TextInputType.text,
                                                                                     validator: (value) {
                                                                                       if (value == null || value.isEmpty) {
-                                                                                        return 'Please input bags';
+                                                                                        return 'inputBags'.tr();
                                                                                       }
                                                                                       return null;
                                                                                     },
-                                                                                    decoration: InputDecoration(label: const Text('Enter bags'), contentPadding: const Pad(top: 0, bottom: 0, left: 10), border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)), enabledBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(10))),
+                                                                                    decoration: InputDecoration(label:  Text('inputBags'.tr()), contentPadding: const Pad(top: 0, bottom: 0, left: 10), border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)), enabledBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(10))),
                                                                                   ),
                                                                                   SizedBox(
                                                                                     height: 10,
@@ -998,11 +999,11 @@ class _DashboardState extends ConsumerState<Dashboard> {
                                                                                     keyboardType: TextInputType.text,
                                                                                     validator: (value) {
                                                                                       if (value == null || value.isEmpty) {
-                                                                                        return 'Please input receieving weight';
+                                                                                        return 'enterRecevingBags'.tr();
                                                                                       }
                                                                                       return null;
                                                                                     },
-                                                                                    decoration: InputDecoration(label: const Text('Enter Receiving weight'), contentPadding: const Pad(top: 0, bottom: 0, left: 10), border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)), enabledBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(10))),
+                                                                                    decoration: InputDecoration(label:  Text('recievingWeight'.tr()), contentPadding: const Pad(top: 0, bottom: 0, left: 10), border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)), enabledBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(10))),
                                                                                   ),
                                                                                   SizedBox(
                                                                                     height: 10,
@@ -1041,7 +1042,7 @@ class _DashboardState extends ConsumerState<Dashboard> {
                                                                                                       height: 5,
                                                                                                     ),
                                                                                                     Text(
-                                                                                                      "Select kanta ",
+                                                                                                      "selectKanta".tr(),
                                                                                                       textAlign: TextAlign.center,
                                                                                                       style: TextStyle(color: ColorConstants.primaryColorDriver, fontWeight: FontWeight.bold, fontSize: Adaptive.sp(16)),
                                                                                                     ),
@@ -1049,7 +1050,7 @@ class _DashboardState extends ConsumerState<Dashboard> {
                                                                                                       height: 5,
                                                                                                     ),
                                                                                                     Text(
-                                                                                                      "Upload Document Image,\n  Supports JPG, JPEG, PNG",
+                                                                                                      "uploadDocumentImage".tr(),
                                                                                                       textAlign: TextAlign.center,
                                                                                                       style: TextStyle(color: ColorConstants.primaryColorDriver, fontWeight: FontWeight.w700, fontSize: Adaptive.sp(13)),
                                                                                                     )
@@ -1101,7 +1102,7 @@ class _DashboardState extends ConsumerState<Dashboard> {
                                                                                                       height: 5,
                                                                                                     ),
                                                                                                     Text(
-                                                                                                      "Select Quality Image",
+                                                                                                      "selectQualityImage".tr(),
                                                                                                       textAlign: TextAlign.center,
                                                                                                       style: TextStyle(color: ColorConstants.primaryColorDriver, fontWeight: FontWeight.bold, fontSize: Adaptive.sp(16)),
                                                                                                     ),
@@ -1109,7 +1110,7 @@ class _DashboardState extends ConsumerState<Dashboard> {
                                                                                                       height: 5,
                                                                                                     ),
                                                                                                     Text(
-                                                                                                      "Upload Document Image,\n  Supports JPG, JPEG, PNG",
+                                                                                                      "uploadDocumentImage".tr(),
                                                                                                       textAlign: TextAlign.center,
                                                                                                       style: TextStyle(color: ColorConstants.primaryColorDriver, fontWeight: FontWeight.w700, fontSize: Adaptive.sp(13)),
                                                                                                     )
@@ -1136,15 +1137,15 @@ class _DashboardState extends ConsumerState<Dashboard> {
                                                                                     ],
                                                                                     borderWidth: 1,
                                                                                     child: Text(
-                                                                                      "Submit",
+                                                                                      "submit".tr(),
                                                                                     ),
                                                                                     onTap: () async {
                                                                                       if (form.currentState!.validate()) {
                                                                                         if (ref.watch(kantaImage) == null) {
-                                                                                          errorToast(context, "please select kanta image");
+                                                                                          errorToast(context, "kantaImage".tr());
                                                                                         }
                                                                                         if (ref.watch(qualityImage) == null) {
-                                                                                          errorToast(context, 'Please select quality image');
+                                                                                          errorToast(context, 'selectQualityImage'.tr());
                                                                                         } else {
                                                                                           final bytes = File(ref.watch(kantaImage)?.path ?? "").readAsBytesSync();
                                                                                           String img64 = base64Encode(bytes);
@@ -1170,7 +1171,7 @@ class _DashboardState extends ConsumerState<Dashboard> {
                                                                         ))));
                                                       },
                                                       child: Text(
-                                                        "End Trip",
+                                                        "endTrip".tr(),
                                                         textAlign:
                                                             TextAlign.center,
                                                         style: TextStyle(
@@ -1188,7 +1189,7 @@ class _DashboardState extends ConsumerState<Dashboard> {
                                                                   .tripStart !=
                                                               null
                                                       ? Text(
-                                                          "Completed",
+                                                          "completed".tr(),
                                                           textAlign:
                                                               TextAlign.center,
                                                           style: TextStyle(
@@ -1202,7 +1203,7 @@ class _DashboardState extends ConsumerState<Dashboard> {
                                                                       .w800),
                                                         )
                                                       : Text(
-                                                          "Processing",
+                                                          "processing".tr(),
                                                           textAlign:
                                                               TextAlign.center,
                                                           style: TextStyle(
@@ -1293,7 +1294,7 @@ class _DashboardState extends ConsumerState<Dashboard> {
               title: Padding(
                 padding: const Pad(all: 10),
                 child: Text(
-                  'Select Truck',
+                  'selectTruck'.tr(),
                   textAlign: TextAlign.center,
                   style: TextStyle(
                       fontSize: Adaptive.sp(16), fontWeight: FontWeight.bold),
@@ -1309,10 +1310,10 @@ class _DashboardState extends ConsumerState<Dashboard> {
           itemAsString: (TruckDatum? u) => "${u?.truckNumber ?? "--"}",
           onChanged: (TruckDatum? data) =>
               ref.watch(truckProvider.notifier).state = data,
-          dropdownDecoratorProps: const DropDownDecoratorProps(
+          dropdownDecoratorProps: DropDownDecoratorProps(
             dropdownSearchDecoration: InputDecoration(
                 contentPadding: Pad(left: 10, bottom: 5, top: 5),
-                hintText: "Select Truck",
+                hintText: 'selectTruck'.tr(),
                 border: OutlineInputBorder(
                     borderRadius: BorderRadius.all(Radius.circular(8)),
                     borderSide:
@@ -1379,7 +1380,7 @@ class _DashboardState extends ConsumerState<Dashboard> {
               title: Padding(
                 padding: const Pad(all: 10),
                 child: Text(
-                  'Select Driver',
+                  'selectDriver'.tr(),
                   textAlign: TextAlign.center,
                   style: TextStyle(
                       fontSize: Adaptive.sp(16), fontWeight: FontWeight.bold),
@@ -1395,10 +1396,10 @@ class _DashboardState extends ConsumerState<Dashboard> {
           itemAsString: (DriverDatum? u) => "${u?.driverName ?? "--"}",
           onChanged: (DriverDatum? data) =>
               ref.watch(driverProvider.notifier).state = data,
-          dropdownDecoratorProps: const DropDownDecoratorProps(
+          dropdownDecoratorProps:  DropDownDecoratorProps(
             dropdownSearchDecoration: InputDecoration(
                 contentPadding: Pad(left: 10, bottom: 5, top: 5),
-                hintText: "Select Driver",
+                hintText:  'selectDriver'.tr(),
                 border: OutlineInputBorder(
                     borderRadius: BorderRadius.all(Radius.circular(8)),
                     borderSide:

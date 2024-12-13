@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:assorted_layout_widgets/assorted_layout_widgets.dart';
 import 'package:dotted_border/dotted_border.dart';
 import 'package:dropdown_search/dropdown_search.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -80,7 +81,7 @@ class _RegistrationscreenState extends ConsumerState<Registrationscreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Register"),
+        title: Text("register".tr()),
       ),
       body: SafeArea(
           child: defaultPadding(Form(
@@ -95,7 +96,7 @@ class _RegistrationscreenState extends ConsumerState<Registrationscreen> {
         Center(
           child: CupertinoButton(
               child: Text(
-                'Constitution',
+                'constitution'.tr(),
                 style: TextStyle(
                     fontWeight: FontWeight.bold,
                     fontSize: Adaptive.sp(16),
@@ -161,7 +162,7 @@ class _RegistrationscreenState extends ConsumerState<Registrationscreen> {
               title: Padding(
                 padding: const Pad(all: 10),
                 child: Text(
-                  'Select Constitution',
+                  'selectConstitution'.tr(),
                   textAlign: TextAlign.center,
                   style: TextStyle(
                       fontSize: Adaptive.sp(16), fontWeight: FontWeight.bold),
@@ -172,17 +173,17 @@ class _RegistrationscreenState extends ConsumerState<Registrationscreen> {
           items: ConstitutionType.values ?? [],
           validator: (value) {
             if (ref.watch(constitutionTypeProvider) == null) {
-              return "Please Select State";
+              return "selectState".tr();
             }
             return null;
           },
           itemAsString: (ConstitutionType? u) => u!.label,
           onChanged: (ConstitutionType? data) =>
               ref.watch(constitutionTypeProvider.notifier).state = data,
-          dropdownDecoratorProps: const DropDownDecoratorProps(
+          dropdownDecoratorProps: DropDownDecoratorProps(
             dropdownSearchDecoration: InputDecoration(
                 contentPadding: Pad(left: 10, bottom: 5, top: 5),
-                hintText: "Select Constitution",
+                hintText: "selectConstitution".tr(),
                 border: OutlineInputBorder(
                     borderRadius: BorderRadius.all(Radius.circular(8)),
                     borderSide:
@@ -197,8 +198,8 @@ class _RegistrationscreenState extends ConsumerState<Registrationscreen> {
               child: Text(
                 ref.watch(constitutionTypeProvider) ==
                         ConstitutionType.proprietorship
-                    ? 'Firm Details'
-                    : 'Personal Details',
+                    ? 'firmDetails'.tr()
+                    : 'personalDetails'.tr(),
                 style: TextStyle(
                     fontWeight: FontWeight.bold,
                     fontSize: Adaptive.sp(16),
@@ -206,12 +207,11 @@ class _RegistrationscreenState extends ConsumerState<Registrationscreen> {
               ),
               onPressed: null),
         ),
-
         personalDetailsLayout(context, ref),
         Center(
           child: CupertinoButton(
               child: Text(
-                'Bank Details',
+                'bankDetails'.tr(),
                 style: TextStyle(
                     fontWeight: FontWeight.bold,
                     fontSize: Adaptive.sp(16),
@@ -220,7 +220,6 @@ class _RegistrationscreenState extends ConsumerState<Registrationscreen> {
               onPressed: null),
         ),
         bankDetailsLayout(context, ref),
-
         SizedBox(
           height: 10,
         ),
@@ -235,30 +234,30 @@ class _RegistrationscreenState extends ConsumerState<Registrationscreen> {
                     break;
                   case ConstitutionType.individual:
                     if (ref.watch(aadharImage) == null) {
-                      errorToast(context, "Please select aadhar image");
+                      errorToast(context, "selectAadharImage".tr());
                     } else if (ref.watch(aadharBackImage) == null) {
-                      errorToast(context, "Please select aadhar back image");
+                      errorToast(context, "selectAadharImage".tr());
                     } else if (ref.watch(profileImage) == null) {
-                      errorToast(context, "Please select profile image");
+                      errorToast(context, "selectProfileImage".tr());
                     } else if (ref.watch(panImage) == null) {
-                      errorToast(context, "Please select pan image");
+                      errorToast(context, "selectPanImage".tr());
                     } else if (ref.watch(chequeImage) == null) {
                       errorToast(
-                          context, "Please select cheque or passbook image");
+                          context, "selectPassbookImage".tr());
                     } else {
                       callSubmitApi();
                     }
                     break;
                   case ConstitutionType.proprietorship:
                     if (ref.watch(profileImage) == null) {
-                      errorToast(context, "Please select profile image");
+                      errorToast(context, "selectProfileImage".tr());
                     } else if (ref.watch(panImage) == null) {
-                      errorToast(context, "Please select pan image");
+                      errorToast(context, "selectPanImage".tr());
                     } else if (ref.watch(chequeImage) == null) {
                       errorToast(
-                          context, "Please select cheque or passbook image");
+                          context, "selectPassbookImage".tr());
                     } else if (ref.watch(documentImage) == null) {
-                      errorToast(context, "Please select document image");
+                      errorToast(context, "uploadDocumentImage".tr());
                     } else {
                       callSubmitApi();
                     }
@@ -267,12 +266,13 @@ class _RegistrationscreenState extends ConsumerState<Registrationscreen> {
               }
             },
             child: Text(
-              "Submit",
+              "submit".tr(),
               style: StyleConstants.buttonTextStyle(),
             ))
       ]);
 
-  callSubmitApi() => ref.watch(registerUserProvider(data: {
+  callSubmitApi() => ref
+          .watch(registerUserProvider(data: {
         'transport_constitution': ref.watch(constitutionTypeProvider)?.type,
         'phone': driverPhoneController.text.toString(),
         'name': driverNameController.text.toString(),
@@ -289,8 +289,12 @@ class _RegistrationscreenState extends ConsumerState<Registrationscreen> {
         'cheque_image': base64Encode(ref.watch(chequeImage)!.readAsBytesSync()),
         if (ref.watch(constitutionTypeProvider)!.type == 1)
           'aadhar_no': driverAadharNoController.text.toString(),
-    if(ref.watch(aadharImage)!=null)  'aadhar_image': base64Encode(ref.watch(aadharImage)!.readAsBytesSync()),
-        if(ref.watch(aadharBackImage)!=null)  'aadhar_back_image': base64Encode(ref.watch(aadharBackImage)!.readAsBytesSync()),
+        if (ref.watch(aadharImage) != null)
+          'aadhar_image':
+              base64Encode(ref.watch(aadharImage)!.readAsBytesSync()),
+        if (ref.watch(aadharBackImage) != null)
+          'aadhar_back_image':
+              base64Encode(ref.watch(aadharBackImage)!.readAsBytesSync()),
         if (ref.watch(constitutionTypeProvider)!.type == 2)
           'firm_name': driverNameController.text.toString(),
         'proof': ref.watch(propDocTypeProvider)?.type,
@@ -298,11 +302,12 @@ class _RegistrationscreenState extends ConsumerState<Registrationscreen> {
         if (ref.watch(documentImage) != null)
           'proprietorship_proof':
               base64Encode(ref.watch(documentImage)!.readAsBytesSync()),
-      }).future).then((value){
-        if(value['status'].toString()=="1"){
+      }).future)
+          .then((value) {
+        if (value['status'].toString() == "1") {
           ref.watch(goRouterProvider).go(RoutesStrings.login);
         }
-  });
+      });
 
   personalDetailsLayout(BuildContext context, WidgetRef ref) => Column(
         children: [
@@ -311,16 +316,16 @@ class _RegistrationscreenState extends ConsumerState<Registrationscreen> {
             textInputAction: TextInputAction.next,
             validator: (value) {
               if (value == null || value.isEmpty) {
-                return 'Please input valid name';
+                return 'validName'.tr();
               }
               return null;
             },
             decoration: InputDecoration(
                 label: Text(ref.watch(constitutionTypeProvider) !=
                         ConstitutionType.proprietorship
-                    ? "Name"
-                    : "Firm Name"),
-                hintText: "Name",
+                    ? "validName".tr()
+                    : "firmName".tr()),
+                hintText: "validName".tr(),
                 border: OutlineInputBorder()),
           ),
           const SizedBox(
@@ -332,16 +337,16 @@ class _RegistrationscreenState extends ConsumerState<Registrationscreen> {
             maxLength: 10,
             validator: (value) {
               if (value == null || value.isEmpty) {
-                return 'Please input valid number';
+                return "validPhone".tr();
               }
               if (value.length != 10) {
-                return "Mobile number must be of 10 digits!";
+                return "validPhone".tr();
               }
               return null;
             },
-            decoration: const InputDecoration(
-                label: Text("Mobile Phone"),
-                hintText: "Mobile Phone",
+            decoration:  InputDecoration(
+                label: Text("enterMobileNumber".tr()),
+                hintText: "enterMobileNumber".tr(),
                 border: OutlineInputBorder()),
           ),
           const SizedBox(
@@ -349,193 +354,197 @@ class _RegistrationscreenState extends ConsumerState<Registrationscreen> {
           ),
           ref.watch(constitutionTypeProvider) == ConstitutionType.proprietorship
               ? Column(
-            children: [
-              DropdownSearch<PropDocumentType?>(
-                popupProps: PopupProps.menu(
-                    searchFieldProps: const TextFieldProps(
-                        autofocus: true,
-                        cursorColor: ColorConstants.primaryColorDriver,
-                        padding: Pad(left: 10, right: 10),
-                        decoration: InputDecoration(
-                          contentPadding: Pad(left: 10, right: 10),
-                          focusedErrorBorder: OutlineInputBorder(
-                              borderSide: BorderSide(
-                                  style: BorderStyle.solid,
-                                  color:
-                                  ColorConstants.primaryColorDriver)),
-                          disabledBorder: OutlineInputBorder(
-                              borderSide: BorderSide(
-                                  style: BorderStyle.solid,
-                                  color:
-                                  ColorConstants.primaryColorDriver)),
-                          errorBorder: OutlineInputBorder(
-                              borderSide: BorderSide(
-                                  style: BorderStyle.solid,
-                                  color:
-                                  ColorConstants.primaryColorDriver)),
-                          focusedBorder: OutlineInputBorder(
-                              borderSide: BorderSide(
-                                  style: BorderStyle.solid,
-                                  color:
-                                  ColorConstants.primaryColorDriver)),
-                          border: OutlineInputBorder(
-                              borderSide: BorderSide(
-                                  style: BorderStyle.solid,
-                                  color:
-                                  ColorConstants.primaryColorDriver)),
-                          enabledBorder: OutlineInputBorder(
-                              borderSide: BorderSide(
-                                  style: BorderStyle.solid,
-                                  color:
-                                  ColorConstants.primaryColorDriver)),
+                  children: [
+                    DropdownSearch<PropDocumentType?>(
+                      popupProps: PopupProps.menu(
+                          searchFieldProps: const TextFieldProps(
+                              autofocus: true,
+                              cursorColor: ColorConstants.primaryColorDriver,
+                              padding: Pad(left: 10, right: 10),
+                              decoration: InputDecoration(
+                                contentPadding: Pad(left: 10, right: 10),
+                                focusedErrorBorder: OutlineInputBorder(
+                                    borderSide: BorderSide(
+                                        style: BorderStyle.solid,
+                                        color:
+                                            ColorConstants.primaryColorDriver)),
+                                disabledBorder: OutlineInputBorder(
+                                    borderSide: BorderSide(
+                                        style: BorderStyle.solid,
+                                        color:
+                                            ColorConstants.primaryColorDriver)),
+                                errorBorder: OutlineInputBorder(
+                                    borderSide: BorderSide(
+                                        style: BorderStyle.solid,
+                                        color:
+                                            ColorConstants.primaryColorDriver)),
+                                focusedBorder: OutlineInputBorder(
+                                    borderSide: BorderSide(
+                                        style: BorderStyle.solid,
+                                        color:
+                                            ColorConstants.primaryColorDriver)),
+                                border: OutlineInputBorder(
+                                    borderSide: BorderSide(
+                                        style: BorderStyle.solid,
+                                        color:
+                                            ColorConstants.primaryColorDriver)),
+                                enabledBorder: OutlineInputBorder(
+                                    borderSide: BorderSide(
+                                        style: BorderStyle.solid,
+                                        color:
+                                            ColorConstants.primaryColorDriver)),
+                              )),
+                          menuProps: MenuProps(
+                              shape: RoundedRectangleBorder(
+                                  side: const BorderSide(
+                                      color: ColorConstants.primaryColorDriver),
+                                  borderRadius: BorderRadius.circular(8))),
+                          itemBuilder: (context, terminal, isVisible) =>
+                              ColumnSuper(
+                                  alignment: Alignment.centerLeft,
+                                  children: [
+                                    Padding(
+                                      padding: const Pad(all: 10),
+                                      child: Text(
+                                        "${terminal?.label}",
+                                        style: TextStyle(
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: Adaptive.sp(16)),
+                                      ),
+                                    ),
+                                    Container(
+                                      height: 1,
+                                      color: Colors.grey.withOpacity(0.3),
+                                    ),
+                                  ]),
+                          isFilterOnline: true,
+                          title: Padding(
+                            padding: const Pad(all: 10),
+                            child: Text(
+                              'selectDocumentType'.tr(),
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                  fontSize: Adaptive.sp(16),
+                                  fontWeight: FontWeight.bold),
+                            ),
+                          ),
+                          showSearchBox: true,
+                          searchDelay: const Duration(microseconds: 500)),
+                      items: PropDocumentType.values ?? [],
+                      itemAsString: (PropDocumentType? u) => u!.label,
+                      onChanged: (PropDocumentType? data) =>
+                          ref.watch(propDocTypeProvider.notifier).state = data,
+                      dropdownDecoratorProps:  DropDownDecoratorProps(
+                        dropdownSearchDecoration: InputDecoration(
+                            contentPadding: Pad(left: 10, bottom: 5, top: 5),
+                            hintText: "selectDocumentType".tr(),
+                            border: OutlineInputBorder(
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(8)),
+                                borderSide: BorderSide(
+                                    color: ColorConstants.primaryColorDriver))),
+                      ),
+                    ),
+                    const SizedBox(
+                      height: 10,
+                    ),
+                    TextFormField(
+                      controller: documentNumberController,
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'validDocument'.tr();
+                        }
+                        return null;
+                      },
+                      textInputAction: TextInputAction.next,
+                      decoration:  InputDecoration(
+                          label: Text('validDocument'.tr()),
+                          border: OutlineInputBorder()),
+                    ),
+                    const SizedBox(
+                      height: 10,
+                    ),
+                    DottedBorder(
+                        borderType: BorderType.RRect,
+                        dashPattern: const [5, 5, 5, 5],
+                        color: ColorConstants.primaryColorDriver,
+                        child: Padding(
+                          padding: const Pad(all: 20),
+                          child: Center(
+                            child: ref.watch(documentImage) != null
+                                ? Stack(
+                                    children: [
+                                      Image.file(
+                                          ref.watch(documentImage) ?? File('')),
+                                      Container(
+                                        decoration: BoxDecoration(
+                                            color:
+                                                Colors.black.withOpacity(0.6),
+                                            shape: BoxShape.circle),
+                                        child: IconButton(
+                                            onPressed: () {
+                                              ref.invalidate(documentImage);
+                                            },
+                                            icon: const Icon(
+                                              Icons.close,
+                                              color: Colors.white,
+                                            )),
+                                      )
+                                    ],
+                                  )
+                                : InkWell(
+                                    child: ColumnSuper(children: [
+                                      Icon(
+                                        Icons.cloud_upload,
+                                        color:
+                                            ColorConstants.primaryColorDriver,
+                                      ),
+                                      SizedBox(
+                                        height: 5,
+                                      ),
+                                      Text(
+                                        "selectDocumentImage".tr(),
+                                        textAlign: TextAlign.center,
+                                        style: TextStyle(
+                                            color: ColorConstants
+                                                .primaryColorDriver,
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: Adaptive.sp(16)),
+                                      ),
+                                      SizedBox(
+                                        height: 5,
+                                      ),
+                                      Text(
+                                        "uploadDocumentImage".tr(),
+                                        textAlign: TextAlign.center,
+                                        style: TextStyle(
+                                            color: ColorConstants
+                                                .primaryColorDriver,
+                                            fontWeight: FontWeight.w700,
+                                            fontSize: Adaptive.sp(13)),
+                                      )
+                                    ]),
+                                    onTap: () async {
+                                      await imagePicker
+                                          .pickImage(
+                                              source: ImageSource.gallery,
+                                              imageQuality: 30)
+                                          .then((value) async {
+                                        if (value != null) {
+                                          ref
+                                              .watch(documentImage.notifier)
+                                              .state = File(value.path);
+                                        }
+                                      });
+                                    },
+                                  ),
+                          ),
                         )),
-                    menuProps: MenuProps(
-                        shape: RoundedRectangleBorder(
-                            side: const BorderSide(
-                                color: ColorConstants.primaryColorDriver),
-                            borderRadius: BorderRadius.circular(8))),
-                    itemBuilder: (context, terminal, isVisible) =>
-                        ColumnSuper(
-                            alignment: Alignment.centerLeft,
-                            children: [
-                              Padding(
-                                padding: const Pad(all: 10),
-                                child: Text(
-                                  "${terminal?.label}",
-                                  style: TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: Adaptive.sp(16)),
-                                ),
-                              ),
-                              Container(
-                                height: 1,
-                                color: Colors.grey.withOpacity(0.3),
-                              ),
-                            ]),
-                    isFilterOnline: true,
-                    title: Padding(
-                      padding: const Pad(all: 10),
-                      child: Text(
-                        'Select Document Type',
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                            fontSize: Adaptive.sp(16),
-                            fontWeight: FontWeight.bold),
-                      ),
+                    const SizedBox(
+                      height: 10,
                     ),
-                    showSearchBox: true,
-                    searchDelay: const Duration(microseconds: 500)),
-                items: PropDocumentType.values ?? [],
-                itemAsString: (PropDocumentType? u) => u!.label,
-                onChanged: (PropDocumentType? data) =>
-                ref.watch(propDocTypeProvider.notifier).state = data,
-                dropdownDecoratorProps: const DropDownDecoratorProps(
-                  dropdownSearchDecoration: InputDecoration(
-                      contentPadding: Pad(left: 10, bottom: 5, top: 5),
-                      hintText: "Select Document Type",
-                      border: OutlineInputBorder(
-                          borderRadius:
-                          BorderRadius.all(Radius.circular(8)),
-                          borderSide: BorderSide(
-                              color: ColorConstants.primaryColorDriver))),
-                ),
-              ),
-              const SizedBox(
-                height: 10,
-              ),
-              TextFormField(
-                controller: documentNumberController,
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Please input valid document number';
-                  }
-                  return null;
-                },
-                textInputAction: TextInputAction.next,
-                decoration: const InputDecoration(
-                    label: Text("Document Number"),
-                    border: OutlineInputBorder()),
-              ),
-              const SizedBox(
-                height: 10,
-              ),
-              DottedBorder(
-                  borderType: BorderType.RRect,
-                  dashPattern: const [5, 5, 5, 5],
-                  color: ColorConstants.primaryColorDriver,
-                  child: Padding(
-                    padding: const Pad(all: 20),
-                    child: Center(
-                      child: ref.watch(documentImage) != null
-                          ? Stack(
-                        children: [
-                          Image.file(
-                              ref.watch(documentImage) ?? File('')),
-                          Container(
-                            decoration: BoxDecoration(
-                                color: Colors.black.withOpacity(0.6),
-                                shape: BoxShape.circle),
-                            child: IconButton(
-                                onPressed: () {
-                                  ref.invalidate(documentImage);
-                                },
-                                icon: const Icon(
-                                  Icons.close,
-                                  color: Colors.white,
-                                )),
-                          )
-                        ],
-                      )
-                          : InkWell(
-                        child: ColumnSuper(children: [
-                          Icon(
-                            Icons.cloud_upload,
-                            color: ColorConstants.primaryColorDriver,
-                          ),
-                          SizedBox(
-                            height: 5,
-                          ),
-                          Text(
-                            "Select Document Image ",
-                            textAlign: TextAlign.center,
-                            style: TextStyle(
-                                color:
-                                ColorConstants.primaryColorDriver,
-                                fontWeight: FontWeight.bold,
-                                fontSize: Adaptive.sp(16)),
-                          ),
-                          SizedBox(
-                            height: 5,
-                          ),
-                          Text(
-                            "Upload Document Image,\n  Supports JPG, JPEG, PNG",
-                            textAlign: TextAlign.center,
-                            style: TextStyle(
-                                color:
-                                ColorConstants.primaryColorDriver,
-                                fontWeight: FontWeight.w700,
-                                fontSize: Adaptive.sp(13)),
-                          )
-                        ]),
-                        onTap: () async {
-                          await imagePicker
-                              .pickImage(source: ImageSource.gallery,imageQuality: 30)
-                              .then((value) async {
-                            if (value != null) {
-                              ref
-                                  .watch(documentImage.notifier)
-                                  .state = File(value.path);
-                            }
-                          });
-                        },
-                      ),
-                    ),
-                  )),
-              const SizedBox(
-                height: 10,
-              ),
-            ],
-          )
+                  ],
+                )
               : SizedBox(),
           // TextFormField(
           //   controller: driverEmailController,
@@ -891,7 +900,7 @@ class _RegistrationscreenState extends ConsumerState<Registrationscreen> {
                                         height: 5,
                                       ),
                                       Text(
-                                        "Upload Document Image,\n  Supports JPG, JPEG, PNG",
+                                        "selectDocumentImage".tr(),
                                         textAlign: TextAlign.center,
                                         style: TextStyle(
                                             color: ColorConstants
@@ -903,7 +912,8 @@ class _RegistrationscreenState extends ConsumerState<Registrationscreen> {
                                     onTap: () async {
                                       await imagePicker
                                           .pickImage(
-                                              source: ImageSource.gallery,imageQuality: 30)
+                                              source: ImageSource.gallery,
+                                              imageQuality: 30)
                                           .then((value) async {
                                         if (value != null) {
                                           ref
@@ -957,7 +967,7 @@ class _RegistrationscreenState extends ConsumerState<Registrationscreen> {
                                         height: 5,
                                       ),
                                       Text(
-                                        "Select Aadhar back side Image ",
+                                        "selectAadharImage".tr(),
                                         textAlign: TextAlign.center,
                                         style: TextStyle(
                                             color: ColorConstants
@@ -969,7 +979,7 @@ class _RegistrationscreenState extends ConsumerState<Registrationscreen> {
                                         height: 5,
                                       ),
                                       Text(
-                                        "Upload Document Image,\n  Supports JPG, JPEG, PNG",
+                                        "uploadDocumentImage".tr(),
                                         textAlign: TextAlign.center,
                                         style: TextStyle(
                                             color: ColorConstants
@@ -981,7 +991,8 @@ class _RegistrationscreenState extends ConsumerState<Registrationscreen> {
                                     onTap: () async {
                                       await imagePicker
                                           .pickImage(
-                                              source: ImageSource.gallery,imageQuality: 30)
+                                              source: ImageSource.gallery,
+                                              imageQuality: 30)
                                           .then((value) async {
                                         if (value != null) {
                                           ref
@@ -1034,7 +1045,7 @@ class _RegistrationscreenState extends ConsumerState<Registrationscreen> {
                               height: 5,
                             ),
                             Text(
-                              "Select Profile Image ",
+                              "selectProfileImage".tr(),
                               textAlign: TextAlign.center,
                               style: TextStyle(
                                   color: ColorConstants.primaryColorDriver,
@@ -1045,7 +1056,7 @@ class _RegistrationscreenState extends ConsumerState<Registrationscreen> {
                               height: 5,
                             ),
                             Text(
-                              "Upload Profile Image,\n  Supports JPG, JPEG, PNG",
+                              "uploadDocumentImage".tr(),
                               textAlign: TextAlign.center,
                               style: TextStyle(
                                   color: ColorConstants.primaryColorDriver,
@@ -1055,7 +1066,9 @@ class _RegistrationscreenState extends ConsumerState<Registrationscreen> {
                           ]),
                           onTap: () async {
                             await imagePicker
-                                .pickImage(source: ImageSource.gallery,imageQuality: 30)
+                                .pickImage(
+                                    source: ImageSource.gallery,
+                                    imageQuality: 30)
                                 .then((value) async {
                               if (value != null) {
                                 ref.watch(profileImage.notifier).state =
@@ -1072,7 +1085,7 @@ class _RegistrationscreenState extends ConsumerState<Registrationscreen> {
           Center(
             child: CupertinoButton(
                 child: Text(
-                  'Pan Details',
+                  'panDetails'.tr(),
                   style: TextStyle(
                       fontWeight: FontWeight.bold,
                       fontSize: Adaptive.sp(16),
@@ -1085,14 +1098,14 @@ class _RegistrationscreenState extends ConsumerState<Registrationscreen> {
             textInputAction: TextInputAction.next,
             validator: (value) {
               if (value == null || value.isEmpty) {
-                return 'Please input pan card';
+                return 'validPan'.tr();
               }
 
               return null;
             },
-            decoration: const InputDecoration(
-                label: Text("Pan card no"),
-                hintText: "Pan card no",
+            decoration:  InputDecoration(
+                label: Text("panCardNo".tr()),
+                hintText: "panCardNo".tr(),
                 border: OutlineInputBorder()),
           ),
           const SizedBox(
@@ -1107,63 +1120,65 @@ class _RegistrationscreenState extends ConsumerState<Registrationscreen> {
                 child: Center(
                   child: ref.watch(panImage) != null
                       ? Stack(
-                    children: [
-                      Image.file(ref.watch(panImage) ?? File('')),
-                      Container(
-                        decoration: BoxDecoration(
-                            color: Colors.black.withOpacity(0.6),
-                            shape: BoxShape.circle),
-                        child: IconButton(
-                            onPressed: () {
-                              ref.invalidate(panImage);
-                            },
-                            icon: const Icon(
-                              Icons.close,
-                              color: Colors.white,
-                            )),
-                      )
-                    ],
-                  )
+                          children: [
+                            Image.file(ref.watch(panImage) ?? File('')),
+                            Container(
+                              decoration: BoxDecoration(
+                                  color: Colors.black.withOpacity(0.6),
+                                  shape: BoxShape.circle),
+                              child: IconButton(
+                                  onPressed: () {
+                                    ref.invalidate(panImage);
+                                  },
+                                  icon: const Icon(
+                                    Icons.close,
+                                    color: Colors.white,
+                                  )),
+                            )
+                          ],
+                        )
                       : InkWell(
-                    child: ColumnSuper(children: [
-                      Icon(
-                        Icons.cloud_upload,
-                        color: ColorConstants.primaryColorDriver,
-                      ),
-                      SizedBox(
-                        height: 5,
-                      ),
-                      Text(
-                        "Select PAN Image ",
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                            color: ColorConstants.primaryColorDriver,
-                            fontWeight: FontWeight.bold,
-                            fontSize: Adaptive.sp(16)),
-                      ),
-                      SizedBox(
-                        height: 5,
-                      ),
-                      Text(
-                        "Upload Document Image,\n  Supports JPG, JPEG, PNG",
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                            color: ColorConstants.primaryColorDriver,
-                            fontWeight: FontWeight.w700,
-                            fontSize: Adaptive.sp(13)),
-                      )
-                    ]),
-                    onTap: () async {
-                      await imagePicker
-                          .pickImage(source: ImageSource.gallery,imageQuality: 30)
-                          .then((value) async {
-                        if (value != null) {
-                          ref.watch(panImage.notifier).state =
-                              File(value.path);
-                        }
-                      });
-                    },
-                  ),
+                          child: ColumnSuper(children: [
+                            Icon(
+                              Icons.cloud_upload,
+                              color: ColorConstants.primaryColorDriver,
+                            ),
+                            SizedBox(
+                              height: 5,
+                            ),
+                            Text(
+                              "selectPanImage".tr(),
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                  color: ColorConstants.primaryColorDriver,
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: Adaptive.sp(16)),
+                            ),
+                            SizedBox(
+                              height: 5,
+                            ),
+                            Text(
+                              "uploadDocumentImage".tr(),
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                  color: ColorConstants.primaryColorDriver,
+                                  fontWeight: FontWeight.w700,
+                                  fontSize: Adaptive.sp(13)),
+                            )
+                          ]),
+                          onTap: () async {
+                            await imagePicker
+                                .pickImage(
+                                    source: ImageSource.gallery,
+                                    imageQuality: 30)
+                                .then((value) async {
+                              if (value != null) {
+                                ref.watch(panImage.notifier).state =
+                                    File(value.path);
+                              }
+                            });
+                          },
+                        ),
                 ),
               )),
           SizedBox(
@@ -1356,7 +1371,6 @@ class _RegistrationscreenState extends ConsumerState<Registrationscreen> {
           //   height: 10,
           // ),
 
-
           DottedBorder(
               borderType: BorderType.RRect,
               dashPattern: const [5, 5, 5, 5],
@@ -1393,7 +1407,7 @@ class _RegistrationscreenState extends ConsumerState<Registrationscreen> {
                               height: 5,
                             ),
                             Text(
-                              "Select Cheque /Passbook Image ",
+                              "selectPassbookImage".tr(),
                               textAlign: TextAlign.center,
                               style: TextStyle(
                                   color: ColorConstants.primaryColorDriver,
@@ -1404,7 +1418,7 @@ class _RegistrationscreenState extends ConsumerState<Registrationscreen> {
                               height: 5,
                             ),
                             Text(
-                              "Upload Document Image,\n  Supports JPG, JPEG, PNG",
+                              "uploadDocumentImage".tr(),
                               textAlign: TextAlign.center,
                               style: TextStyle(
                                   color: ColorConstants.primaryColorDriver,
@@ -1414,7 +1428,9 @@ class _RegistrationscreenState extends ConsumerState<Registrationscreen> {
                           ]),
                           onTap: () async {
                             await imagePicker
-                                .pickImage(source: ImageSource.gallery,imageQuality: 30)
+                                .pickImage(
+                                    source: ImageSource.gallery,
+                                    imageQuality: 30)
                                 .then((value) async {
                               if (value != null) {
                                 ref.watch(chequeImage.notifier).state =

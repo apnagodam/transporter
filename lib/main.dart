@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -16,6 +17,7 @@ import 'Presentation/Utils/color_constants.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   final sharedPreferences = await SharedPreferences.getInstance();
+  await EasyLocalization.ensureInitialized();
 
   if (Platform.isAndroid) {
     InAppUpdate.checkForUpdate().then((updateInfo) {
@@ -47,11 +49,16 @@ void main() async {
     child: ResponsiveSizer(
       builder: (context, orientation, screenType) {
         return ToastificationWrapper(
-            child: MaterialApp(
-          builder: OneContext().builder,
-          navigatorKey: OneContext().key,
-          home: const MyApp(),
-        ));
+            child: EasyLocalization(
+                fallbackLocale: Locale('hi', 'IN'),
+                startLocale: Locale('hi', 'IN'),
+                supportedLocales: [Locale('hi', 'IN'), Locale('en', 'US')],
+                path: 'assets/translations',
+                child: MaterialApp(
+                  builder: OneContext().builder,
+                  navigatorKey: OneContext().key,
+                  home: const MyApp(),
+                )));
       },
     ),
   ));
@@ -66,7 +73,10 @@ class MyApp extends ConsumerWidget {
     return MaterialApp.router(
       debugShowCheckedModeBanner: false,
       routerConfig: ref.watch(goRouterProvider),
-      title: 'Transporter',
+      localizationsDelegates: context.localizationDelegates,
+      supportedLocales: context.supportedLocales,
+      locale: context.locale,
+      title: 'transporter'.tr(),
       theme: ThemeData(
           fontFamily: GoogleFonts.quicksand().fontFamily,
           colorScheme: ColorScheme.fromSeed(

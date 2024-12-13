@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:assorted_layout_widgets/assorted_layout_widgets.dart';
 import 'package:button_animations/button_animations.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:easy_pdf_viewer/easy_pdf_viewer.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -33,7 +34,7 @@ class _TripshistoryState extends ConsumerState<Tripshistory> {
               child: ListView(
                 children: [
                   ref.watch(tripsHistoryProvider).when(
-                      data: (data) => ListView.builder(
+                      data: (data) =>ListView.builder(
                           physics: const NeverScrollableScrollPhysics(),
                           itemCount: data.data?.length,
                           shrinkWrap: true,
@@ -56,7 +57,7 @@ class _TripshistoryState extends ConsumerState<Tripshistory> {
                                             Padding(
                                               padding: Pad(all: 10),
                                               child: Text(
-                                                'Trip Id : ${data.data?[index].tripId ?? "--"}',
+                                                '${'tripId'.tr()}: ${data.data?[index].tripId ?? "--"}',
                                                 style: TextStyle(
                                                     color: Colors.black,
                                                     fontSize: Adaptive.sp(16),
@@ -77,7 +78,7 @@ class _TripshistoryState extends ConsumerState<Tripshistory> {
                                       ),
                                       RowSuper(fill: true, children: [
                                         Text(
-                                          'From',
+                                          'from'.tr(),
                                           textAlign: TextAlign.start,
                                           style: TextStyle(
                                               color: ColorConstants
@@ -100,7 +101,7 @@ class _TripshistoryState extends ConsumerState<Tripshistory> {
                                       ),
                                       RowSuper(fill: true, children: [
                                         Text(
-                                          'To',
+                                          'to'.tr(),
                                           textAlign: TextAlign.start,
                                           style: TextStyle(
                                               color: ColorConstants
@@ -123,7 +124,7 @@ class _TripshistoryState extends ConsumerState<Tripshistory> {
                                       ),
                                       RowSuper(fill: true, children: [
                                         Text(
-                                          'Vehicle Number',
+                                          'vehicleNumber'.tr(),
                                           textAlign: TextAlign.start,
                                           style: TextStyle(
                                               color: ColorConstants
@@ -146,7 +147,7 @@ class _TripshistoryState extends ConsumerState<Tripshistory> {
                                       ),
                                       RowSuper(fill: true, children: [
                                         Text(
-                                          'Driver name',
+                                          'driverName'.tr(),
                                           textAlign: TextAlign.start,
                                           style: TextStyle(
                                               color: ColorConstants
@@ -169,7 +170,7 @@ class _TripshistoryState extends ConsumerState<Tripshistory> {
                                       ),
                                       RowSuper(fill: true, children: [
                                         Text(
-                                          'Driver phone',
+                                          'driverPhone'.tr(),
                                           textAlign: TextAlign.start,
                                           style: TextStyle(
                                               color: ColorConstants
@@ -192,7 +193,7 @@ class _TripshistoryState extends ConsumerState<Tripshistory> {
                                       ),
                                       RowSuper(fill: true, children: [
                                         Text(
-                                          'Customer',
+                                          'customer'.tr(),
                                           textAlign: TextAlign.start,
                                           style: TextStyle(
                                               color: ColorConstants
@@ -220,7 +221,7 @@ class _TripshistoryState extends ConsumerState<Tripshistory> {
                                           alignment: Alignment.center,
                                           children: [
                                             Text(
-                                              'Customer Phone',
+                                              'customerPhone'.tr(),
                                               textAlign: TextAlign.start,
                                               style: TextStyle(
                                                   color: ColorConstants
@@ -246,7 +247,7 @@ class _TripshistoryState extends ConsumerState<Tripshistory> {
                                           alignment: Alignment.center,
                                           children: [
                                             Text(
-                                              'Rate per Qtl. (Freight Rate)',
+                                              'ratePerQtl'.tr(),
                                               textAlign: TextAlign.start,
                                               style: TextStyle(
                                                   color: ColorConstants
@@ -255,7 +256,7 @@ class _TripshistoryState extends ConsumerState<Tripshistory> {
                                                   fontWeight: FontWeight.w800),
                                             ),
                                             Text(
-                                              '${currencyFormat.format(int.parse("${data.data?[index].rate ?? 0}"))} / per Qtl.',
+                                              '${currencyFormat.format(int.parse("${data.data?[index].rate ?? 0}"))} / perQtl'.tr(),
                                               textAlign: TextAlign.end,
                                               style: TextStyle(
                                                   color: ColorConstants
@@ -272,7 +273,7 @@ class _TripshistoryState extends ConsumerState<Tripshistory> {
                                           alignment: Alignment.center,
                                           children: [
                                             Text(
-                                              'Commodity',
+                                              'commodity'.tr(),
                                               textAlign: TextAlign.start,
                                               style: TextStyle(
                                                   color: ColorConstants
@@ -298,7 +299,7 @@ class _TripshistoryState extends ConsumerState<Tripshistory> {
                                           alignment: Alignment.center,
                                           children: [
                                             Text(
-                                              'Final Weight(Qtl.)',
+                                              'finalWeight'.tr(),
                                               textAlign: TextAlign.start,
                                               style: TextStyle(
                                                   color: ColorConstants
@@ -307,7 +308,7 @@ class _TripshistoryState extends ConsumerState<Tripshistory> {
                                                   fontWeight: FontWeight.w800),
                                             ),
                                             Text(
-                                              '${data.data?[index].weight ?? "Pending"}',
+                                              '${data.data?[index].weight ?? "pending".tr()}',
                                               textAlign: TextAlign.end,
                                               style: TextStyle(
                                                   color: ColorConstants
@@ -324,7 +325,7 @@ class _TripshistoryState extends ConsumerState<Tripshistory> {
                                           alignment: Alignment.center,
                                           children: [
                                             Text(
-                                              'Final No of Bags',
+                                              'finalNoOfBags'.tr(),
                                               textAlign: TextAlign.start,
                                               style: TextStyle(
                                                   color: ColorConstants
@@ -333,7 +334,7 @@ class _TripshistoryState extends ConsumerState<Tripshistory> {
                                                   fontWeight: FontWeight.w800),
                                             ),
                                             Text(
-                                              '${data.data?[index].noOfBags ?? "Pending"}',
+                                              '${data.data?[index].noOfBags ?? "pending".tr()}',
                                               textAlign: TextAlign.end,
                                               style: TextStyle(
                                                   color: ColorConstants
@@ -350,7 +351,7 @@ class _TripshistoryState extends ConsumerState<Tripshistory> {
                                           alignment: Alignment.center,
                                           children: [
                                             Text(
-                                              'Receiving Weight(Qtl.)',
+                                              'receivingWeight'.tr(),
                                               textAlign: TextAlign.start,
                                               style: TextStyle(
                                                   color: ColorConstants
@@ -359,7 +360,7 @@ class _TripshistoryState extends ConsumerState<Tripshistory> {
                                                   fontWeight: FontWeight.w800),
                                             ),
                                             Text(
-                                              '${data.data?[index].recevingWeight ?? "Pending"}',
+                                              '${data.data?[index].recevingWeight ?? "pending".tr()}',
                                               textAlign: TextAlign.end,
                                               style: TextStyle(
                                                   color: ColorConstants
@@ -376,7 +377,7 @@ class _TripshistoryState extends ConsumerState<Tripshistory> {
                                           alignment: Alignment.center,
                                           children: [
                                             Text(
-                                              'Receiving Bags',
+                                              'receivingBags'.tr(),
                                               textAlign: TextAlign.start,
                                               style: TextStyle(
                                                   color: ColorConstants
@@ -385,7 +386,7 @@ class _TripshistoryState extends ConsumerState<Tripshistory> {
                                                   fontWeight: FontWeight.w800),
                                             ),
                                             Text(
-                                              '${data.data?[index].recevingBags ?? "Pending"}',
+                                              '${data.data?[index].recevingBags ?? "pending".tr()}',
                                               textAlign: TextAlign.end,
                                               style: TextStyle(
                                                   color: ColorConstants
@@ -402,7 +403,7 @@ class _TripshistoryState extends ConsumerState<Tripshistory> {
                                           alignment: Alignment.center,
                                           children: [
                                             Text(
-                                              '${data.data?[index].weight == null ? 'Provisional Billty ' : "Final Billty "}',
+                                              '${data.data?[index].weight == null ? 'provBilty'.tr() : "provBilty".tr()}',
                                               textAlign: TextAlign.start,
                                               style: TextStyle(
                                                   color: ColorConstants
@@ -464,7 +465,7 @@ class _TripshistoryState extends ConsumerState<Tripshistory> {
                                           alignment: Alignment.center,
                                           children: [
                                             Text(
-                                              'Goods Invoice Image',
+                                              'goodsInvoiceImage'.tr(),
                                               textAlign: TextAlign.start,
                                               style: TextStyle(
                                                   color: ColorConstants
@@ -481,7 +482,7 @@ class _TripshistoryState extends ConsumerState<Tripshistory> {
                                                 onTap: () {},
                                                 child: InstaImageViewer(
                                                   imageUrl:
-                                                  "${data.data?[index].goodsInvoiceImage}",
+                                                  "${ImageClient.assetsImageUrl}${data.data?[index].goodsInvoiceImage}",
                                                   child: Icon(
                                                     CupertinoIcons.eye,
                                                     color: ColorConstants
@@ -499,7 +500,7 @@ class _TripshistoryState extends ConsumerState<Tripshistory> {
                                           alignment: Alignment.center,
                                           children: [
                                             Text(
-                                              'Kanta Image',
+                                              'kantaImage'.tr(),
                                               textAlign: TextAlign.start,
                                               style: TextStyle(
                                                   color: ColorConstants
@@ -531,7 +532,7 @@ class _TripshistoryState extends ConsumerState<Tripshistory> {
                                           alignment: Alignment.center,
                                           children: [
                                             Text(
-                                              'Receiving Kanta Parchi',
+                                              'receivingKanta'.tr(),
                                               textAlign: TextAlign.start,
                                               style: TextStyle(
                                                   color: ColorConstants
@@ -564,8 +565,110 @@ class _TripshistoryState extends ConsumerState<Tripshistory> {
                                       const SizedBox(
                                         height: 10,
                                       ),
-                                 Text(
-                                        "Completed",
+                                      data.data?[index].truckNumber == null &&
+                                          data.data?[index].driverName ==
+                                              null
+                                          ? AnimatedButton(
+                                        height: 35,
+                                        color: ColorConstants
+                                            .primaryColorWSP,
+                                        width: MediaQuery.of(context)
+                                            .size
+                                            .width /
+                                            1.2,
+                                        isOutline: true,
+                                        isMultiColor: true,
+                                        colors: [
+                                          ColorConstants.primaryColorWSP,
+                                          ColorConstants.primaryColorWSP,
+                                        ],
+                                        borderWidth: 1,
+                                        onTap: () async {
+
+                                        },
+                                        child: Text(
+                                          "selectTruck / selectDriver".tr(),
+                                          textAlign: TextAlign.center,
+                                          style: TextStyle(
+                                              color: Colors.white,
+                                              fontSize: Adaptive.sp(14),
+                                              fontWeight:
+                                              FontWeight.w800),
+                                        ),
+                                      )
+                                          : data.data?[index].weight != null &&
+                                          data.data?[index].tripStart ==
+                                              null
+                                          ? AnimatedButton(
+                                        height: 35,
+                                        color: ColorConstants
+                                            .primaryColorWSP,
+                                        width: MediaQuery.of(context)
+                                            .size
+                                            .width /
+                                            1.2,
+                                        isOutline: true,
+                                        isMultiColor: true,
+                                        colors: [
+                                          ColorConstants
+                                              .secondaryColorWSP,
+                                          ColorConstants
+                                              .secondaryColorWSP,
+                                        ],
+                                        borderWidth: 1,
+                                        onTap: () async {
+                                          ref
+                                              .watch(startTripProvider(
+                                              tripRequestId:
+                                              "${data.data?[index].id}")
+                                              .future)
+                                              .then((value) {
+                                            if (value['status']
+                                                .toString() ==
+                                                "1") {
+                                              ref.invalidate(
+                                                  tripsListProvider);
+                                            }
+                                          });
+                                        },
+                                        child: Text(
+                                          "startTrip".tr(),
+                                          textAlign: TextAlign.center,
+                                          style: TextStyle(
+                                              color: Colors.white,
+                                              fontSize:
+                                              Adaptive.sp(14),
+                                              fontWeight:
+                                              FontWeight.w800),
+                                        ),
+                                      )
+                                          : data.data?[index].weight !=
+                                          null &&
+                                          data.data?[index]
+                                              .tripStart !=
+                                              null &&
+                                          data.data?[index]
+                                              .tripEnd ==
+                                              null
+                                          ? Text(
+                                        "endTrip".tr(),
+                                        textAlign:
+                                        TextAlign.center,
+                                        style: TextStyle(
+                                            color: Colors.white,
+                                            fontSize:
+                                            Adaptive.sp(14),
+                                            fontWeight:
+                                            FontWeight
+                                                .w800),
+                                      )
+                                          : data.data?[index].tripEnd !=
+                                          null &&
+                                          data.data?[index]
+                                              .tripStart !=
+                                              null
+                                          ? Text(
+                                        "completed".tr(),
                                         textAlign:
                                         TextAlign.center,
                                         style: TextStyle(
@@ -578,7 +681,20 @@ class _TripshistoryState extends ConsumerState<Tripshistory> {
                                             FontWeight
                                                 .w800),
                                       )
-                                          ,
+                                          : Text(
+                                        "processing".tr(),
+                                        textAlign:
+                                        TextAlign.center,
+                                        style: TextStyle(
+                                            color: ColorConstants
+                                                .primaryColorDriver,
+                                            fontSize:
+                                            Adaptive.sp(
+                                                14),
+                                            fontWeight:
+                                            FontWeight
+                                                .w800),
+                                      ),
                                       const SizedBox(
                                         height: 10,
                                       ),
