@@ -9,8 +9,8 @@ TripDataResponse tripDataResponseFromMap(String str) => TripDataResponse.fromMap
 String tripDataResponseToMap(TripDataResponse data) => json.encode(data.toMap());
 
 class TripDataResponse {
-  String? status;
-  String? message;
+  dynamic status;
+  dynamic message;
   List<Datum>? data;
 
   TripDataResponse({
@@ -33,36 +33,44 @@ class TripDataResponse {
 }
 
 class Datum {
-  dynamic? id;
-  String? requestDate;
-  String? tripDate;
-  String? tripId;
-  String? transporterName;
-  String? transporterPhone;
-  String? userName;
-  String? userPhone;
-  String? fromAddress;
-  String? toAddress;
+  dynamic id;
+  dynamic requestDate;
+  dynamic? tripDate;
+  dynamic tripId;
+  dynamic transporterName;
+  dynamic transporterPhone;
+  dynamic userName;
+  dynamic userPhone;
+  dynamic fromAddress;
+  dynamic toAddress;
   dynamic rate;
-  String? commodity;
-  String? weight;
+  dynamic commodity;
+  dynamic weight;
   dynamic noOfBags;
-  String? recevingWeight;
+  dynamic recevingWeight;
   dynamic recevingBags;
-  String? biltyImage;
-  String? kantaImage;
-  String? goodsInvoiceImage;
-  String? recevingKantaImage;
-  dynamic frightInvoiceImage;
-  String? inOutTypes;
+  dynamic inOutTypes;
   dynamic status;
-  String? tripStart;
-  String? tripEnd;
-  String? driverName;
-  String? driverPhone;
-  String? truckNumber;
-  String? kantaImageUrl;
+  dynamic tripStart;
+  dynamic tripEnd;
+  dynamic driverName;
+  dynamic driverPhone;
+  dynamic truckNumber;
   dynamic poId;
+  dynamic paymentTo;
+  dynamic paymentToStatus;
+  dynamic kantaImage;
+  dynamic recevingKantaImage;
+  dynamic qualityReport;
+  dynamic recevingQualityImg;
+  dynamic paotiImage;
+  dynamic invoiceImg;
+  dynamic eWayBill;
+  dynamic mandiTaxImg;
+  dynamic goodsInvoiceImage;
+  dynamic frightInvoiceImage;
+  dynamic biltyImage;
+  dynamic kantaImageUrl;
 
   Datum({
     this.id,
@@ -81,11 +89,6 @@ class Datum {
     this.noOfBags,
     this.recevingWeight,
     this.recevingBags,
-    this.biltyImage,
-    this.kantaImage,
-    this.goodsInvoiceImage,
-    this.recevingKantaImage,
-    this.frightInvoiceImage,
     this.inOutTypes,
     this.status,
     this.tripStart,
@@ -93,8 +96,21 @@ class Datum {
     this.driverName,
     this.driverPhone,
     this.truckNumber,
+    this.poId,
+    this.paymentTo,
+    this.paymentToStatus,
+    this.kantaImage,
+    this.recevingKantaImage,
+    this.qualityReport,
+    this.recevingQualityImg,
+    this.paotiImage,
+    this.invoiceImg,
+    this.eWayBill,
+    this.mandiTaxImg,
+    this.goodsInvoiceImage,
+    this.frightInvoiceImage,
+    this.biltyImage,
     this.kantaImageUrl,
-    this.poId
   });
 
   factory Datum.fromMap(Map<String, dynamic> json) => Datum(
@@ -114,11 +130,6 @@ class Datum {
     noOfBags: json["no_of_bags"],
     recevingWeight: json["receving_weight"],
     recevingBags: json["receving_bags"],
-    biltyImage: json["bilty_image"],
-    kantaImage: json["kanta_image"],
-    goodsInvoiceImage: json["goods_invoice_image"],
-    recevingKantaImage: json["receving_kanta_image"],
-    frightInvoiceImage: json["fright_invoice_image"],
     inOutTypes: json["in_out_types"],
     status: json["status"],
     tripStart: json["trip_start"],
@@ -126,8 +137,21 @@ class Datum {
     driverName: json["driver_name"],
     driverPhone: json["driver_phone"],
     truckNumber: json["truck_number"],
+    poId: json["po_id"],
+    paymentTo: json["payment_to"],
+    paymentToStatus: json["payment_to_status"],
+    kantaImage: json["kanta_image"],
+    recevingKantaImage: json["receving_kanta_image"],
+    qualityReport: json["quality_report"],
+    recevingQualityImg: json["receving_quality_img"],
+    paotiImage: json["paoti_image"],
+    invoiceImg: json["invoice_img"],
+    eWayBill: json["e_way_bill"],
+    mandiTaxImg: json["mandi_tax_img"],
+    goodsInvoiceImage: json["goods_invoice_image"],
+    frightInvoiceImage: json["fright_invoice_image"],
+    biltyImage: json["bilty_image"],
     kantaImageUrl: json["kanta_image_url"],
-    poId: json['po_id']
   );
 
   Map<String, dynamic> toMap() => {
@@ -147,11 +171,6 @@ class Datum {
     "no_of_bags": noOfBags,
     "receving_weight": recevingWeight,
     "receving_bags": recevingBags,
-    "bilty_image": biltyImage,
-    "kanta_image": kantaImage,
-    "goods_invoice_image": goodsInvoiceImage,
-    "receving_kanta_image": recevingKantaImage,
-    "fright_invoice_image": frightInvoiceImage,
     "in_out_types": inOutTypes,
     "status": status,
     "trip_start": tripStart,
@@ -159,7 +178,20 @@ class Datum {
     "driver_name": driverName,
     "driver_phone": driverPhone,
     "truck_number": truckNumber,
+    "po_id": poId,
+    "payment_to": paymentTo,
+    "payment_to_status": paymentToStatus,
+    "kanta_image": kantaImage,
+    "receving_kanta_image": recevingKantaImage,
+    "quality_report": qualityReport,
+    "receving_quality_img": recevingQualityImg,
+    "paoti_image": paotiImage,
+    "invoice_img": invoiceImg,
+    "e_way_bill": eWayBill,
+    "mandi_tax_img": mandiTaxImg,
+    "goods_invoice_image": goodsInvoiceImage,
+    "fright_invoice_image": frightInvoiceImage,
+    "bilty_image": biltyImage,
     "kanta_image_url": kantaImageUrl,
-    "po_id":poId
   };
 }

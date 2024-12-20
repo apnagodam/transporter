@@ -10,8 +10,8 @@ String bankListModelToMap(BankListModel data) => json.encode(data.toMap());
 
 class BankListModel {
   List<BankDatum>? data;
-  String? status;
-  String? message;
+  dynamic status;
+  dynamic message;
 
   BankListModel({
     this.data,
@@ -33,9 +33,9 @@ class BankListModel {
 }
 
 class BankDatum {
-  int? id;
-  String? bankName;
-  int? status;
+  dynamic id;
+  dynamic bankName;
+  dynamic status;
 
   BankDatum({
     this.id,

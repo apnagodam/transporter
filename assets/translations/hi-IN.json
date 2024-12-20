@@ -20,8 +20,7 @@
   "validPan": "कृपया पैन कार्ड डालें",
   "selectPanImage": "पैन छवि चुनें",
   "selectAadharImage": "आधार छवि का चयन करें",
-  "selectAadharBackImage":"आधार की पिछली छवि चुनें",
-
+  "selectAadharBackImage": "आधार की पिछली छवि चुनें",
   "selectPassbookImage": "चेक/पासबुक छवि चुनें",
   "selectProfileImage": "प्रोफ़ाइल छवि चुनें",
   "submit": "जमा करना",
@@ -31,17 +30,17 @@
   "otpNotReceived": "ओटीपी प्राप्त नहीं हुआ?",
   "resendOtp": "ओटीपी दोबारा भेजें",
   "trips": "ट्रिप्स",
-  "tripsHistory": "यात्रा इतिहास",
+  "tripsHistory": "ट्रिप्स हिस्ट्री",
+  "tripsInProcess": "ट्रिप्स इन प्रोसेस",
   "logout": "लॉग आउट",
   "tripId": "ट्रिप आईडी",
   "from": "से",
   "to": "को",
-
   "customer": "ग्राहक",
   "customerPhone": "ग्राहक का फ़ोन",
   "ratePerQtl": "प्रति क्विंटल दर. (भाड़ा दर)",
   "commodity": "माल",
-  "finalWeight":"अंतिम वजन (क्विंटल)",
+  "finalWeight": "अंतिम वजन (क्विंटल)",
   "finalNoOfBags": "बैगों की अंतिम संख्या",
   "receivingWeight": "प्राप्त वजन (क्यूटीएल)",
   "receivingBags": "रिसीविंग बैग",
@@ -54,11 +53,14 @@
   "inputBags": "कृपया बैग इनपुट करें",
   "enterRecevingBags": "कृपया प्राप्त वजन दर्ज करें",
   "selectKanta": "कांटा चुनें",
+
   "selectQualityImage": "गुणवत्ता छवि का चयन करें",
+  "selectPaotiImage": "पाओटी छवि का चयन करें",
+  "enterPaotiNumber": "पाओटी नंबर दर्ज करें",
+
   "tripEnd": "यात्रा समाप्त",
   "pending": "लंबित",
   "perQtl": "प्रति क्विंटल.",
-
   "constitution": "कंस्टीट्यूशन",
   "selectConstitution": "संविधान चुनें",
   "selectState": "राज्य चुनें",
@@ -67,11 +69,9 @@
   "bankDetails": "बैंक विवरण",
   "firmName": "फर्म का नाम",
   "selectTruck": "ट्रक चुनें",
-
   "selectDriver": "ड्राइवर का चयन करें",
   "driverName": "ड्राइवर का नाम",
   "driverPhone": "ड्राइवर फ़ोन",
-
   "vehicleNumber": "वाहन संख्या",
   "provBilty": "अनंतिम बिल्टी",
   "goodsInvoiceImage": "माल बिल छवि",
@@ -81,11 +81,6 @@
   "startTrip": "यात्रा शुरू करें",
   "endTrip": "यात्रा समाप्त",
   "completed": "पूरा हुआ",
-  "processing": "प्रोसेसिंग"
-
-
-
-
-
-
+  "processing": "प्रोसेसिंग",
+  "changeLanguage": "भाषा बदलें"
 }

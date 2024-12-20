@@ -1,9 +1,7 @@
-import 'dart:convert';
 import 'dart:io';
 
 import 'package:assorted_layout_widgets/assorted_layout_widgets.dart';
 import 'package:button_animations/button_animations.dart';
-import 'package:dotted_border/dotted_border.dart';
 import 'package:dropdown_search/dropdown_search.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:easy_pdf_viewer/easy_pdf_viewer.dart';
@@ -11,20 +9,21 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import 'package:image_picker/image_picker.dart';
 import 'package:insta_image_viewer/insta_image_viewer.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
+import 'package:one_context/one_context.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
+import 'package:restart_app/restart_app.dart';
 import 'package:transporter/Data/Model/TruckDriverResponse.dart';
 import 'package:transporter/Domain/Trips/TripsService.dart';
 import 'package:transporter/Presentation/Routes/routes.dart';
 import 'package:transporter/Presentation/Utils/Widgets/Widgets.dart';
-import 'package:transporter/Presentation/Utils/pdf/BiltyPdf.dart';
 
-import '../../Domain/Dio/DioProvider.dart';
+import '../../Data/Model/TripDataResponse.dart';
 import '../Preferences/SharedPrefs/SharedUtility.dart';
 import '../Routes/routes_strings.dart';
 import '../Utils/color_constants.dart';
+import '../Utils/pdf/BiltyPdf.dart';
 
 class Dashboard extends ConsumerStatefulWidget {
   const Dashboard({super.key});
@@ -36,18 +35,13 @@ class Dashboard extends ConsumerStatefulWidget {
 class _DashboardState extends ConsumerState<Dashboard> {
   var truckProvider = StateProvider<TruckDatum?>((ref) => null);
   var driverProvider = StateProvider<DriverDatum?>((ref) => null);
-  final form = GlobalKey<FormState>();
-
-  final bagsController = TextEditingController();
-  final weightController = TextEditingController();
-  final imagePicker = ImagePicker();
-  var kantaImage = StateProvider<File?>((ref) => null);
-  var qualityImage = StateProvider<File?>((ref) => null);
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(),
+      appBar: AppBar(
+        title: Text('Dashboard'),
+      ),
       drawer: Drawer(
         child: ListView(
           children: [
@@ -104,9 +98,39 @@ class _DashboardState extends ConsumerState<Dashboard> {
                         .watch(goRouterProvider)
                         .goNamed(RoutesStrings.tripsHistory);
                   },
+                ),
+                ListTile(
+                  title: Text(
+                    'tripsInProcess'.tr(),
+                    style: TextStyle(
+                        fontWeight: FontWeight.w600, fontSize: Adaptive.sp(16)),
+                  ),
+                  onTap: () {
+                    ref
+                        .watch(goRouterProvider)
+                        .goNamed(RoutesStrings.tripsInProcess);
+                  },
                 )
               ],
-            )
+            ),
+            ListTile(
+              title: Text(
+                'changeLanguage'.tr(),
+                style: TextStyle(
+                    fontWeight: FontWeight.w600, fontSize: Adaptive.sp(16)),
+              ),
+              onTap: () {
+                if (ref.watch(sharedUtilityProvider).getLocale() ==
+                    Locale('hi', 'IN')) {
+                  ref.watch(sharedUtilityProvider).setLocale("en");
+                } else {
+                  ref.watch(sharedUtilityProvider).setLocale("hi");
+                }
+                Restart.restartApp().then((value) {
+                  setState(() {});
+                });
+              },
+            ),
 
             // CupertinoActionSheet(
             //   actions: [
@@ -241,7 +265,7 @@ class _DashboardState extends ConsumerState<Dashboard> {
             //                 fontWeight: FontWeight.w500))),
             //   ],
             // ),
-            ,
+
             CupertinoActionSheet(
               actions: [
                 CupertinoActionSheetAction(
@@ -263,970 +287,38 @@ class _DashboardState extends ConsumerState<Dashboard> {
       ),
       body: SafeArea(
           child: RefreshIndicator.adaptive(
-              child: ListView(
-                children: [
-                  ref.watch(tripsListProvider).when(
-                      data: (data) => ListView.builder(
-                          physics: const NeverScrollableScrollPhysics(),
-                          itemCount: data.data?.length,
-                          shrinkWrap: true,
-                          itemBuilder: (context, index) {
-                            return Container(
-                              margin: Pad(all: 10),
-                              decoration: BoxDecoration(
-                                  border: Border.all(
-                                      color: ColorConstants.primaryColorWSP),
-                                  borderRadius: BorderRadius.circular(10)),
-                              child: Padding(
-                                padding: const Pad(all: 10),
-                                child: ColumnSuper(
-                                    alignment: Alignment.center,
-                                    children: [
-                                      RowSuper(
-                                          fill: true,
-                                          alignment: Alignment.center,
-                                          children: [
-                                            Padding(
-                                              padding: Pad(all: 10),
-                                              child: Text(
-                                                '${'tripId'.tr()}: ${data.data?[index].tripId ?? "--"}',
-                                                style: TextStyle(
-                                                    color: Colors.black,
-                                                    fontSize: Adaptive.sp(16),
-                                                    fontWeight:
-                                                        FontWeight.bold),
-                                                textAlign: TextAlign.center,
-                                              ),
-                                            ),
-                                          ]),
-                                      const SizedBox(
-                                        height: 10,
-                                      ),
-                                      Divider(
-                                        height: 2,
-                                      ),
-                                      SizedBox(
-                                        height: 10,
-                                      ),
-                                      RowSuper(fill: true, children: [
-                                        Text(
-                                          'from'.tr(),
-                                          textAlign: TextAlign.start,
-                                          style: TextStyle(
-                                              color: ColorConstants
-                                                  .primaryColorWSP,
-                                              fontSize: Adaptive.sp(14),
-                                              fontWeight: FontWeight.w800),
-                                        ),
-                                        Text(
-                                          ' ${data.data?[index]?.fromAddress}',
-                                          textAlign: TextAlign.end,
-                                          style: TextStyle(
-                                              color: ColorConstants
-                                                  .primaryColorWSP,
-                                              fontSize: Adaptive.sp(14),
-                                              fontWeight: FontWeight.w800),
-                                        ),
-                                      ]),
-                                      SizedBox(
-                                        height: 10,
-                                      ),
-                                      RowSuper(fill: true, children: [
-                                        Text(
-                                          'to'.tr(),
-                                          textAlign: TextAlign.start,
-                                          style: TextStyle(
-                                              color: ColorConstants
-                                                  .primaryColorWSP,
-                                              fontSize: Adaptive.sp(14),
-                                              fontWeight: FontWeight.w800),
-                                        ),
-                                        Text(
-                                          ' ${data.data?[index]?.toAddress}',
-                                          textAlign: TextAlign.end,
-                                          style: TextStyle(
-                                              color: ColorConstants
-                                                  .primaryColorWSP,
-                                              fontSize: Adaptive.sp(14),
-                                              fontWeight: FontWeight.w800),
-                                        ),
-                                      ]),
-                                      SizedBox(
-                                        height: 10,
-                                      ),
-                                      RowSuper(fill: true, children: [
-                                        Text(
-                                          'vehicleNumber'.tr(),
-                                          textAlign: TextAlign.start,
-                                          style: TextStyle(
-                                              color: ColorConstants
-                                                  .primaryColorWSP,
-                                              fontSize: Adaptive.sp(14),
-                                              fontWeight: FontWeight.w800),
-                                        ),
-                                        Text(
-                                          '${data.data?[index].truckNumber ?? "--"}',
-                                          textAlign: TextAlign.end,
-                                          style: TextStyle(
-                                              color: ColorConstants
-                                                  .primaryColorWSP,
-                                              fontSize: Adaptive.sp(14),
-                                              fontWeight: FontWeight.w800),
-                                        ),
-                                      ]),
-                                      const SizedBox(
-                                        height: 10,
-                                      ),
-                                      RowSuper(fill: true, children: [
-                                        Text(
-                                          'driverName'.tr(),
-                                          textAlign: TextAlign.start,
-                                          style: TextStyle(
-                                              color: ColorConstants
-                                                  .primaryColorWSP,
-                                              fontSize: Adaptive.sp(14),
-                                              fontWeight: FontWeight.w800),
-                                        ),
-                                        Text(
-                                          '${data.data?[index].driverName ?? "--"}',
-                                          textAlign: TextAlign.end,
-                                          style: TextStyle(
-                                              color: ColorConstants
-                                                  .primaryColorWSP,
-                                              fontSize: Adaptive.sp(14),
-                                              fontWeight: FontWeight.w800),
-                                        ),
-                                      ]),
-                                      const SizedBox(
-                                        height: 10,
-                                      ),
-                                      RowSuper(fill: true, children: [
-                                        Text(
-                                          'driverPhone'.tr(),
-                                          textAlign: TextAlign.start,
-                                          style: TextStyle(
-                                              color: ColorConstants
-                                                  .primaryColorWSP,
-                                              fontSize: Adaptive.sp(14),
-                                              fontWeight: FontWeight.w800),
-                                        ),
-                                        Text(
-                                          '${data.data?[index].driverPhone ?? "--"}',
-                                          textAlign: TextAlign.end,
-                                          style: TextStyle(
-                                              color: ColorConstants
-                                                  .primaryColorWSP,
-                                              fontSize: Adaptive.sp(14),
-                                              fontWeight: FontWeight.w800),
-                                        ),
-                                      ]),
-                                      const SizedBox(
-                                        height: 10,
-                                      ),
-                                      RowSuper(fill: true, children: [
-                                        Text(
-                                          'customer'.tr(),
-                                          textAlign: TextAlign.start,
-                                          style: TextStyle(
-                                              color: ColorConstants
-                                                  .primaryColorWSP,
-                                              fontSize: Adaptive.sp(14),
-                                              fontWeight: FontWeight.w800),
-                                        ),
-                                        Text.rich(
-                                            textAlign: TextAlign.end,
-                                            TextSpan(
-                                              text:
-                                                  '${data.data?[index].userName}',
-                                              style: TextStyle(
-                                                  color: ColorConstants
-                                                      .primaryColorWSP,
-                                                  fontSize: Adaptive.sp(14),
-                                                  fontWeight: FontWeight.w800),
-                                            )),
-                                      ]),
-                                      const SizedBox(
-                                        height: 10,
-                                      ),
-                                      RowSuper(
-                                          fill: true,
-                                          alignment: Alignment.center,
-                                          children: [
-                                            Text(
-                                              'customerPhone'.tr(),
-                                              textAlign: TextAlign.start,
-                                              style: TextStyle(
-                                                  color: ColorConstants
-                                                      .primaryColorWSP,
-                                                  fontSize: Adaptive.sp(14),
-                                                  fontWeight: FontWeight.w800),
-                                            ),
-                                            Text(
-                                              '${data.data?[index].userPhone}',
-                                              textAlign: TextAlign.end,
-                                              style: TextStyle(
-                                                  color: ColorConstants
-                                                      .primaryColorWSP,
-                                                  fontSize: Adaptive.sp(14),
-                                                  fontWeight: FontWeight.w800),
-                                            ),
-                                          ]),
-                                      const SizedBox(
-                                        height: 10,
-                                      ),
-                                      RowSuper(
-                                          fill: true,
-                                          alignment: Alignment.center,
-                                          children: [
-                                            Text(
-                                              'ratePerQtl'.tr(),
-                                              textAlign: TextAlign.start,
-                                              style: TextStyle(
-                                                  color: ColorConstants
-                                                      .primaryColorWSP,
-                                                  fontSize: Adaptive.sp(14),
-                                                  fontWeight: FontWeight.w800),
-                                            ),
-                                            Text(
-                                              '${currencyFormat.format(int.parse("${data.data?[index].rate ?? 0}"))} / perQtl'.tr(),
-                                              textAlign: TextAlign.end,
-                                              style: TextStyle(
-                                                  color: ColorConstants
-                                                      .primaryColorWSP,
-                                                  fontSize: Adaptive.sp(14),
-                                                  fontWeight: FontWeight.w800),
-                                            ),
-                                          ]),
-                                      const SizedBox(
-                                        height: 10,
-                                      ),
-                                      RowSuper(
-                                          fill: true,
-                                          alignment: Alignment.center,
-                                          children: [
-                                            Text(
-                                              'commodity'.tr(),
-                                              textAlign: TextAlign.start,
-                                              style: TextStyle(
-                                                  color: ColorConstants
-                                                      .primaryColorWSP,
-                                                  fontSize: Adaptive.sp(14),
-                                                  fontWeight: FontWeight.w800),
-                                            ),
-                                            Text(
-                                              '${data.data?[index].commodity}',
-                                              textAlign: TextAlign.end,
-                                              style: TextStyle(
-                                                  color: ColorConstants
-                                                      .primaryColorWSP,
-                                                  fontSize: Adaptive.sp(14),
-                                                  fontWeight: FontWeight.w800),
-                                            ),
-                                          ]),
-                                      const SizedBox(
-                                        height: 10,
-                                      ),
-                                      RowSuper(
-                                          fill: true,
-                                          alignment: Alignment.center,
-                                          children: [
-                                            Text(
-                                              'finalWeight'.tr(),
-                                              textAlign: TextAlign.start,
-                                              style: TextStyle(
-                                                  color: ColorConstants
-                                                      .primaryColorWSP,
-                                                  fontSize: Adaptive.sp(14),
-                                                  fontWeight: FontWeight.w800),
-                                            ),
-                                            Text(
-                                              '${data.data?[index].weight ?? "pending".tr()}',
-                                              textAlign: TextAlign.end,
-                                              style: TextStyle(
-                                                  color: ColorConstants
-                                                      .primaryColorWSP,
-                                                  fontSize: Adaptive.sp(14),
-                                                  fontWeight: FontWeight.w800),
-                                            ),
-                                          ]),
-                                      const SizedBox(
-                                        height: 10,
-                                      ),
-                                      RowSuper(
-                                          fill: true,
-                                          alignment: Alignment.center,
-                                          children: [
-                                            Text(
-                                              'finalNoOfBags'.tr(),
-                                              textAlign: TextAlign.start,
-                                              style: TextStyle(
-                                                  color: ColorConstants
-                                                      .primaryColorWSP,
-                                                  fontSize: Adaptive.sp(14),
-                                                  fontWeight: FontWeight.w800),
-                                            ),
-                                            Text(
-                                              '${data.data?[index].noOfBags ?? "pending".tr()}',
-                                              textAlign: TextAlign.end,
-                                              style: TextStyle(
-                                                  color: ColorConstants
-                                                      .primaryColorWSP,
-                                                  fontSize: Adaptive.sp(14),
-                                                  fontWeight: FontWeight.w800),
-                                            ),
-                                          ]),
-                                      const SizedBox(
-                                        height: 10,
-                                      ),
-                                      RowSuper(
-                                          fill: true,
-                                          alignment: Alignment.center,
-                                          children: [
-                                            Text(
-                                              'receivingWeight'.tr(),
-                                              textAlign: TextAlign.start,
-                                              style: TextStyle(
-                                                  color: ColorConstants
-                                                      .primaryColorWSP,
-                                                  fontSize: Adaptive.sp(14),
-                                                  fontWeight: FontWeight.w800),
-                                            ),
-                                            Text(
-                                              '${data.data?[index].recevingWeight ?? "pending".tr()}',
-                                              textAlign: TextAlign.end,
-                                              style: TextStyle(
-                                                  color: ColorConstants
-                                                      .primaryColorWSP,
-                                                  fontSize: Adaptive.sp(14),
-                                                  fontWeight: FontWeight.w800),
-                                            ),
-                                          ]),
-                                      const SizedBox(
-                                        height: 10,
-                                      ),
-                                      RowSuper(
-                                          fill: true,
-                                          alignment: Alignment.center,
-                                          children: [
-                                            Text(
-                                              'receivingBags'.tr(),
-                                              textAlign: TextAlign.start,
-                                              style: TextStyle(
-                                                  color: ColorConstants
-                                                      .primaryColorWSP,
-                                                  fontSize: Adaptive.sp(14),
-                                                  fontWeight: FontWeight.w800),
-                                            ),
-                                            Text(
-                                              '${data.data?[index].recevingBags ?? "pending".tr()}',
-                                              textAlign: TextAlign.end,
-                                              style: TextStyle(
-                                                  color: ColorConstants
-                                                      .primaryColorWSP,
-                                                  fontSize: Adaptive.sp(14),
-                                                  fontWeight: FontWeight.w800),
-                                            ),
-                                          ]),
-                                      const SizedBox(
-                                        height: 10,
-                                      ),
-                                      RowSuper(
-                                          fill: true,
-                                          alignment: Alignment.center,
-                                          children: [
-                                            Text(
-                                              '${data.data?[index].weight == null ? 'provBilty'.tr() : "provBilty".tr()}',
-                                              textAlign: TextAlign.start,
-                                              style: TextStyle(
-                                                  color: ColorConstants
-                                                      .primaryColorWSP,
-                                                  fontSize: Adaptive.sp(14),
-                                                  fontWeight: FontWeight.w800),
-                                            ),
-                                            Align(
-                                              alignment: Alignment.centerRight,
-                                              child: InkWell(
-                                                onTap: () async {
-                                                  ref
-                                                      .watch(tripDataProvider(
-                                                              tripRequestid:
-                                                                  "${data.data?[index].id}")
-                                                          .future)
-                                                      .then((value) {
-                                                    ref
-                                                        .watch(
-                                                            createBiltyPdfProvider(
-                                                                    context:
-                                                                        context,
-                                                                    model:
-                                                                        value)
-                                                                .future)
-                                                        .then((value) async {
-                                                      if (value != null) {
-                                                        PDFDocument doc =
-                                                            await PDFDocument
-                                                                .fromFile(
-                                                                    value ??
-                                                                        File(
-                                                                            ''));
-                                                        showBarModalBottomSheet(
-                                                            context: context,
-                                                            builder: (context) =>
-                                                                PDFViewer(
-                                                                    document:
-                                                                        doc));
-                                                      }
-                                                    });
-                                                  });
-                                                },
-                                                child: Icon(
-                                                  CupertinoIcons.eye,
-                                                  color: ColorConstants
-                                                      .primaryColorWSP,
-                                                ),
-                                              ),
-                                            )
-                                          ]),
-                                      const SizedBox(
-                                        height: 10,
-                                      ),
-                                      data.data?[index].poId == null
-                                          ? SizedBox()
-                                          : RowSuper(
-                                              fill: true,
-                                              alignment: Alignment.center,
-                                              children: [
-                                                  Text(
-                                                    'goodsInvoiceImage'.tr(),
-                                                    textAlign: TextAlign.start,
-                                                    style: TextStyle(
-                                                        color: ColorConstants
-                                                            .primaryColorDriver,
-                                                        fontSize:
-                                                            Adaptive.sp(14),
-                                                        fontWeight:
-                                                            FontWeight.w800),
-                                                  ),
-                                                  Align(
-                                                    alignment:
-                                                        Alignment.centerRight,
-                                                    child: InkWell(
-                                                      onTap: () {},
-                                                      child: InstaImageViewer(
-                                                        imageUrl:
-                                                            "${ImageClient.assetsImageUrl}${data.data?[index].goodsInvoiceImage}",
-                                                        child: Icon(
-                                                          CupertinoIcons.eye,
-                                                          color: ColorConstants
-                                                              .primaryColorDriver,
-                                                        ),
-                                                      ),
-                                                    ),
-                                                  ),
-                                                ]),
-                                      const SizedBox(
-                                        height: 10,
-                                      ),
-                                      RowSuper(
-                                          fill: true,
-                                          alignment: Alignment.center,
-                                          children: [
-                                            Text(
-                                              'kantaImage'.tr(),
-                                              textAlign: TextAlign.start,
-                                              style: TextStyle(
-                                                  color: ColorConstants
-                                                      .primaryColorWSP,
-                                                  fontSize: Adaptive.sp(14),
-                                                  fontWeight: FontWeight.w800),
-                                            ),
-                                            Align(
-                                              alignment: Alignment.centerRight,
-                                              child: InkWell(
-                                                onTap: () {},
-                                                child: InstaImageViewer(
-                                                  imageUrl:
-                                                      "${ImageClient.secondKantaImage}${data.data![index].kantaImage}",
-                                                  child: Icon(
-                                                    CupertinoIcons.eye,
-                                                    color: ColorConstants
-                                                        .primaryColorWSP,
-                                                  ),
-                                                ),
-                                              ),
-                                            ),
-                                          ]),
-                                      const SizedBox(
-                                        height: 10,
-                                      ),
-                                      RowSuper(
-                                          fill: true,
-                                          alignment: Alignment.center,
-                                          children: [
-                                            Text(
-                                              'receivingKanta'.tr(),
-                                              textAlign: TextAlign.start,
-                                              style: TextStyle(
-                                                  color: ColorConstants
-                                                      .primaryColorWSP,
-                                                  fontSize: Adaptive.sp(14),
-                                                  fontWeight: FontWeight.w800),
-                                            ),
-                                            Align(
-                                              alignment: Alignment.centerRight,
-                                              child: InkWell(
-                                                onTap: () {},
-                                                child: InstaImageViewer(
-                                                  imageUrl:
-                                                      "${ImageClient.secondKantaImage}${data.data?[index].recevingKantaImage}",
-                                                  child: Icon(
-                                                    CupertinoIcons.eye,
-                                                    color: ColorConstants
-                                                        .primaryColorWSP,
-                                                  ),
-                                                ),
-                                              ),
-                                            ),
-                                          ]),
-                                      const SizedBox(
-                                        height: 10,
-                                      ),
-                                      Divider(
-                                        height: 2,
-                                      ),
-                                      const SizedBox(
-                                        height: 10,
-                                      ),
-                                      data.data?[index].truckNumber == null &&
-                                              data.data?[index].driverName ==
-                                                  null
-                                          ? AnimatedButton(
-                                              height: 35,
-                                              color: ColorConstants
-                                                  .primaryColorWSP,
-                                              width: MediaQuery.of(context)
-                                                      .size
-                                                      .width /
-                                                  1.2,
-                                              isOutline: true,
-                                              isMultiColor: true,
-                                              colors: [
-                                                ColorConstants.primaryColorWSP,
-                                                ColorConstants.primaryColorWSP,
-                                              ],
-                                              borderWidth: 1,
-                                              onTap: () async {
-                                                ref
-                                                    .watch(truckDriverProvider
-                                                        .future)
-                                                    .then((truckData) =>
-                                                        showBarModalBottomSheet(
-                                                            context: context,
-                                                            builder:
-                                                                (modalContext) =>
-                                                                    SafeArea(
-                                                                        child:
-                                                                            Padding(
-                                                                      padding: Pad(
-                                                                          all:
-                                                                              10),
-                                                                      child: ColumnSuper(
-                                                                          children: [
-                                                                            truckSelection(
-                                                                                ref,
-                                                                                context,
-                                                                                truckData.truckData ?? []),
-                                                                            SizedBox(
-                                                                              height: 10,
-                                                                            ),
-                                                                            driverSelection(
-                                                                                ref,
-                                                                                context,
-                                                                                truckData.driverData ?? []),
-                                                                            SizedBox(
-                                                                              height: 10,
-                                                                            ),
-                                                                            AnimatedButton(
-                                                                              height: 35,
-                                                                              color: ColorConstants.primaryColorWSP,
-                                                                              width: MediaQuery.of(context).size.width / 1.2,
-                                                                              isOutline: true,
-                                                                              isMultiColor: true,
-                                                                              colors: [
-                                                                                ColorConstants.primaryColorWSP,
-                                                                                ColorConstants.primaryColorWSP,
-                                                                              ],
-                                                                              borderWidth: 1,
-                                                                              onTap: () async {
-                                                                                if (ref.watch(truckProvider) == null) {
-                                                                                  errorToast(context, 'selectTruck'.tr());
-                                                                                }
-                                                                                if (ref.watch(driverProvider) == null) {
-                                                                                  errorToast(context, 'selectDriver'.tr());
-                                                                                } else {
-                                                                                  ref.watch(updateTruckDriverProvider(driverId: "${ref.watch(driverProvider)?.id ?? 0}", truckId: "${ref.watch(truckProvider)?.id ?? 0}", tripRequestId: "${data.data?[index].id}").future).then((value) {
-                                                                                    if (value['status'].toString() == "1") {
-                                                                                      ref.invalidate(tripsListProvider);
-                                                                                      ref.watch(goRouterProvider).pop(modalContext);
-                                                                                    }
-                                                                                  });
-                                                                                }
-                                                                              },
-                                                                              child: Text(
-                                                                                "submit".tr(),
-                                                                                textAlign: TextAlign.center,
-                                                                                style: TextStyle(color: Colors.white, fontSize: Adaptive.sp(14), fontWeight: FontWeight.w800),
-                                                                              ),
-                                                                            )
-                                                                          ]),
-                                                                    ))));
-                                              },
-                                              child: Text(
-                                                "selectTruck / selectDriver".tr(),
-                                                textAlign: TextAlign.center,
-                                                style: TextStyle(
-                                                    color: Colors.white,
-                                                    fontSize: Adaptive.sp(14),
-                                                    fontWeight:
-                                                        FontWeight.w800),
-                                              ),
-                                            )
-                                          : data.data?[index].weight != null &&
-                                                  data.data?[index].tripStart ==
-                                                      null
-                                              ? AnimatedButton(
-                                                  height: 35,
-                                                  color: ColorConstants
-                                                      .primaryColorWSP,
-                                                  width: MediaQuery.of(context)
-                                                          .size
-                                                          .width /
-                                                      1.2,
-                                                  isOutline: true,
-                                                  isMultiColor: true,
-                                                  colors: [
-                                                    ColorConstants
-                                                        .secondaryColorWSP,
-                                                    ColorConstants
-                                                        .secondaryColorWSP,
-                                                  ],
-                                                  borderWidth: 1,
-                                                  onTap: () async {
-                                                    ref
-                                                        .watch(startTripProvider(
-                                                                tripRequestId:
-                                                                    "${data.data?[index].id}")
-                                                            .future)
-                                                        .then((value) {
-                                                      if (value['status']
-                                                              .toString() ==
-                                                          "1") {
-                                                        ref.invalidate(
-                                                            tripsListProvider);
-                                                      }
-                                                    });
-                                                  },
-                                                  child: Text(
-                                                    "startTrip".tr(),
-                                                    textAlign: TextAlign.center,
-                                                    style: TextStyle(
-                                                        color: Colors.white,
-                                                        fontSize:
-                                                            Adaptive.sp(14),
-                                                        fontWeight:
-                                                            FontWeight.w800),
-                                                  ),
-                                                )
-                                              : data.data?[index].weight !=
-                                                          null &&
-                                                      data.data?[index]
-                                                              .tripStart !=
-                                                          null &&
-                                                      data.data?[index]
-                                                              .tripEnd ==
-                                                          null
-                                                  ? AnimatedButton(
-                                                      height: 35,
-                                                      color: ColorConstants
-                                                          .primaryColorWSP,
-                                                      width:
-                                                          MediaQuery.of(context)
-                                                                  .size
-                                                                  .width /
-                                                              1.2,
-                                                      isOutline: true,
-                                                      isMultiColor: true,
-                                                      colors: [
-                                                        ColorConstants
-                                                            .primaryColorDriver,
-                                                        ColorConstants
-                                                            .primaryColorDriver,
-                                                      ],
-                                                      borderWidth: 1,
-                                                      onTap: () async {
-                                                        showBarModalBottomSheet(
-                                                            context: context,
-                                                            builder: (context) =>
-                                                                Consumer(
-                                                                    builder: (context,
-                                                                            ref,
-                                                                            child) =>
-                                                                        SafeArea(
-                                                                            child:
-                                                                                Padding(
-                                                                          padding:
-                                                                              Pad(all: 10),
-                                                                          child: Form(
-                                                                              key: form,
-                                                                              child: ListView(
-                                                                                children: [
-                                                                                  TextFormField(
-                                                                                    controller: bagsController,
-                                                                                    keyboardType: TextInputType.text,
-                                                                                    validator: (value) {
-                                                                                      if (value == null || value.isEmpty) {
-                                                                                        return 'inputBags'.tr();
-                                                                                      }
-                                                                                      return null;
-                                                                                    },
-                                                                                    decoration: InputDecoration(label:  Text('inputBags'.tr()), contentPadding: const Pad(top: 0, bottom: 0, left: 10), border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)), enabledBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(10))),
-                                                                                  ),
-                                                                                  SizedBox(
-                                                                                    height: 10,
-                                                                                  ),
-                                                                                  TextFormField(
-                                                                                    controller: weightController,
-                                                                                    keyboardType: TextInputType.text,
-                                                                                    validator: (value) {
-                                                                                      if (value == null || value.isEmpty) {
-                                                                                        return 'enterRecevingBags'.tr();
-                                                                                      }
-                                                                                      return null;
-                                                                                    },
-                                                                                    decoration: InputDecoration(label:  Text('recievingWeight'.tr()), contentPadding: const Pad(top: 0, bottom: 0, left: 10), border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)), enabledBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(10))),
-                                                                                  ),
-                                                                                  SizedBox(
-                                                                                    height: 10,
-                                                                                  ),
-                                                                                  DottedBorder(
-                                                                                      borderType: BorderType.RRect,
-                                                                                      dashPattern: const [5, 5, 5, 5],
-                                                                                      color: ColorConstants.primaryColorDriver,
-                                                                                      child: Padding(
-                                                                                        padding: const Pad(all: 20),
-                                                                                        child: Center(
-                                                                                          child: ref.watch(kantaImage) != null
-                                                                                              ? Stack(
-                                                                                                  children: [
-                                                                                                    Image.file(ref.watch(kantaImage) ?? File('')),
-                                                                                                    Container(
-                                                                                                      decoration: BoxDecoration(color: Colors.black.withOpacity(0.6), shape: BoxShape.circle),
-                                                                                                      child: IconButton(
-                                                                                                          onPressed: () {
-                                                                                                            ref.invalidate(kantaImage);
-                                                                                                          },
-                                                                                                          icon: const Icon(
-                                                                                                            Icons.close,
-                                                                                                            color: Colors.white,
-                                                                                                          )),
-                                                                                                    )
-                                                                                                  ],
-                                                                                                )
-                                                                                              : InkWell(
-                                                                                                  child: ColumnSuper(children: [
-                                                                                                    Icon(
-                                                                                                      Icons.cloud_upload,
-                                                                                                      color: ColorConstants.primaryColorDriver,
-                                                                                                    ),
-                                                                                                    SizedBox(
-                                                                                                      height: 5,
-                                                                                                    ),
-                                                                                                    Text(
-                                                                                                      "selectKanta".tr(),
-                                                                                                      textAlign: TextAlign.center,
-                                                                                                      style: TextStyle(color: ColorConstants.primaryColorDriver, fontWeight: FontWeight.bold, fontSize: Adaptive.sp(16)),
-                                                                                                    ),
-                                                                                                    SizedBox(
-                                                                                                      height: 5,
-                                                                                                    ),
-                                                                                                    Text(
-                                                                                                      "uploadDocumentImage".tr(),
-                                                                                                      textAlign: TextAlign.center,
-                                                                                                      style: TextStyle(color: ColorConstants.primaryColorDriver, fontWeight: FontWeight.w700, fontSize: Adaptive.sp(13)),
-                                                                                                    )
-                                                                                                  ]),
-                                                                                                  onTap: () async {
-                                                                                                    imagePicker.pickImage(source: ImageSource.camera).then((file) {
-                                                                                                      if (file != null) {
-                                                                                                        ref.watch(kantaImage.notifier).state = File(file.path);
-                                                                                                      }
-                                                                                                    });
-                                                                                                  },
-                                                                                                ),
-                                                                                        ),
-                                                                                      )),
-                                                                                  SizedBox(
-                                                                                    height: 10,
-                                                                                  ),
-                                                                                  DottedBorder(
-                                                                                      borderType: BorderType.RRect,
-                                                                                      dashPattern: const [5, 5, 5, 5],
-                                                                                      color: ColorConstants.primaryColorDriver,
-                                                                                      child: Padding(
-                                                                                        padding: const Pad(all: 20),
-                                                                                        child: Center(
-                                                                                          child: ref.watch(qualityImage) != null
-                                                                                              ? Stack(
-                                                                                                  children: [
-                                                                                                    Image.file(ref.watch(qualityImage) ?? File('')),
-                                                                                                    Container(
-                                                                                                      decoration: BoxDecoration(color: Colors.black.withOpacity(0.6), shape: BoxShape.circle),
-                                                                                                      child: IconButton(
-                                                                                                          onPressed: () {
-                                                                                                            ref.invalidate(qualityImage);
-                                                                                                          },
-                                                                                                          icon: const Icon(
-                                                                                                            Icons.close,
-                                                                                                            color: Colors.white,
-                                                                                                          )),
-                                                                                                    )
-                                                                                                  ],
-                                                                                                )
-                                                                                              : InkWell(
-                                                                                                  child: ColumnSuper(children: [
-                                                                                                    Icon(
-                                                                                                      Icons.cloud_upload,
-                                                                                                      color: ColorConstants.primaryColorDriver,
-                                                                                                    ),
-                                                                                                    SizedBox(
-                                                                                                      height: 5,
-                                                                                                    ),
-                                                                                                    Text(
-                                                                                                      "selectQualityImage".tr(),
-                                                                                                      textAlign: TextAlign.center,
-                                                                                                      style: TextStyle(color: ColorConstants.primaryColorDriver, fontWeight: FontWeight.bold, fontSize: Adaptive.sp(16)),
-                                                                                                    ),
-                                                                                                    SizedBox(
-                                                                                                      height: 5,
-                                                                                                    ),
-                                                                                                    Text(
-                                                                                                      "uploadDocumentImage".tr(),
-                                                                                                      textAlign: TextAlign.center,
-                                                                                                      style: TextStyle(color: ColorConstants.primaryColorDriver, fontWeight: FontWeight.w700, fontSize: Adaptive.sp(13)),
-                                                                                                    )
-                                                                                                  ]),
-                                                                                                  onTap: () async {
-                                                                                                    imagePicker.pickImage(source: ImageSource.camera).then((file) {
-                                                                                                      if (file != null) {
-                                                                                                        ref.watch(qualityImage.notifier).state = File(file.path);
-                                                                                                      }
-                                                                                                    });
-                                                                                                  },
-                                                                                                ),
-                                                                                        ),
-                                                                                      )),
-                                                                                  AnimatedButton(
-                                                                                    height: 35,
-                                                                                    color: ColorConstants.primaryColorDriver,
-                                                                                    width: MediaQuery.of(context).size.width / 1.2,
-                                                                                    isOutline: true,
-                                                                                    isMultiColor: true,
-                                                                                    colors: [
-                                                                                      ColorConstants.primaryColorDriver,
-                                                                                      ColorConstants.primaryColorDriver,
-                                                                                    ],
-                                                                                    borderWidth: 1,
-                                                                                    child: Text(
-                                                                                      "submit".tr(),
-                                                                                    ),
-                                                                                    onTap: () async {
-                                                                                      if (form.currentState!.validate()) {
-                                                                                        if (ref.watch(kantaImage) == null) {
-                                                                                          errorToast(context, "kantaImage".tr());
-                                                                                        }
-                                                                                        if (ref.watch(qualityImage) == null) {
-                                                                                          errorToast(context, 'selectQualityImage'.tr());
-                                                                                        } else {
-                                                                                          final bytes = File(ref.watch(kantaImage)?.path ?? "").readAsBytesSync();
-                                                                                          String img64 = base64Encode(bytes);
-
-                                                                                          final bytes2 = File(ref.watch(qualityImage)?.path ?? "").readAsBytesSync();
-                                                                                          String img642 = base64Encode(bytes);
-                                                                                          ref.watch(endTripProvider(tripRequestId: '${data.data?[index]?.id ?? 0}', kantaWeight: '${weightController.text.toString()}', bags: "${bagsController.text.toString()}", kantaImage: img64, qualityImage: img642).future).then((value) {
-                                                                                            if (value['status'].toString() == "1") {
-                                                                                              ref.invalidate(tripsListProvider);
-                                                                                              ref.invalidate(kantaImage);
-                                                                                              ref.invalidate(qualityImage);
-                                                                                              bagsController.clear();
-                                                                                              weightController.clear();
-                                                                                              ref.watch(goRouterProvider).pop(context);
-                                                                                            }
-                                                                                          });
-                                                                                        }
-                                                                                      }
-                                                                                    },
-                                                                                  )
-                                                                                ],
-                                                                              )),
-                                                                        ))));
-                                                      },
-                                                      child: Text(
-                                                        "endTrip".tr(),
-                                                        textAlign:
-                                                            TextAlign.center,
-                                                        style: TextStyle(
-                                                            color: Colors.white,
-                                                            fontSize:
-                                                                Adaptive.sp(14),
-                                                            fontWeight:
-                                                                FontWeight
-                                                                    .w800),
-                                                      ),
-                                                    )
-                                                  : data.data?[index].tripEnd !=
-                                                              null &&
-                                                          data.data?[index]
-                                                                  .tripStart !=
-                                                              null
-                                                      ? Text(
-                                                          "completed".tr(),
-                                                          textAlign:
-                                                              TextAlign.center,
-                                                          style: TextStyle(
-                                                              color: ColorConstants
-                                                                  .primaryColorDriver,
-                                                              fontSize:
-                                                                  Adaptive.sp(
-                                                                      14),
-                                                              fontWeight:
-                                                                  FontWeight
-                                                                      .w800),
-                                                        )
-                                                      : Text(
-                                                          "processing".tr(),
-                                                          textAlign:
-                                                              TextAlign.center,
-                                                          style: TextStyle(
-                                                              color: ColorConstants
-                                                                  .primaryColorDriver,
-                                                              fontSize:
-                                                                  Adaptive.sp(
-                                                                      14),
-                                                              fontWeight:
-                                                                  FontWeight
-                                                                      .w800),
-                                                        ),
-                                      const SizedBox(
-                                        height: 10,
-                                      ),
-                                    ]),
-                              ),
-                            );
-                          }),
-                      error: (e, s) => Container(),
-                      loading: () => CupertinoActivityIndicator())
-                ],
-              ),
+              child: ref.watch(tripsListProvider).when(
+                  data: (data) {
+                    var dataList = data.data
+                        ?.where((datum) =>
+                            datum.weight == null ||
+                            datum.tripStart == null ||
+                            datum.tripEnd == null)
+                        .toList();
+                    return ListView(
+                      children: [
+                        tripsTypesLayout(data.data),
+                        Padding(
+                          padding: Pad(all: 10),
+                          child: Text(
+                            "Running Trip Ids",
+                            style: TextStyle(
+                                fontSize: Adaptive.sp(18),
+                                fontWeight: FontWeight.bold),
+                          ),
+                        ),
+                        ListView.builder(
+                            physics: const NeverScrollableScrollPhysics(),
+                            itemCount: dataList?.length,
+                            shrinkWrap: true,
+                            itemBuilder: (context, index) {
+                              return tripRequestLayout(dataList![index]);
+                            })
+                      ],
+                    );
+                  },
+                  error: (e, s) => Container(),
+                  loading: () => CupertinoActivityIndicator()),
               onRefresh: () {
                 return Future(() {
                   ref.invalidate(tripsListProvider);
@@ -1234,6 +326,855 @@ class _DashboardState extends ConsumerState<Dashboard> {
               })),
     );
   }
+
+  tripsTypesLayout(List<Datum>? data) => Padding(
+        padding: Pad(all: 10),
+        child: Row(children: [
+          Expanded(
+              child: InkWell(
+            child: Card(
+              color: ColorConstants.primaryColorDriver,
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(8),
+                  side: BorderSide(color: ColorConstants.primaryColorDriver)),
+              child: Padding(
+                padding: Pad(all: 15),
+                child: Row(
+                  children: [
+                    Card(
+                      child: Padding(
+                        padding: Pad(all: 5),
+                        child: Icon(Icons.fire_truck_outlined),
+                      ),
+                      color: Colors.white,
+                    ),
+                    SizedBox(
+                      width: 5,
+                    ),
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        TextOneLine(
+                          "Start Trips",
+                          style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              color: Colors.white,
+                              fontSize: Adaptive.sp(16)),
+                        ),
+                        Text(
+                          "${data?.where((datum) => datum.weight != null && datum.tripStart == null).toList().length}",
+                          textAlign: TextAlign.start,
+                          style: TextStyle(
+                              color: Colors.white,
+                              fontWeight: FontWeight.bold,
+                              fontSize: Adaptive.sp(18)),
+                        )
+                      ],
+                    )
+                  ],
+                ),
+              ),
+            ),
+            onTap: () {
+              ref.watch(goRouterProvider).goNamed(RoutesStrings.tripsInProcess);
+            },
+          )),
+          Expanded(
+              child: InkWell(
+            child: Card(
+              color: ColorConstants.primaryColorDriver,
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(8),
+                  side: BorderSide(color: ColorConstants.primaryColorDriver)),
+              child: Padding(
+                  padding: Pad(all: 15),
+                  child: Row(
+                    children: [
+                      Card(
+                        child: Padding(
+                          padding: Pad(all: 5),
+                          child: Icon(Icons.history),
+                        ),
+                        color: Colors.white,
+                      ),
+                      SizedBox(
+                        width: 5,
+                      ),
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          TextOneLine("End Trips",
+                              style: TextStyle(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: Adaptive.sp(16))),
+                          Text(
+                            "${data?.where((datum) => datum.weight != null && datum.tripStart != null && datum.tripEnd == null).toList().length}",
+                            textAlign: TextAlign.start,
+                            style: TextStyle(
+                                color: Colors.white,
+                                fontWeight: FontWeight.bold,
+                                fontSize: Adaptive.sp(18)),
+                          )
+                        ],
+                      ),
+                    ],
+                  )),
+            ),
+            onTap: () {
+              ref.watch(goRouterProvider).goNamed(RoutesStrings.tripsHistory);
+            },
+          ))
+        ]),
+      );
+
+  tripRequestLayout(Datum dataList) => Container(
+        margin: Pad(all: 10),
+        decoration: BoxDecoration(
+            border: Border.all(color: ColorConstants.primaryColorWSP),
+            borderRadius: BorderRadius.circular(10)),
+        child: Padding(
+          padding: const Pad(all: 10),
+          child: ColumnSuper(alignment: Alignment.center, children: [
+            RowSuper(fill: true, alignment: Alignment.centerRight, children: [
+              Padding(
+                padding: Pad(all: 10),
+                child: Text(
+                  dataList.tripId == null
+                      ? "--"
+                      : '${'tripId'.tr()}: ${dataList?.tripId.toString()}',
+                  style: TextStyle(
+                      color: Colors.black,
+                      fontSize: Adaptive.sp(16),
+                      fontWeight: FontWeight.bold),
+                  textAlign: TextAlign.end,
+                ),
+              ),
+              TextButton(
+                  onPressed: () {
+                    showCupertinoModalBottomSheet(
+                        context: context,
+                        builder: (context) => Material(
+                              color: Colors.white,
+                              child: Padding(
+                                padding: Pad(all: 10),
+                                child: Column(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    Text(
+                                      "Trip Details",
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: Adaptive.sp(18),
+                                          color: ColorConstants
+                                              .primaryColorDriver),
+                                    ),
+                                    const SizedBox(
+                                      height: 10,
+                                    ),
+                                    RowSuper(fill: true, children: [
+                                      Text(
+                                        'driverName'.tr(),
+                                        textAlign: TextAlign.start,
+                                        style: TextStyle(
+                                            color:
+                                                ColorConstants.primaryColorWSP,
+                                            fontSize: Adaptive.sp(14),
+                                            fontWeight: FontWeight.w800),
+                                      ),
+                                      Text(
+                                        '${dataList.driverName ?? "--"}',
+                                        textAlign: TextAlign.end,
+                                        style: TextStyle(
+                                            color:
+                                                ColorConstants.primaryColorWSP,
+                                            fontSize: Adaptive.sp(14),
+                                            fontWeight: FontWeight.w800),
+                                      ),
+                                    ]),
+                                    const SizedBox(
+                                      height: 10,
+                                    ),
+                                    RowSuper(fill: true, children: [
+                                      Text(
+                                        'driverPhone'.tr(),
+                                        textAlign: TextAlign.start,
+                                        style: TextStyle(
+                                            color:
+                                                ColorConstants.primaryColorWSP,
+                                            fontSize: Adaptive.sp(14),
+                                            fontWeight: FontWeight.w800),
+                                      ),
+                                      Text(
+                                        '${dataList.driverPhone ?? "--"}',
+                                        textAlign: TextAlign.end,
+                                        style: TextStyle(
+                                            color:
+                                                ColorConstants.primaryColorWSP,
+                                            fontSize: Adaptive.sp(14),
+                                            fontWeight: FontWeight.w800),
+                                      ),
+                                    ]),
+                                    const SizedBox(
+                                      height: 10,
+                                    ),
+                                    RowSuper(fill: true, children: [
+                                      Text(
+                                        'customer'.tr(),
+                                        textAlign: TextAlign.start,
+                                        style: TextStyle(
+                                            color:
+                                                ColorConstants.primaryColorWSP,
+                                            fontSize: Adaptive.sp(14),
+                                            fontWeight: FontWeight.w800),
+                                      ),
+                                      Text.rich(
+                                          textAlign: TextAlign.end,
+                                          TextSpan(
+                                            text: '${dataList.userName}',
+                                            style: TextStyle(
+                                                color: ColorConstants
+                                                    .primaryColorWSP,
+                                                fontSize: Adaptive.sp(14),
+                                                fontWeight: FontWeight.w800),
+                                          )),
+                                    ]),
+                                    const SizedBox(
+                                      height: 10,
+                                    ),
+                                    RowSuper(
+                                        fill: true,
+                                        alignment: Alignment.center,
+                                        children: [
+                                          Text(
+                                            'customerPhone'.tr(),
+                                            textAlign: TextAlign.start,
+                                            style: TextStyle(
+                                                color: ColorConstants
+                                                    .primaryColorWSP,
+                                                fontSize: Adaptive.sp(14),
+                                                fontWeight: FontWeight.w800),
+                                          ),
+                                          Text(
+                                            '${dataList.userPhone}',
+                                            textAlign: TextAlign.end,
+                                            style: TextStyle(
+                                                color: ColorConstants
+                                                    .primaryColorWSP,
+                                                fontSize: Adaptive.sp(14),
+                                                fontWeight: FontWeight.w800),
+                                          ),
+                                        ]),
+                                    const SizedBox(
+                                      height: 10,
+                                    ),
+                                    RowSuper(
+                                        fill: true,
+                                        alignment: Alignment.center,
+                                        children: [
+                                          Text(
+                                            'ratePerQtl'.tr(),
+                                            textAlign: TextAlign.start,
+                                            style: TextStyle(
+                                                color: ColorConstants
+                                                    .primaryColorWSP,
+                                                fontSize: Adaptive.sp(14),
+                                                fontWeight: FontWeight.w800),
+                                          ),
+                                          Text(
+                                            '${currencyFormat.format(num.parse("${dataList.rate ?? 0}"))} / perQtl'
+                                                .tr(),
+                                            textAlign: TextAlign.end,
+                                            style: TextStyle(
+                                                color: ColorConstants
+                                                    .primaryColorWSP,
+                                                fontSize: Adaptive.sp(14),
+                                                fontWeight: FontWeight.w800),
+                                          ),
+                                        ]),
+                                    const SizedBox(
+                                      height: 10,
+                                    ),
+                                    RowSuper(
+                                        fill: true,
+                                        alignment: Alignment.center,
+                                        children: [
+                                          Text(
+                                            'finalWeight'.tr(),
+                                            textAlign: TextAlign.start,
+                                            style: TextStyle(
+                                                color: ColorConstants
+                                                    .primaryColorWSP,
+                                                fontSize: Adaptive.sp(14),
+                                                fontWeight: FontWeight.w800),
+                                          ),
+                                          Text(
+                                            '${dataList.weight ?? "pending".tr()}',
+                                            textAlign: TextAlign.end,
+                                            style: TextStyle(
+                                                color: ColorConstants
+                                                    .primaryColorWSP,
+                                                fontSize: Adaptive.sp(14),
+                                                fontWeight: FontWeight.w800),
+                                          ),
+                                        ]),
+                                    const SizedBox(
+                                      height: 10,
+                                    ),
+                                    RowSuper(
+                                        fill: true,
+                                        alignment: Alignment.center,
+                                        children: [
+                                          Text(
+                                            'finalNoOfBags'.tr(),
+                                            textAlign: TextAlign.start,
+                                            style: TextStyle(
+                                                color: ColorConstants
+                                                    .primaryColorWSP,
+                                                fontSize: Adaptive.sp(14),
+                                                fontWeight: FontWeight.w800),
+                                          ),
+                                          Text(
+                                            '${dataList.noOfBags ?? "pending".tr()}',
+                                            textAlign: TextAlign.end,
+                                            style: TextStyle(
+                                                color: ColorConstants
+                                                    .primaryColorWSP,
+                                                fontSize: Adaptive.sp(14),
+                                                fontWeight: FontWeight.w800),
+                                          ),
+                                        ]),
+                                    const SizedBox(
+                                      height: 10,
+                                    ),
+                                    RowSuper(
+                                        fill: true,
+                                        alignment: Alignment.center,
+                                        children: [
+                                          Text(
+                                            'receivingWeight'.tr(),
+                                            textAlign: TextAlign.start,
+                                            style: TextStyle(
+                                                color: ColorConstants
+                                                    .primaryColorWSP,
+                                                fontSize: Adaptive.sp(14),
+                                                fontWeight: FontWeight.w800),
+                                          ),
+                                          Text(
+                                            '${dataList.recevingWeight ?? "pending".tr()}',
+                                            textAlign: TextAlign.end,
+                                            style: TextStyle(
+                                                color: ColorConstants
+                                                    .primaryColorWSP,
+                                                fontSize: Adaptive.sp(14),
+                                                fontWeight: FontWeight.w800),
+                                          ),
+                                        ]),
+                                    const SizedBox(
+                                      height: 10,
+                                    ),
+                                    RowSuper(
+                                        fill: true,
+                                        alignment: Alignment.center,
+                                        children: [
+                                          Text(
+                                            'receivingBags'.tr(),
+                                            textAlign: TextAlign.start,
+                                            style: TextStyle(
+                                                color: ColorConstants
+                                                    .primaryColorWSP,
+                                                fontSize: Adaptive.sp(14),
+                                                fontWeight: FontWeight.w800),
+                                          ),
+                                          Text(
+                                            '${dataList.recevingBags ?? "pending".tr()}',
+                                            textAlign: TextAlign.end,
+                                            style: TextStyle(
+                                                color: ColorConstants
+                                                    .primaryColorWSP,
+                                                fontSize: Adaptive.sp(14),
+                                                fontWeight: FontWeight.w800),
+                                          ),
+                                        ]),
+                                    const SizedBox(
+                                      height: 10,
+                                    ),
+                                    RowSuper(
+                                        fill: true,
+                                        alignment: Alignment.center,
+                                        children: [
+                                          Text(
+                                            '${dataList?.weight == null ? 'provBilty'.tr() : "provBilty".tr()}',
+                                            textAlign: TextAlign.start,
+                                            style: TextStyle(
+                                                color: ColorConstants
+                                                    .primaryColorWSP,
+                                                fontSize: Adaptive.sp(14),
+                                                fontWeight: FontWeight.w800),
+                                          ),
+                                          Align(
+                                            alignment: Alignment.centerRight,
+                                            child: InkWell(
+                                              onTap: () async {
+                                                ref
+                                                    .watch(tripDataProvider(
+                                                            tripRequestid:
+                                                                "${dataList.id}")
+                                                        .future)
+                                                    .then((value) {
+                                                  ref
+                                                      .watch(
+                                                          createBiltyPdfProvider(
+                                                                  context:
+                                                                      context,
+                                                                  model: value)
+                                                              .future)
+                                                      .then((value) async {
+                                                    if (value != null) {
+                                                      PDFDocument doc =
+                                                          await PDFDocument
+                                                              .fromFile(value ??
+                                                                  File(''));
+                                                      showBarModalBottomSheet(
+                                                          context: context,
+                                                          builder: (context) =>
+                                                              PDFViewer(
+                                                                  document:
+                                                                      doc));
+                                                    }
+                                                  });
+                                                });
+                                              },
+                                              child: Icon(
+                                                CupertinoIcons.eye,
+                                                color: ColorConstants
+                                                    .primaryColorWSP,
+                                              ),
+                                            ),
+                                          )
+                                        ]),
+                                    const SizedBox(
+                                      height: 10,
+                                    ),
+                                    imageLayout(dataList),
+                                    Divider(
+                                      height: 2,
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ));
+                  },
+                  child: Text(
+                    'View Details',
+                    style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        decoration: TextDecoration.underline,
+                        fontSize: Adaptive.sp(13)),
+                  ))
+            ]),
+            const SizedBox(
+              height: 10,
+            ),
+            Divider(
+              height: 2,
+            ),
+            SizedBox(
+              height: 10,
+            ),
+            Row(children: [
+              Expanded(
+                  child: Text(
+                'Date'.tr(),
+                textAlign: TextAlign.start,
+                style: TextStyle(
+                    color: ColorConstants.primaryColorWSP,
+                    fontSize: Adaptive.sp(14),
+                    fontWeight: FontWeight.w800),
+              )),
+              Expanded(
+                  child: Text(
+                '${dataList.tripDate ?? ""}',
+                textAlign: TextAlign.end,
+                style: TextStyle(
+                    color: ColorConstants.primaryColorWSP,
+                    fontSize: Adaptive.sp(14),
+                    fontWeight: FontWeight.w800),
+              )),
+            ]),
+            SizedBox(
+              height: 10,
+            ),
+            Row(children: [
+              Expanded(
+                  child: Text(
+                'from'.tr(),
+                textAlign: TextAlign.start,
+                style: TextStyle(
+                    color: ColorConstants.primaryColorWSP,
+                    fontSize: Adaptive.sp(14),
+                    fontWeight: FontWeight.w800),
+              )),
+              Expanded(
+                  child: Text(
+                ' ${dataList?.fromAddress}',
+                textAlign: TextAlign.end,
+                style: TextStyle(
+                    color: ColorConstants.primaryColorWSP,
+                    fontSize: Adaptive.sp(14),
+                    fontWeight: FontWeight.w800),
+              )),
+            ]),
+            SizedBox(
+              height: 10,
+            ),
+            Row(children: [
+              Expanded(
+                  child: Text(
+                'to'.tr(),
+                textAlign: TextAlign.start,
+                style: TextStyle(
+                    color: ColorConstants.primaryColorWSP,
+                    fontSize: Adaptive.sp(14),
+                    fontWeight: FontWeight.w800),
+              )),
+              Expanded(
+                  child: Text(
+                ' ${dataList?.toAddress}',
+                textAlign: TextAlign.end,
+                style: TextStyle(
+                    color: ColorConstants.primaryColorWSP,
+                    fontSize: Adaptive.sp(14),
+                    fontWeight: FontWeight.w800),
+              )),
+            ]),
+            SizedBox(
+              height: 10,
+            ),
+            RowSuper(fill: true, alignment: Alignment.center, children: [
+              Text(
+                'commodity'.tr(),
+                textAlign: TextAlign.start,
+                style: TextStyle(
+                    color: ColorConstants.primaryColorWSP,
+                    fontSize: Adaptive.sp(14),
+                    fontWeight: FontWeight.w800),
+              ),
+              Text(
+                '${dataList?.commodity}',
+                textAlign: TextAlign.end,
+                style: TextStyle(
+                    color: ColorConstants.primaryColorWSP,
+                    fontSize: Adaptive.sp(14),
+                    fontWeight: FontWeight.w800),
+              ),
+            ]),
+            const SizedBox(
+              height: 10,
+            ),
+            RowSuper(fill: true, children: [
+              Text(
+                'vehicleNumber'.tr(),
+                textAlign: TextAlign.start,
+                style: TextStyle(
+                    color: ColorConstants.primaryColorWSP,
+                    fontSize: Adaptive.sp(14),
+                    fontWeight: FontWeight.w800),
+              ),
+              Text(
+                '${dataList.truckNumber ?? "--"}',
+                textAlign: TextAlign.end,
+                style: TextStyle(
+                    color: ColorConstants.primaryColorWSP,
+                    fontSize: Adaptive.sp(14),
+                    fontWeight: FontWeight.w800),
+              ),
+            ]),
+            Divider(),
+            const SizedBox(
+              height: 10,
+            ),
+            actionLayout(dataList),
+            const SizedBox(
+              height: 10,
+            ),
+          ]),
+        ),
+      );
+
+  imageLayout(Datum data) => data.inOutTypes.toString().toLowerCase() == "in"
+      ? Column(
+          children: [
+            data.poId == null
+                ? SizedBox()
+                : RowSuper(fill: true, alignment: Alignment.center, children: [
+                    Text(
+                      'goodsInvoiceImage'.tr(),
+                      textAlign: TextAlign.start,
+                      style: TextStyle(
+                          color: ColorConstants.primaryColorDriver,
+                          fontSize: Adaptive.sp(14),
+                          fontWeight: FontWeight.w800),
+                    ),
+                    Align(
+                      alignment: Alignment.centerRight,
+                      child: InkWell(
+                        onTap: () {},
+                        child: InstaImageViewer(
+                          imageUrl: "${data.goodsInvoiceImage}",
+                          child: Icon(
+                            CupertinoIcons.eye,
+                            color: ColorConstants.primaryColorDriver,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ]),
+            const SizedBox(
+              height: 10,
+            ),
+            RowSuper(fill: true, alignment: Alignment.center, children: [
+              Text(
+                'Kanta Parchi Image'.tr(),
+                textAlign: TextAlign.start,
+                style: TextStyle(
+                    color: ColorConstants.primaryColorWSP,
+                    fontSize: Adaptive.sp(14),
+                    fontWeight: FontWeight.w800),
+              ),
+              Align(
+                alignment: Alignment.centerRight,
+                child: InkWell(
+                  onTap: () {},
+                  child: InstaImageViewer(
+                    imageUrl: "${data.kantaImage}",
+                    child: Icon(
+                      CupertinoIcons.eye,
+                      color: ColorConstants.primaryColorWSP,
+                    ),
+                  ),
+                ),
+              ),
+            ]),
+            const SizedBox(
+              height: 10,
+            ),
+            RowSuper(fill: true, alignment: Alignment.center, children: [
+              Text(
+                'Quality Report Image'.tr(),
+                textAlign: TextAlign.start,
+                style: TextStyle(
+                    color: ColorConstants.primaryColorWSP,
+                    fontSize: Adaptive.sp(14),
+                    fontWeight: FontWeight.w800),
+              ),
+              Align(
+                alignment: Alignment.centerRight,
+                child: InkWell(
+                  onTap: () {},
+                  child: InstaImageViewer(
+                    imageUrl: "${data.qualityReport}",
+                    child: Icon(
+                      CupertinoIcons.eye,
+                      color: ColorConstants.primaryColorWSP,
+                    ),
+                  ),
+                ),
+              ),
+            ]),
+            const SizedBox(
+              height: 10,
+            ),
+            RowSuper(fill: true, alignment: Alignment.center, children: [
+              Text(
+                'Invoice Image'.tr(),
+                textAlign: TextAlign.start,
+                style: TextStyle(
+                    color: ColorConstants.primaryColorWSP,
+                    fontSize: Adaptive.sp(14),
+                    fontWeight: FontWeight.w800),
+              ),
+              Align(
+                alignment: Alignment.centerRight,
+                child: InkWell(
+                  onTap: () {},
+                  child: InstaImageViewer(
+                    imageUrl: "${data.invoiceImg}",
+                    child: Icon(
+                      CupertinoIcons.eye,
+                      color: ColorConstants.primaryColorWSP,
+                    ),
+                  ),
+                ),
+              ),
+            ]),
+            const SizedBox(
+              height: 10,
+            ),
+            RowSuper(fill: true, alignment: Alignment.center, children: [
+              Text(
+                'E-way bill  Image'.tr(),
+                textAlign: TextAlign.start,
+                style: TextStyle(
+                    color: ColorConstants.primaryColorWSP,
+                    fontSize: Adaptive.sp(14),
+                    fontWeight: FontWeight.w800),
+              ),
+              Align(
+                alignment: Alignment.centerRight,
+                child: InkWell(
+                  onTap: () {},
+                  child: InstaImageViewer(
+                    imageUrl: "${data.eWayBill}",
+                    child: Icon(
+                      CupertinoIcons.eye,
+                      color: ColorConstants.primaryColorWSP,
+                    ),
+                  ),
+                ),
+              ),
+            ]),
+            const SizedBox(
+              height: 10,
+            ),
+            RowSuper(fill: true, alignment: Alignment.center, children: [
+              Text(
+                'Mandi Tax Image'.tr(),
+                textAlign: TextAlign.start,
+                style: TextStyle(
+                    color: ColorConstants.primaryColorWSP,
+                    fontSize: Adaptive.sp(14),
+                    fontWeight: FontWeight.w800),
+              ),
+              Align(
+                alignment: Alignment.centerRight,
+                child: InkWell(
+                  onTap: () {},
+                  child: InstaImageViewer(
+                    imageUrl: "${data.mandiTaxImg}",
+                    child: Icon(
+                      CupertinoIcons.eye,
+                      color: ColorConstants.primaryColorWSP,
+                    ),
+                  ),
+                ),
+              ),
+            ]),
+            const SizedBox(
+              height: 10,
+            ),
+          ],
+        )
+      : Column(
+          children: [
+            data.poId == null
+                ? SizedBox()
+                : RowSuper(fill: true, alignment: Alignment.center, children: [
+                    Text(
+                      'goodsInvoiceImage'.tr(),
+                      textAlign: TextAlign.start,
+                      style: TextStyle(
+                          color: ColorConstants.primaryColorDriver,
+                          fontSize: Adaptive.sp(14),
+                          fontWeight: FontWeight.w800),
+                    ),
+                    Align(
+                      alignment: Alignment.centerRight,
+                      child: InkWell(
+                        onTap: () {},
+                        child: InstaImageViewer(
+                          imageUrl: "${data.goodsInvoiceImage}",
+                          child: Icon(
+                            CupertinoIcons.eye,
+                            color: ColorConstants.primaryColorDriver,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ]),
+            const SizedBox(
+              height: 10,
+            ),
+            RowSuper(fill: true, alignment: Alignment.center, children: [
+              Text(
+                'receivingKanta'.tr(),
+                textAlign: TextAlign.start,
+                style: TextStyle(
+                    color: ColorConstants.primaryColorWSP,
+                    fontSize: Adaptive.sp(14),
+                    fontWeight: FontWeight.w800),
+              ),
+              Align(
+                alignment: Alignment.centerRight,
+                child: InkWell(
+                  onTap: () {},
+                  child: InstaImageViewer(
+                    imageUrl: "${data.recevingKantaImage}",
+                    child: Icon(
+                      CupertinoIcons.eye,
+                      color: ColorConstants.primaryColorWSP,
+                    ),
+                  ),
+                ),
+              ),
+            ]),
+            const SizedBox(
+              height: 10,
+            ),
+            RowSuper(fill: true, alignment: Alignment.center, children: [
+              Text(
+                'Paoti Image'.tr(),
+                textAlign: TextAlign.start,
+                style: TextStyle(
+                    color: ColorConstants.primaryColorWSP,
+                    fontSize: Adaptive.sp(14),
+                    fontWeight: FontWeight.w800),
+              ),
+              Align(
+                alignment: Alignment.centerRight,
+                child: InkWell(
+                  onTap: () {},
+                  child: InstaImageViewer(
+                    imageUrl: "${data.paotiImage}",
+                    child: Icon(
+                      CupertinoIcons.eye,
+                      color: ColorConstants.primaryColorWSP,
+                    ),
+                  ),
+                ),
+              ),
+            ]),
+            const SizedBox(
+              height: 10,
+            ),
+            RowSuper(fill: true, alignment: Alignment.center, children: [
+              Text(
+                'Receiving Quality Image'.tr(),
+                textAlign: TextAlign.start,
+                style: TextStyle(
+                    color: ColorConstants.primaryColorWSP,
+                    fontSize: Adaptive.sp(14),
+                    fontWeight: FontWeight.w800),
+              ),
+              Align(
+                alignment: Alignment.centerRight,
+                child: InkWell(
+                  onTap: () {},
+                  child: InstaImageViewer(
+                    imageUrl: "${data.recevingQualityImg}",
+                    child: Icon(
+                      CupertinoIcons.eye,
+                      color: ColorConstants.primaryColorWSP,
+                    ),
+                  ),
+                ),
+              ),
+            ]),
+            const SizedBox(
+              height: 10,
+            ),
+          ],
+        );
 
   truckSelection(WidgetRef ref, BuildContext context, List<TruckDatum?> data) =>
       DropdownSearch<TruckDatum?>(
@@ -1396,15 +1337,196 @@ class _DashboardState extends ConsumerState<Dashboard> {
           itemAsString: (DriverDatum? u) => "${u?.driverName ?? "--"}",
           onChanged: (DriverDatum? data) =>
               ref.watch(driverProvider.notifier).state = data,
-          dropdownDecoratorProps:  DropDownDecoratorProps(
+          dropdownDecoratorProps: DropDownDecoratorProps(
             dropdownSearchDecoration: InputDecoration(
                 contentPadding: Pad(left: 10, bottom: 5, top: 5),
-                hintText:  'selectDriver'.tr(),
+                hintText: 'selectDriver'.tr(),
                 border: OutlineInputBorder(
                     borderRadius: BorderRadius.all(Radius.circular(8)),
                     borderSide:
                         BorderSide(color: ColorConstants.primaryColorWSP))),
           ));
+
+  actionLayout(Datum dataList) {
+    return dataList.truckNumber == null && dataList.driverName == null
+        ? AnimatedButton(
+            height: 35,
+            color: ColorConstants.primaryColorWSP,
+            width: MediaQuery.of(context).size.width / 1.2,
+            isOutline: true,
+            isMultiColor: true,
+            colors: [
+              ColorConstants.primaryColorWSP,
+              ColorConstants.primaryColorWSP,
+            ],
+            borderWidth: 1,
+            onTap: () async {
+              ref
+                  .watch(truckDriverProvider.future)
+                  .then((truckData) => showBarModalBottomSheet(
+                      context: context,
+                      builder: (modalContext) => SafeArea(
+                              child: Padding(
+                            padding: Pad(all: 10),
+                            child: ColumnSuper(children: [
+                              truckSelection(
+                                  ref, context, truckData.truckData ?? []),
+                              SizedBox(
+                                height: 10,
+                              ),
+                              driverSelection(
+                                  ref, context, truckData.driverData ?? []),
+                              SizedBox(
+                                height: 10,
+                              ),
+                              AnimatedButton(
+                                height: 35,
+                                color: ColorConstants.primaryColorWSP,
+                                width: MediaQuery.of(context).size.width / 1.2,
+                                isOutline: true,
+                                isMultiColor: true,
+                                colors: [
+                                  ColorConstants.primaryColorWSP,
+                                  ColorConstants.primaryColorWSP,
+                                ],
+                                borderWidth: 1,
+                                onTap: () async {
+                                  if (ref.watch(truckProvider) == null) {
+                                    errorToast(context, 'selectTruck'.tr());
+                                  }
+                                  if (ref.watch(driverProvider) == null) {
+                                    errorToast(context, 'selectDriver'.tr());
+                                  } else {
+                                    ref
+                                        .watch(updateTruckDriverProvider(
+                                                driverId:
+                                                    "${ref.watch(driverProvider)?.id ?? 0}",
+                                                truckId:
+                                                    "${ref.watch(truckProvider)?.id ?? 0}",
+                                                tripRequestId: "${dataList.id}")
+                                            .future)
+                                        .then((value) {
+                                      if (value['status'].toString() == "1") {
+                                        successToast(OneContext().context!,
+                                            "${value['message'] ?? value['Message']}");
+
+                                        ref.invalidate(tripsListProvider);
+                                        ref
+                                            .watch(goRouterProvider)
+                                            .pop(modalContext);
+                                      }
+                                    });
+                                  }
+                                },
+                                child: Text(
+                                  "submit".tr(),
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                      color: Colors.white,
+                                      fontSize: Adaptive.sp(14),
+                                      fontWeight: FontWeight.w800),
+                                ),
+                              )
+                            ]),
+                          ))));
+            },
+            child: Text(
+              "selectTruck / selectDriver".tr(),
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                  color: Colors.white,
+                  fontSize: Adaptive.sp(14),
+                  fontWeight: FontWeight.w800),
+            ),
+          )
+        : dataList.weight != null && dataList.tripStart == null
+            ? AnimatedButton(
+                height: 35,
+                color: ColorConstants.primaryColorWSP,
+                width: MediaQuery.of(context).size.width / 1.2,
+                isOutline: true,
+                isMultiColor: true,
+                colors: [
+                  ColorConstants.secondaryColorWSP,
+                  ColorConstants.secondaryColorWSP,
+                ],
+                borderWidth: 1,
+                onTap: () async {
+                  ref
+                      .watch(startTripProvider(tripRequestId: "${dataList.id}")
+                          .future)
+                      .then((value) {
+                    if (value['status'].toString() == "1") {
+                      ref.invalidate(tripsListProvider);
+                    }
+                  });
+                },
+                child: Text(
+                  "startTrip".tr(),
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                      color: Colors.white,
+                      fontSize: Adaptive.sp(14),
+                      fontWeight: FontWeight.w800),
+                ),
+              )
+            : dataList.paymentTo.toString() == "1" &&
+                    dataList.tripStart != null &&
+                    dataList.tripEnd == null
+                ? Text(
+                    "End Trip pending from driver".tr(),
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                        color: ColorConstants.primaryColorDriver,
+                        fontSize: Adaptive.sp(14),
+                        fontWeight: FontWeight.w800),
+                  )
+                : dataList.weight != null &&
+                        dataList.tripStart != null &&
+                        dataList.tripEnd == null
+                    ? AnimatedButton(
+                        height: 35,
+                        color: ColorConstants.primaryColorWSP,
+                        width: MediaQuery.of(context).size.width / 1.2,
+                        isOutline: true,
+                        isMultiColor: true,
+                        colors: [
+                          ColorConstants.primaryColorDriver,
+                          ColorConstants.primaryColorDriver,
+                        ],
+                        borderWidth: 1,
+                        onTap: () async {
+                          ref.watch(goRouterProvider).goNamed(
+                              RoutesStrings.paotiEndTrip,
+                              extra: dataList);
+                        },
+                        child: Text(
+                          "endTrip".tr(),
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                              color: Colors.white,
+                              fontSize: Adaptive.sp(14),
+                              fontWeight: FontWeight.w800),
+                        ),
+                      )
+                    : dataList.tripEnd != null && dataList.tripStart != null
+                        ? Text(
+                            "completed".tr(),
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                                color: ColorConstants.primaryColorDriver,
+                                fontSize: Adaptive.sp(14),
+                                fontWeight: FontWeight.w800),
+                          )
+                        : Text(
+                            "processing".tr(),
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                                color: ColorConstants.primaryColorDriver,
+                                fontSize: Adaptive.sp(14),
+                                fontWeight: FontWeight.w800),
+                          );
+  }
 }
 
 var currencyFormat =

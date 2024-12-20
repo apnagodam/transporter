@@ -19,7 +19,7 @@ Future<File?> createBiltyPdf(CreateBiltyPdfRef ref,
   final pdf = pw.Document();
   final img = await rootBundle.load('assets/logo.png');
   final imageBytes = img.buffer.asUint8List();
-  var hindiFont = await rootBundle.load('assets/fonts/Hind-Regular.ttf');
+  var hindiFont = await rootBundle.load('assets/fonts/Hind-Bold.ttf');
   pdf.addPage(pw.Page(
       pageFormat: PdfPageFormat.a3,
       build: (pw.Context buildContext) {
@@ -39,7 +39,7 @@ Future<File?> createBiltyPdf(CreateBiltyPdfRef ref,
                           pw.Center(
                               child: pw.Text("${model.data?.bilty ?? ""}",
                                   style: pw.TextStyle(
-                                      fontSize: Adaptive.sp(14),
+                                      fontSize: Adaptive.sp(16),
                                       fontWeight: pw.FontWeight.normal))),
                           pw.SizedBox(
                             height: 10,
@@ -56,7 +56,7 @@ Future<File?> createBiltyPdf(CreateBiltyPdfRef ref,
                               child: pw.Text(
                                   "Contact No. : ${model.data?.transporterPhone}",
                                   style: pw.TextStyle(
-                                      fontSize: Adaptive.sp(14),
+                                      fontSize: Adaptive.sp(16),
                                       fontWeight: pw.FontWeight.normal))),
                           pw.SizedBox(
                             height: 10,
@@ -66,7 +66,7 @@ Future<File?> createBiltyPdf(CreateBiltyPdfRef ref,
                                   "हेड ऑिफस : ${model.data?.transporterAddress}",
                                   style: pw.TextStyle(
                                       font: pw.Font.ttf(hindiFont),
-                                      fontSize: Adaptive.sp(14),
+                                      fontSize: Adaptive.sp(16),
                                       fontWeight: pw.FontWeight.normal))),
                           pw.SizedBox(
                             height: 10,
@@ -83,12 +83,12 @@ Future<File?> createBiltyPdf(CreateBiltyPdfRef ref,
                                         pw.Text("Bill NO.",
                                             style: pw.TextStyle(
                                                 font: pw.Font.ttf(hindiFont),
-                                                fontSize: Adaptive.sp(14),
+                                                fontSize: Adaptive.sp(16),
                                                 fontWeight:
                                                     pw.FontWeight.bold)),
                                         pw.Text(" ${model.data?.biltiyNumber}",
                                             style: pw.TextStyle(
-                                                fontSize: Adaptive.sp(14),
+                                                fontSize: Adaptive.sp(16),
                                                 fontWeight:
                                                     pw.FontWeight.normal))
                                       ]),
@@ -98,7 +98,7 @@ Future<File?> createBiltyPdf(CreateBiltyPdfRef ref,
                                         pw.Text("तारीख :",
                                             style: pw.TextStyle(
                                                 font: pw.Font.ttf(hindiFont),
-                                                fontSize: Adaptive.sp(14),
+                                                fontSize: Adaptive.sp(16),
                                                 fontWeight:
                                                     pw.FontWeight.bold)),
                                         pw.Text(
@@ -107,7 +107,7 @@ Future<File?> createBiltyPdf(CreateBiltyPdfRef ref,
                                                 decoration:
                                                     pw.TextDecoration.underline,
                                                 font: pw.Font.ttf(hindiFont),
-                                                fontSize: Adaptive.sp(14),
+                                                fontSize: Adaptive.sp(16),
                                                 fontWeight:
                                                     pw.FontWeight.normal))
                                       ]),
@@ -128,7 +128,7 @@ Future<File?> createBiltyPdf(CreateBiltyPdfRef ref,
                                         pw.Text("ड्राइवर का नाम:",
                                             style: pw.TextStyle(
                                                 font: pw.Font.ttf(hindiFont),
-                                                fontSize: Adaptive.sp(14),
+                                                fontSize: Adaptive.sp(16),
                                                 fontWeight:
                                                     pw.FontWeight.bold)),
                                         pw.Text(" ${model.data?.driverName}",
@@ -136,7 +136,7 @@ Future<File?> createBiltyPdf(CreateBiltyPdfRef ref,
                                                 decoration:
                                                     pw.TextDecoration.underline,
                                                 font: pw.Font.ttf(hindiFont),
-                                                fontSize: Adaptive.sp(14),
+                                                fontSize: Adaptive.sp(16),
                                                 fontWeight:
                                                     pw.FontWeight.normal))
                                       ]),
@@ -146,7 +146,7 @@ Future<File?> createBiltyPdf(CreateBiltyPdfRef ref,
                                         pw.Text("ट्रक नंबर:",
                                             style: pw.TextStyle(
                                                 font: pw.Font.ttf(hindiFont),
-                                                fontSize: Adaptive.sp(14),
+                                                fontSize: Adaptive.sp(16),
                                                 fontWeight:
                                                     pw.FontWeight.bold)),
                                         pw.Text(" ${model.data?.truckNumber}",
@@ -154,7 +154,7 @@ Future<File?> createBiltyPdf(CreateBiltyPdfRef ref,
                                                 decoration:
                                                     pw.TextDecoration.underline,
                                                 font: pw.Font.ttf(hindiFont),
-                                                fontSize: Adaptive.sp(14),
+                                                fontSize: Adaptive.sp(16),
                                                 fontWeight:
                                                     pw.FontWeight.normal))
                                       ]),
@@ -164,7 +164,7 @@ Future<File?> createBiltyPdf(CreateBiltyPdfRef ref,
                                         pw.Text("माल की कीमत:",
                                             style: pw.TextStyle(
                                                 font: pw.Font.ttf(hindiFont),
-                                                fontSize: Adaptive.sp(14),
+                                                fontSize: Adaptive.sp(16),
                                                 fontWeight:
                                                     pw.FontWeight.bold)),
                                         pw.Text(" ${model.data?.rate}",
@@ -172,7 +172,7 @@ Future<File?> createBiltyPdf(CreateBiltyPdfRef ref,
                                                 decoration:
                                                     pw.TextDecoration.underline,
                                                 font: pw.Font.ttf(hindiFont),
-                                                fontSize: Adaptive.sp(14),
+                                                fontSize: Adaptive.sp(16),
                                                 fontWeight:
                                                     pw.FontWeight.normal))
                                       ]),
@@ -199,7 +199,7 @@ Future<File?> createBiltyPdf(CreateBiltyPdfRef ref,
                                                 style: pw.TextStyle(
                                                     font:
                                                         pw.Font.ttf(hindiFont),
-                                                    fontSize: Adaptive.sp(14),
+                                                    fontSize: Adaptive.sp(16),
                                                     fontWeight:
                                                         pw.FontWeight.bold)),
                                             pw.Text(
@@ -207,7 +207,7 @@ Future<File?> createBiltyPdf(CreateBiltyPdfRef ref,
                                                 style: pw.TextStyle(
                                                     font:
                                                         pw.Font.ttf(hindiFont),
-                                                    fontSize: Adaptive.sp(14),
+                                                    fontSize: Adaptive.sp(16),
                                                     fontWeight:
                                                         pw.FontWeight.normal)),
                                           ]))),
@@ -246,14 +246,14 @@ Future<File?> createBiltyPdf(CreateBiltyPdfRef ref,
                                                 style: pw.TextStyle(
                                                     font:
                                                         pw.Font.ttf(hindiFont),
-                                                    fontSize: Adaptive.sp(14),
+                                                    fontSize: Adaptive.sp(16),
                                                     fontWeight:
                                                         pw.FontWeight.bold)),
                                             pw.Text("${model.data?.toAddress}",
                                                 style: pw.TextStyle(
                                                     font:
                                                         pw.Font.ttf(hindiFont),
-                                                    fontSize: Adaptive.sp(14),
+                                                    fontSize: Adaptive.sp(16),
                                                     fontWeight:
                                                         pw.FontWeight.normal)),
                                           ])))
@@ -270,7 +270,7 @@ Future<File?> createBiltyPdf(CreateBiltyPdfRef ref,
                                       child: pw.Text("माल का विवरण",
                                           style: pw.TextStyle(
                                               font: pw.Font.ttf(hindiFont),
-                                              fontSize: Adaptive.sp(12),
+                                              fontSize: Adaptive.sp(16),
                                               fontWeight:
                                                   pw.FontWeight.normal)))),
                               pw.Expanded(
@@ -282,7 +282,7 @@ Future<File?> createBiltyPdf(CreateBiltyPdfRef ref,
                                       child: pw.Text("वजन क्विंटल",
                                           style: pw.TextStyle(
                                               font: pw.Font.ttf(hindiFont),
-                                              fontSize: Adaptive.sp(12),
+                                              fontSize: Adaptive.sp(16),
                                               fontWeight:
                                                   pw.FontWeight.normal)))),
                               pw.Expanded(
@@ -294,7 +294,7 @@ Future<File?> createBiltyPdf(CreateBiltyPdfRef ref,
                                       child: pw.Text("कुल बैग",
                                           style: pw.TextStyle(
                                               font: pw.Font.ttf(hindiFont),
-                                              fontSize: Adaptive.sp(12),
+                                              fontSize: Adaptive.sp(16),
                                               fontWeight:
                                                   pw.FontWeight.normal)))),
                               pw.Expanded(
@@ -306,7 +306,7 @@ Future<File?> createBiltyPdf(CreateBiltyPdfRef ref,
                                       child: pw.Text("दर (Rs./Qtl.) ",
                                           style: pw.TextStyle(
                                               font: pw.Font.ttf(hindiFont),
-                                              fontSize: Adaptive.sp(12),
+                                              fontSize: Adaptive.sp(16),
                                               fontWeight:
                                                   pw.FontWeight.normal)))),
                               pw.Expanded(
@@ -318,7 +318,7 @@ Future<File?> createBiltyPdf(CreateBiltyPdfRef ref,
                                       child: pw.Text("िकराया",
                                           style: pw.TextStyle(
                                               font: pw.Font.ttf(hindiFont),
-                                              fontSize: Adaptive.sp(12),
+                                              fontSize: Adaptive.sp(16),
                                               fontWeight:
                                                   pw.FontWeight.normal)))),
                               pw.Expanded(
@@ -330,7 +330,7 @@ Future<File?> createBiltyPdf(CreateBiltyPdfRef ref,
                                       child: pw.Text("एडवांस",
                                           style: pw.TextStyle(
                                               font: pw.Font.ttf(hindiFont),
-                                              fontSize: Adaptive.sp(12),
+                                              fontSize: Adaptive.sp(16),
                                               fontWeight:
                                                   pw.FontWeight.normal)))),
                               pw.Expanded(
@@ -342,7 +342,7 @@ Future<File?> createBiltyPdf(CreateBiltyPdfRef ref,
                                       child: pw.Text("बकाया",
                                           style: pw.TextStyle(
                                               font: pw.Font.ttf(hindiFont),
-                                              fontSize: Adaptive.sp(12),
+                                              fontSize: Adaptive.sp(16),
                                               fontWeight:
                                                   pw.FontWeight.normal))))
                             ],
@@ -361,7 +361,7 @@ Future<File?> createBiltyPdf(CreateBiltyPdfRef ref,
                                             "${model.data?.commodityName}",
                                             style: pw.TextStyle(
                                                 font: pw.Font.ttf(hindiFont),
-                                                fontSize: Adaptive.sp(14),
+                                                fontSize: Adaptive.sp(16),
                                                 fontWeight:
                                                     pw.FontWeight.normal)))),
                                 pw.Expanded(
@@ -387,7 +387,7 @@ Future<File?> createBiltyPdf(CreateBiltyPdfRef ref,
                                             "${model.data?.bags ?? ""}",
                                             style: pw.TextStyle(
                                                 font: pw.Font.ttf(hindiFont),
-                                                fontSize: Adaptive.sp(14),
+                                                fontSize: Adaptive.sp(16),
                                                 fontWeight:
                                                     pw.FontWeight.normal)))),
                                 pw.Expanded(
@@ -412,7 +412,7 @@ Future<File?> createBiltyPdf(CreateBiltyPdfRef ref,
                                             "${model.data?.totalRate}",
                                             style: pw.TextStyle(
                                                 font: pw.Font.ttf(hindiFont),
-                                                fontSize: Adaptive.sp(14),
+                                                fontSize: Adaptive.sp(16),
                                                 fontWeight:
                                                     pw.FontWeight.normal)))),
                                 pw.Expanded(
@@ -424,7 +424,7 @@ Future<File?> createBiltyPdf(CreateBiltyPdfRef ref,
                                         child: pw.Text("${model.data?.advance}",
                                             style: pw.TextStyle(
                                                 font: pw.Font.ttf(hindiFont),
-                                                fontSize: Adaptive.sp(14),
+                                                fontSize: Adaptive.sp(16),
                                                 fontWeight:
                                                     pw.FontWeight.normal)))),
                                 pw.Expanded(
@@ -437,7 +437,7 @@ Future<File?> createBiltyPdf(CreateBiltyPdfRef ref,
                                             "${model?.data?.weight == null ? '' : model.data?.baki}",
                                             style: pw.TextStyle(
                                                 font: pw.Font.ttf(hindiFont),
-                                                fontSize: Adaptive.sp(14),
+                                                fontSize: Adaptive.sp(16),
                                                 fontWeight:
                                                     pw.FontWeight.normal))))
                               ],
@@ -454,31 +454,31 @@ Future<File?> createBiltyPdf(CreateBiltyPdfRef ref,
                                   pw.Text("नोट:",
                                       style: pw.TextStyle(
                                           font: pw.Font.ttf(hindiFont),
-                                          fontSize: Adaptive.sp(14),
+                                          fontSize: Adaptive.sp(16),
                                           fontWeight: pw.FontWeight.normal)),
                                   pw.Text(
                                       "1 : यह दस्तावेज़ डिजिटल रूप से बनाया गया है और इसमें हस्ताक्षर की कोई आवश्यकता नहीं है",
                                       style: pw.TextStyle(
                                           font: pw.Font.ttf(hindiFont),
-                                          fontSize: Adaptive.sp(14),
+                                          fontSize: Adaptive.sp(16),
                                           fontWeight: pw.FontWeight.normal)),
                                   pw.Text(
                                       "2 : जब तक किराया नहीं दिया जाएगा, स्टॉक वितरित नहीं किया जाएगा",
                                       style: pw.TextStyle(
                                           font: pw.Font.ttf(hindiFont),
-                                          fontSize: Adaptive.sp(14),
+                                          fontSize: Adaptive.sp(16),
                                           fontWeight: pw.FontWeight.normal)),
                                   pw.Text(
                                       "3 : सभी विवादों के लिए न्याय स्थान जयपुर होगा",
                                       style: pw.TextStyle(
                                           font: pw.Font.ttf(hindiFont),
-                                          fontSize: Adaptive.sp(14),
+                                          fontSize: Adaptive.sp(16),
                                           fontWeight: pw.FontWeight.normal)),
                                   pw.Text(
                                       "4 : माल के बीमा की जिम्मेदारी पार्टी की होगी",
                                       style: pw.TextStyle(
                                           font: pw.Font.ttf(hindiFont),
-                                          fontSize: Adaptive.sp(14),
+                                          fontSize: Adaptive.sp(16),
                                           fontWeight: pw.FontWeight.normal))
                                 ]),
                           ),
@@ -492,17 +492,17 @@ Future<File?> createBiltyPdf(CreateBiltyPdfRef ref,
                                 pw.Text("ह. ममालिक / ड्राइवर ",
                                     style: pw.TextStyle(
                                         font: pw.Font.ttf(hindiFont),
-                                        fontSize: Adaptive.sp(14),
+                                        fontSize: Adaptive.sp(16),
                                         fontWeight: pw.FontWeight.normal)),
                                 pw.Text("ह. भेजने वाला ",
                                     style: pw.TextStyle(
                                         font: pw.Font.ttf(hindiFont),
-                                        fontSize: Adaptive.sp(14),
+                                        fontSize: Adaptive.sp(16),
                                         fontWeight: pw.FontWeight.normal)),
                                 pw.Text("ह. मैनेजर",
                                     style: pw.TextStyle(
                                         font: pw.Font.ttf(hindiFont),
-                                        fontSize: Adaptive.sp(14),
+                                        fontSize: Adaptive.sp(16),
                                         fontWeight: pw.FontWeight.normal)),
                               ])
                         ]),

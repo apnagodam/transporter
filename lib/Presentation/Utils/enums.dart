@@ -10,7 +10,6 @@ enum ConstitutionType {
   final int type;
 }
 
-
 enum PropDocumentType {
   gst('GST', 1),
   msme('MSME ', 2),
@@ -20,6 +19,17 @@ enum PropDocumentType {
   // company('Company ', 4);
 
   const PropDocumentType(this.label, this.type);
+
+  final String label;
+  final int type;
+}
+
+enum TripStatus {
+  accepted('Accepted', 1),
+  partAccepted('Part-Accepted ', 2),
+  rejected('Rejected ', 3);
+
+  const TripStatus(this.label, this.type);
 
   final String label;
   final int type;

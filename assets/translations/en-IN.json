@@ -31,6 +31,8 @@
   "resendOtp": "Resend OTP",
   "trips": "Trips",
   "tripsHistory": "Trips History",
+  "tripsInProcess": "Trips in Process",
+
   "logout": "Logout",
   "tripId": "Trip Id",
   "from": "From",
@@ -55,7 +57,11 @@
   "inputBags": "Please input bags",
   "enterRecevingBags": "Please input receieving weight",
   "selectKanta": "Select Kanta",
+
   "selectQualityImage": "Select Quality Image",
+  "selectPaotiImage": "Select Paoti Image",
+  "enterPaotiNumber": "Enter Paoti Number",
+
 
   "tripEnd": "Trip End",
   "pending": "Pending",
@@ -77,12 +83,13 @@
   "goodsInvoiceImage": "Goods Invoice Image",
   "kantaImage": "Kanta Image",
   "receivingKanta": "Receiving Kanta Parchi",
-  "recievingWeight": "पEnter Receiving weight",
+  "recievingWeight": "Enter Receiving weight",
 
   "startTrip": "Start Trip",
   "endTrip": "End Trip",
   "completed": "Completed",
-  "processing": "Processing"
+  "processing": "Processing",
+  "changeLanguage": "Change Language"
 
 
 

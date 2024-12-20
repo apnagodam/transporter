@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:ui';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -21,7 +22,10 @@ class SharedUtility {
 
   final SharedPreferences sharedPreferences;
 
-  String getToken() {
+  Locale getLocale()=>Locale(sharedPreferences.getString('language_code')??"hi","IN");
+  setLocale(String languageCode)=>sharedPreferences.setString('language_code',languageCode);
+
+      String getToken() {
     return sharedPreferences.getString('token') ?? "";
   }
 

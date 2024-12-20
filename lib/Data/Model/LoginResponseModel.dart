@@ -9,10 +9,10 @@ LoginResponseModel loginResponseModelFromMap(String str) => LoginResponseModel.f
 String loginResponseModelToMap(LoginResponseModel data) => json.encode(data.toMap());
 
 class LoginResponseModel {
-  String? authorization;
+  dynamic authorization;
   UserDetails? userDetails;
-  int? status;
-  String? message;
+  dynamic status;
+  dynamic message;
 
   LoginResponseModel({
     this.authorization,
@@ -40,28 +40,28 @@ class UserDetails {
   dynamic? id;
   dynamic? userId;
   dynamic? transportConstitution;
-  String? name;
-  String? firmName;
+  dynamic name;
+  dynamic firmName;
   dynamic email;
-  String? phone;
-  String? address;
-  String? district;
-  String? state;
+  dynamic phone;
+  dynamic address;
+  dynamic district;
+  dynamic state;
   dynamic? pincode;
-  String? bankName;
-  String? bankBranch;
-  String? bankAccNo;
-  String? bankIfscCode;
+  dynamic bankName;
+  dynamic bankBranch;
+  dynamic bankAccNo;
+  dynamic bankIfscCode;
   dynamic gstNumber;
-  String? chequeImage;
-  String? pancardImage;
-  String? aadharImage;
-  String? aadharBackImage;
-  String? pancardNo;
+  dynamic chequeImage;
+  dynamic pancardImage;
+  dynamic aadharImage;
+  dynamic aadharBackImage;
+  dynamic pancardNo;
   dynamic aadharNo;
   dynamic? proof;
-  String? firmProofNumber;
-  String? proprietorshipProof;
+  dynamic firmProofNumber;
+  dynamic proprietorshipProof;
   dynamic partnershipDeed;
   dynamic partnersCount;
   dynamic moaAoa;
@@ -75,9 +75,9 @@ class UserDetails {
   dynamic? verify;
   dynamic? wallet;
   dynamic? status;
-  DateTime? createdAt;
-  DateTime? updatedAt;
-  String? imageUrl;
+  dynamic createdAt;
+  dynamic updatedAt;
+  dynamic imageUrl;
 
   UserDetails({
     this.id,

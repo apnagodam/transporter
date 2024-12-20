@@ -9,6 +9,9 @@ class RoutesStrings {
 
   static const profile = 'profile';
   static const tripsHistory = 'tripsHistory';
+  static const tripsInProcess = 'tripsInProcess';
+  static  const paotiEndTrip  = 'paotiEndTrip';
+
   static const sanctionedAmount = 'sanctionedAmount';
   static const addMoney = 'addMoney';
   static const moneyRequests = 'moneyRequests';

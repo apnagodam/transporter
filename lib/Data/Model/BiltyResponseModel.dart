@@ -9,8 +9,8 @@ BiltyResponseData biltyResponseDataFromMap(String str) => BiltyResponseData.from
 String biltyResponseDataToMap(BiltyResponseData data) => json.encode(data.toMap());
 
 class BiltyResponseData {
-  String? status;
-  String? message;
+  dynamic status;
+  dynamic message;
   Data? data;
 
   BiltyResponseData({
@@ -33,27 +33,27 @@ class BiltyResponseData {
 }
 
 class Data {
-  String? transporterName;
-  String? transporterPhone;
-  String? transporterAddress;
-  String? fromAddress;
-  String? warehouseAddress;
-  String? toAddress;
+  dynamic transporterName;
+  dynamic transporterPhone;
+  dynamic transporterAddress;
+  dynamic fromAddress;
+  dynamic warehouseAddress;
+  dynamic toAddress;
   dynamic biltiyNumber;
-  String? fromUser;
-  String? toUser;
-  String? truckNumber;
-  String? driverName;
-  String? weight;
+  dynamic fromUser;
+  dynamic toUser;
+  dynamic truckNumber;
+  dynamic driverName;
+  dynamic weight;
   dynamic bags;
   dynamic rate;
-  String? commodityName;
+  dynamic commodityName;
   dynamic totalRate;
   dynamic advance;
   dynamic baki;
-  String? bilty;
+  dynamic bilty;
   dynamic goodsPrice;
-  String? biltyDate;
+  dynamic biltyDate;
 
   Data({
     this.transporterName,

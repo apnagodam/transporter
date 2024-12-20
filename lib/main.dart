@@ -50,9 +50,9 @@ void main() async {
       builder: (context, orientation, screenType) {
         return ToastificationWrapper(
             child: EasyLocalization(
-                fallbackLocale: Locale('hi', 'IN'),
-                startLocale: Locale('hi', 'IN'),
-                supportedLocales: [Locale('hi', 'IN'), Locale('en', 'US')],
+                fallbackLocale: Locale('en', 'IN'),
+                startLocale: Locale(sharedPreferences.getString('language_code')??"en", 'IN'),
+                supportedLocales: [Locale('en', 'IN'), Locale('en', 'IN')],
                 path: 'assets/translations',
                 child: MaterialApp(
                   builder: OneContext().builder,
@@ -75,21 +75,31 @@ class MyApp extends ConsumerWidget {
       routerConfig: ref.watch(goRouterProvider),
       localizationsDelegates: context.localizationDelegates,
       supportedLocales: context.supportedLocales,
-      locale: context.locale,
+      locale: ref.watch(sharedUtilityProvider).getLocale(),
       title: 'transporter'.tr(),
       theme: ThemeData(
-          fontFamily: GoogleFonts.quicksand().fontFamily,
+          fontFamily: GoogleFonts.roboto().fontFamily,
           colorScheme: ColorScheme.fromSeed(
               seedColor: ColorConstants.primaryColorDriver),
           useMaterial3: true,
           scaffoldBackgroundColor: Colors.white,
-          appBarTheme: AppBarTheme(
-              color: Colors.white,
+          appBarTheme: AppBarTheme(color: ColorConstants.primaryColorDriver,
               centerTitle: true,
+              iconTheme: IconThemeData(color: Colors.white),
               titleTextStyle: TextStyle(
                   fontWeight: FontWeight.bold,
-                  fontSize: Adaptive.sp(16),
-                  color: ColorConstants.primaryColorDriver))),
+                  fontSize: Adaptive.sp(18),
+                  color: Colors.white)),
+
+        pageTransitionsTheme: const PageTransitionsTheme(
+          builders: <TargetPlatform, PageTransitionsBuilder>{
+            TargetPlatform.android:CupertinoPageTransitionsBuilder(),
+            TargetPlatform.iOS: CupertinoPageTransitionsBuilder(),
+            TargetPlatform.linux: CupertinoPageTransitionsBuilder(),
+            TargetPlatform.macOS: CupertinoPageTransitionsBuilder(),
+          },
+        ),
+      ),
     );
   }
 }

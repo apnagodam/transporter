@@ -32,8 +32,8 @@ Dio dioStates(DioStatesRef ref) {
 }
 
 class ApiClient {
-  static const baseUrl = "https://apnagodam.com/transport_api/";
-  static const testBaseUrl = "https://test.apnagodam.com/transport_api/";
+  static const baseUrl = "https://apnagodam.com/";
+  static const testBaseUrl = "https://test.apnagodam.com/";
 
 /*
   sates url from api controller.php
@@ -56,7 +56,7 @@ bank api
 *
 *
 */
-  static const getBanklist = "banks-list";
+  static const getBanklist = "transport_api/banks-list";
 
   /*
 Authentication api
@@ -64,10 +64,10 @@ Authentication api
 *
 *
 */
-  static const registerUser = 'transporter_store';
-  static const verifyOtp = 'transporter_verify_otp';
-  static const login = 'v1_transporter_send_otp';
-  static const loginInfo = 'login-info';
+  static const registerUser = 'transport_api/transporter_store';
+  static const verifyOtp = 'transport_api/transporter_verify_otp';
+  static const login = 'transport_api/v1_transporter_send_otp';
+  static const loginInfo = 'transport_api/login-info';
 
   /*
 Trips api
@@ -75,12 +75,12 @@ Trips api
 *
 *
 */
-  static const getTrips = 'transporter_trip_request';
-  static const updateTruckDriver = 'driver_truck_update';
-  static const startTrip = 'trip_start_update';
-  static const biltyPdfData = 'bilty_data';
-  static const tripEnd = 'transporter_trip_end';
-  static const getTripsHistory = 'trip_history';
+  static const getTrips = 'transport_api/transporter_trip_request';
+  static const updateTruckDriver = 'transport_api/driver_truck_update';
+  static const startTrip = 'transport_api/trip_start_update';
+  static const biltyPdfData = 'transport_api/bilty_data';
+  static const tripEnd = 'transport_api/transporter_trip_end';
+  static const getTripsHistory = 'transport_api/trip_history';
 
 /*
 Truck Driver api
@@ -88,13 +88,12 @@ Truck Driver api
 *
 *
 */
-  static const getTruckDriver = 'truck_driver_list';
+  static const getTruckDriver = 'transport_api/truck_driver_list';
 }
 
 class ImageClient {
-  static const assetsImageUrl =
-      "https://apnagodam.com/resources/assets/upload/transporter/";
+  static const assetsImageUrl = "resources/assets/upload/transporter/";
 
   static const secondKantaImage =
-      'https://apnagodam.com/resources/assets/upload/second_kanta_parchi/';
+      'resources/assets/upload/second_kanta_parchi/';
 }

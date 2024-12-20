@@ -1,8 +1,10 @@
-
 import 'package:flutter/foundation.dart';
 import 'package:go_router/go_router.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
+import 'package:transporter/Data/Model/TripDataResponse.dart';
+import 'package:transporter/Presentation/Dashboard/Paoti/PaotiEndTrip.dart';
 import 'package:transporter/Presentation/Dashboard/TripsHistory.dart';
+import 'package:transporter/Presentation/Dashboard/TripsInProcess.dart';
 import 'package:transporter/Presentation/Profile/ProfileScreen.dart';
 import 'package:transporter/Presentation/Routes/routes_strings.dart';
 
@@ -11,7 +13,6 @@ import '../Authentication/RegistrationScreen.dart';
 import '../Authentication/VerifyOtp.dart';
 import '../Dashboard/Dashboard.dart';
 import '../Preferences/SharedPrefs/SharedUtility.dart';
-
 
 part 'routes.g.dart';
 
@@ -28,21 +29,32 @@ GoRouter goRouter(GoRouterRef ref) {
       },
       routes: [
         GoRoute(
-          path: RoutesStrings.dashboard,
-          name: RoutesStrings.dashboard,
-          builder: (context, state) => const Dashboard(),
-          routes: [
-             GoRoute(
+            path: RoutesStrings.dashboard,
+            name: RoutesStrings.dashboard,
+            builder: (context, state) => const Dashboard(),
+            routes: [
+              GoRoute(
                   path: RoutesStrings.profile,
                   name: RoutesStrings.profile,
-                  builder: (context, state) =>const Profilescreen()),
-
-            GoRoute(
-                path: RoutesStrings.tripsHistory,
-                name: RoutesStrings.tripsHistory,
-                builder: (context, state) =>const Tripshistory()),
-          ]
-        ),
+                  builder: (context, state) => const Profilescreen()),
+              GoRoute(
+                  path: RoutesStrings.tripsHistory,
+                  name: RoutesStrings.tripsHistory,
+                  builder: (context, state) => const Tripshistory()),
+              GoRoute(
+                  path: RoutesStrings.tripsInProcess,
+                  name: RoutesStrings.tripsInProcess,
+                  builder: (context, state) => const Tripsinprocess()),
+              GoRoute(
+                path: RoutesStrings.paotiEndTrip,
+                name: RoutesStrings.paotiEndTrip,
+                builder: (context, state) {
+                  Datum? dataList =
+                      state.extra as Datum?; // 👈 casting is important
+                  return Paotiendtrip(dataList: dataList);
+                },
+              ),
+            ]),
         GoRoute(
             path: RoutesStrings.login,
             name: RoutesStrings.login,
@@ -62,6 +74,5 @@ GoRouter goRouter(GoRouterRef ref) {
                   name: RoutesStrings.register,
                   builder: (context, state) => const Registrationscreen())
             ]),
-
       ]);
 }
