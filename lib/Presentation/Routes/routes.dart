@@ -12,6 +12,8 @@ import '../Authentication/LoginScreen.dart';
 import '../Authentication/RegistrationScreen.dart';
 import '../Authentication/VerifyOtp.dart';
 import '../Dashboard/Dashboard.dart';
+import '../Dashboard/TripTypes/EndTrips.dart';
+import '../Dashboard/TripTypes/StartTrips.dart';
 import '../Preferences/SharedPrefs/SharedUtility.dart';
 
 part 'routes.g.dart';
@@ -45,6 +47,7 @@ GoRouter goRouter(GoRouterRef ref) {
                   path: RoutesStrings.tripsInProcess,
                   name: RoutesStrings.tripsInProcess,
                   builder: (context, state) => const Tripsinprocess()),
+
               GoRoute(
                 path: RoutesStrings.paotiEndTrip,
                 name: RoutesStrings.paotiEndTrip,
@@ -54,6 +57,14 @@ GoRouter goRouter(GoRouterRef ref) {
                   return Paotiendtrip(dataList: dataList);
                 },
               ),
+              GoRoute(
+                  path: RoutesStrings.startTrips,
+                  name: RoutesStrings.startTrips,
+                  builder: (context, state) => const Starttrips()),
+              GoRoute(
+                  path: RoutesStrings.endTrips,
+                  name: RoutesStrings.endTrips,
+                  builder: (context, state) => const Endtrips()),
             ]),
         GoRoute(
             path: RoutesStrings.login,

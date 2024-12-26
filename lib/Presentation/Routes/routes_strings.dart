@@ -11,6 +11,8 @@ class RoutesStrings {
   static const tripsHistory = 'tripsHistory';
   static const tripsInProcess = 'tripsInProcess';
   static  const paotiEndTrip  = 'paotiEndTrip';
+  static const startTrips = 'startTrips';
+  static const endTrips ='endTrips';
 
   static const sanctionedAmount = 'sanctionedAmount';
   static const addMoney = 'addMoney';

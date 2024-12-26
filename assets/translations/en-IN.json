@@ -89,7 +89,10 @@
   "endTrip": "End Trip",
   "completed": "Completed",
   "processing": "Processing",
-  "changeLanguage": "Change Language"
+  "changeLanguage": "Change Language",
+  "tripStatus": "Trip Status",
+  "selectTripStatus": "Select Trip Status"
+
 
 
 

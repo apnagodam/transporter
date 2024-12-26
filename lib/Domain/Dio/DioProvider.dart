@@ -13,9 +13,9 @@ Dio dio(DioRef ref) {
       headers: {
         "Authorization": "${ref.watch(sharedUtilityProvider).getToken()}",
       },
-      connectTimeout: const Duration(minutes: 1),
-      receiveTimeout: const Duration(minutes: 1),
-      sendTimeout: const Duration(minutes: 1)))
+      connectTimeout: const Duration(minutes: 45),
+      receiveTimeout: const Duration(minutes: 45),
+      sendTimeout: const Duration(minutes: 45)))
     ..interceptors.add(DioInterceptor(ref));
 }
 
@@ -26,9 +26,9 @@ Dio dioStates(DioStatesRef ref) {
       headers: {
         "Authorization": "${ref.watch(sharedUtilityProvider).getToken()}",
       },
-      connectTimeout: const Duration(minutes: 1),
-      receiveTimeout: const Duration(minutes: 1),
-      sendTimeout: const Duration(minutes: 1)));
+      connectTimeout: const Duration(minutes: 45),
+      receiveTimeout: const Duration(minutes: 45),
+      sendTimeout: const Duration(minutes: 45)));
 }
 
 class ApiClient {
@@ -79,7 +79,7 @@ Trips api
   static const updateTruckDriver = 'transport_api/driver_truck_update';
   static const startTrip = 'transport_api/trip_start_update';
   static const biltyPdfData = 'transport_api/bilty_data';
-  static const tripEnd = 'transport_api/transporter_trip_end';
+  static const tripEnd = 'transport_api/v1_transporter_trip_end';
   static const getTripsHistory = 'transport_api/trip_history';
 
 /*

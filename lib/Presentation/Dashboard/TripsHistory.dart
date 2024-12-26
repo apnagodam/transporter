@@ -15,6 +15,7 @@ import 'package:insta_image_viewer/insta_image_viewer.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:one_context/one_context.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
+import 'package:searchable_listview/searchable_listview.dart';
 import 'package:transporter/Domain/Trips/TripsService.dart';
 
 import '../../Data/Model/TripDataResponse.dart';
@@ -49,28 +50,78 @@ class _TripshistoryState extends ConsumerState<Tripshistory> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Trips History'),
+        title: const Text('Trips History'),
       ),
       body: SafeArea(
           child: RefreshIndicator.adaptive(
-              child: ListView(
-                children: [
-                  ref.watch(tripsListProvider).when(
-                      data: (data) {
-                        var dataList =
-                            data.data?.where((datum) => datum != null).toList();
-                        return ListView.builder(
-                            physics: const NeverScrollableScrollPhysics(),
-                            itemCount: dataList?.length,
-                            shrinkWrap: true,
-                            itemBuilder: (context, index) {
-                              return tripRequestLayout(dataList![index]);
-                            });
-                      },
-                      error: (e, s) => Container(),
-                      loading: () => CupertinoActivityIndicator())
-                ],
-              ),
+              child: ref.watch(tripsListProvider).when(
+                  data: (data) {
+                    var dataList =
+                        data.data?.where((datum) => datum.tripEnd != null).toList();
+
+                    return Padding(
+                      padding: const Pad(all: 10),
+                      child: SearchableList<Datum>(
+                        // sortWidget: Icon(Icons.sort),
+                        // sortPredicate: (a, b) =>
+                        //     a.requestDate.compareTo(b.requestDate),
+                        initialList: dataList!,
+                        itemBuilder: (Datum user) => tripRequestLayout(user),
+                        filter: (value) => dataList!
+                            .where(
+                              (element) =>
+                                  element.driverName
+                                      .toLowerCase()
+                                      .contains(value) ||
+                                  element.transporterName
+                                      .toLowerCase()
+                                      .contains(value) ||
+                                  element.tripId
+                                      .toLowerCase()
+                                      .contains(value) ||
+                                  element.userName
+                                      .toLowerCase()
+                                      .contains(value) ||
+                                  element.userPhone
+                                      .toLowerCase()
+                                      .contains(value) ||
+                                  element.toAddress
+                                      .toLowerCase()
+                                      .contains(value) ||
+                                  element.fromAddress
+                                      .toLowerCase()
+                                      .contains(value) ||
+                                  element.truckNumber
+                                      .toLowerCase()
+                                      .contains(value) ||  element.tripDate
+                                      .toLowerCase()
+                                      .contains(value),
+                            )
+                            .toList(),
+                        emptyWidget: Container(),
+                        inputDecoration: InputDecoration(
+                          labelText: "Search Here...",
+                          fillColor: Colors.white,
+                          focusedBorder: OutlineInputBorder(
+                            borderSide: const BorderSide(
+                              color: ColorConstants.primaryColorDriver,
+                              width: 1.0,
+                            ),
+                            borderRadius: BorderRadius.circular(10.0),
+                          ),
+                          border: OutlineInputBorder(
+                            borderSide: const BorderSide(
+                              color: ColorConstants.primaryColorDriver,
+                              width: 1.0,
+                            ),
+                            borderRadius: BorderRadius.circular(10.0),
+                          ),
+                        ),
+                      ),
+                    );
+                  },
+                  error: (e, s) => Container(),
+                  loading: () => const CupertinoActivityIndicator()),
               onRefresh: () {
                 return Future(() {
                   ref.invalidate(tripsHistoryProvider);
@@ -80,38 +131,385 @@ class _TripshistoryState extends ConsumerState<Tripshistory> {
   }
 
   tripRequestLayout(Datum dataList) => Container(
-        margin: Pad(all: 10),
-        decoration: BoxDecoration(
-            border: Border.all(color: ColorConstants.primaryColorWSP),
-            borderRadius: BorderRadius.circular(10)),
-        child: Padding(
-          padding: const Pad(all: 10),
-          child: ColumnSuper(alignment: Alignment.center, children: [
-            RowSuper(fill: true, alignment: Alignment.center, children: [
-              Padding(
-                padding: Pad(all: 10),
-                child: Text(
-                  '${'tripId'.tr()}: ${dataList?.tripId ?? "--"}',
-                  style: TextStyle(
-                      color: Colors.black,
-                      fontSize: Adaptive.sp(16),
-                      fontWeight: FontWeight.bold),
-                  textAlign: TextAlign.center,
-                ),
-              ),
-            ]),
-            const SizedBox(
-              height: 10,
+    margin: const Pad(top: 10,bottom: 10),
+    decoration: BoxDecoration(
+        border: Border.all(color: ColorConstants.primaryColorWSP),
+        borderRadius: BorderRadius.circular(10)),
+    child: Padding(
+      padding: const Pad(all: 10),
+      child: ColumnSuper(alignment: Alignment.center, children: [
+        RowSuper(fill: true, alignment: Alignment.centerRight, children: [
+          Padding(
+            padding: const Pad(all: 10),
+            child: Text(
+              dataList.tripId == null
+                  ? "--"
+                  : '${'tripId'.tr()}: ${dataList.tripId.toString()}',
+              style: TextStyle(
+                  color: Colors.black,
+                  fontSize: Adaptive.sp(16),
+                  fontWeight: FontWeight.bold),
+              textAlign: TextAlign.end,
             ),
-            Divider(
-              height: 2,
-            ),
-            SizedBox(
-              height: 10,
-            ),
-            Row(children: [
-              Expanded(
-                  child: Text(
+          ),
+          TextButton(
+              onPressed: () {
+                showCupertinoModalBottomSheet(
+                    context: context,
+                    builder: (context) => Material(
+                      color: Colors.white,
+                      child: Padding(
+                        padding: const Pad(all: 10),
+                        child: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Text(
+                              "Trip Details",
+                              style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: Adaptive.sp(18),
+                                  color: ColorConstants
+                                      .primaryColorDriver),
+                            ),
+                            const SizedBox(
+                              height: 10,
+                            ),
+                            RowSuper(fill: true, children: [
+                              Text(
+                                'driverName'.tr(),
+                                textAlign: TextAlign.start,
+                                style: TextStyle(
+                                    color:
+                                    ColorConstants.primaryColorWSP,
+                                    fontSize: Adaptive.sp(14),
+                                    fontWeight: FontWeight.w800),
+                              ),
+                              Text(
+                                '${dataList.driverName ?? "--"}',
+                                textAlign: TextAlign.end,
+                                style: TextStyle(
+                                    color:
+                                    ColorConstants.primaryColorWSP,
+                                    fontSize: Adaptive.sp(14),
+                                    fontWeight: FontWeight.w800),
+                              ),
+                            ]),
+                            const SizedBox(
+                              height: 10,
+                            ),
+                            RowSuper(fill: true, children: [
+                              Text(
+                                'driverPhone'.tr(),
+                                textAlign: TextAlign.start,
+                                style: TextStyle(
+                                    color:
+                                    ColorConstants.primaryColorWSP,
+                                    fontSize: Adaptive.sp(14),
+                                    fontWeight: FontWeight.w800),
+                              ),
+                              Text(
+                                '${dataList.driverPhone ?? "--"}',
+                                textAlign: TextAlign.end,
+                                style: TextStyle(
+                                    color:
+                                    ColorConstants.primaryColorWSP,
+                                    fontSize: Adaptive.sp(14),
+                                    fontWeight: FontWeight.w800),
+                              ),
+                            ]),
+                            const SizedBox(
+                              height: 10,
+                            ),
+                            RowSuper(fill: true, children: [
+                              Text(
+                                'customer'.tr(),
+                                textAlign: TextAlign.start,
+                                style: TextStyle(
+                                    color:
+                                    ColorConstants.primaryColorWSP,
+                                    fontSize: Adaptive.sp(14),
+                                    fontWeight: FontWeight.w800),
+                              ),
+                              Text.rich(
+                                  textAlign: TextAlign.end,
+                                  TextSpan(
+                                    text: '${dataList.userName}',
+                                    style: TextStyle(
+                                        color: ColorConstants
+                                            .primaryColorWSP,
+                                        fontSize: Adaptive.sp(14),
+                                        fontWeight: FontWeight.w800),
+                                  )),
+                            ]),
+                            const SizedBox(
+                              height: 10,
+                            ),
+                            RowSuper(
+                                fill: true,
+                                alignment: Alignment.center,
+                                children: [
+                                  Text(
+                                    'customerPhone'.tr(),
+                                    textAlign: TextAlign.start,
+                                    style: TextStyle(
+                                        color: ColorConstants
+                                            .primaryColorWSP,
+                                        fontSize: Adaptive.sp(14),
+                                        fontWeight: FontWeight.w800),
+                                  ),
+                                  Text(
+                                    '${dataList.userPhone}',
+                                    textAlign: TextAlign.end,
+                                    style: TextStyle(
+                                        color: ColorConstants
+                                            .primaryColorWSP,
+                                        fontSize: Adaptive.sp(14),
+                                        fontWeight: FontWeight.w800),
+                                  ),
+                                ]),
+                            const SizedBox(
+                              height: 10,
+                            ),
+                            RowSuper(
+                                fill: true,
+                                alignment: Alignment.center,
+                                children: [
+                                  Text(
+                                    'ratePerQtl'.tr(),
+                                    textAlign: TextAlign.start,
+                                    style: TextStyle(
+                                        color: ColorConstants
+                                            .primaryColorWSP,
+                                        fontSize: Adaptive.sp(14),
+                                        fontWeight: FontWeight.w800),
+                                  ),
+                                  Text(
+                                    '${currencyFormat.format(num.parse("${dataList.rate ?? 0}"))} / perQtl'
+                                        .tr(),
+                                    textAlign: TextAlign.end,
+                                    style: TextStyle(
+                                        color: ColorConstants
+                                            .primaryColorWSP,
+                                        fontSize: Adaptive.sp(14),
+                                        fontWeight: FontWeight.w800),
+                                  ),
+                                ]),
+                            const SizedBox(
+                              height: 10,
+                            ),
+                            RowSuper(
+                                fill: true,
+                                alignment: Alignment.center,
+                                children: [
+                                  Text(
+                                    'finalWeight'.tr(),
+                                    textAlign: TextAlign.start,
+                                    style: TextStyle(
+                                        color: ColorConstants
+                                            .primaryColorWSP,
+                                        fontSize: Adaptive.sp(14),
+                                        fontWeight: FontWeight.w800),
+                                  ),
+                                  Text(
+                                    '${dataList.weight ?? "pending".tr()}',
+                                    textAlign: TextAlign.end,
+                                    style: TextStyle(
+                                        color: ColorConstants
+                                            .primaryColorWSP,
+                                        fontSize: Adaptive.sp(14),
+                                        fontWeight: FontWeight.w800),
+                                  ),
+                                ]),
+                            const SizedBox(
+                              height: 10,
+                            ),
+                            RowSuper(
+                                fill: true,
+                                alignment: Alignment.center,
+                                children: [
+                                  Text(
+                                    'finalNoOfBags'.tr(),
+                                    textAlign: TextAlign.start,
+                                    style: TextStyle(
+                                        color: ColorConstants
+                                            .primaryColorWSP,
+                                        fontSize: Adaptive.sp(14),
+                                        fontWeight: FontWeight.w800),
+                                  ),
+                                  Text(
+                                    '${dataList.noOfBags ?? "pending".tr()}',
+                                    textAlign: TextAlign.end,
+                                    style: TextStyle(
+                                        color: ColorConstants
+                                            .primaryColorWSP,
+                                        fontSize: Adaptive.sp(14),
+                                        fontWeight: FontWeight.w800),
+                                  ),
+                                ]),
+                            const SizedBox(
+                              height: 10,
+                            ),
+                            RowSuper(
+                                fill: true,
+                                alignment: Alignment.center,
+                                children: [
+                                  Text(
+                                    'receivingWeight'.tr(),
+                                    textAlign: TextAlign.start,
+                                    style: TextStyle(
+                                        color: ColorConstants
+                                            .primaryColorWSP,
+                                        fontSize: Adaptive.sp(14),
+                                        fontWeight: FontWeight.w800),
+                                  ),
+                                  Text(
+                                    '${dataList.recevingWeight ?? "pending".tr()}',
+                                    textAlign: TextAlign.end,
+                                    style: TextStyle(
+                                        color: ColorConstants
+                                            .primaryColorWSP,
+                                        fontSize: Adaptive.sp(14),
+                                        fontWeight: FontWeight.w800),
+                                  ),
+                                ]),
+                            const SizedBox(
+                              height: 10,
+                            ),
+                            RowSuper(
+                                fill: true,
+                                alignment: Alignment.center,
+                                children: [
+                                  Text(
+                                    'receivingBags'.tr(),
+                                    textAlign: TextAlign.start,
+                                    style: TextStyle(
+                                        color: ColorConstants
+                                            .primaryColorWSP,
+                                        fontSize: Adaptive.sp(14),
+                                        fontWeight: FontWeight.w800),
+                                  ),
+                                  Text(
+                                    '${dataList.recevingBags ?? "pending".tr()}',
+                                    textAlign: TextAlign.end,
+                                    style: TextStyle(
+                                        color: ColorConstants
+                                            .primaryColorWSP,
+                                        fontSize: Adaptive.sp(14),
+                                        fontWeight: FontWeight.w800),
+                                  ),
+                                ]),
+                            const SizedBox(
+                              height: 10,
+                            ),
+                            RowSuper(
+                                fill: true,
+                                alignment: Alignment.center,
+                                children: [
+                                  Text(
+                                    dataList.weight == null ? 'provBilty'.tr() : "provBilty".tr(),
+                                    textAlign: TextAlign.start,
+                                    style: TextStyle(
+                                        color: ColorConstants
+                                            .primaryColorWSP,
+                                        fontSize: Adaptive.sp(14),
+                                        fontWeight: FontWeight.w800),
+                                  ),
+                                  Align(
+                                    alignment: Alignment.centerRight,
+                                    child: InkWell(
+                                      onTap: () async {
+                                        ref
+                                            .watch(tripDataProvider(
+                                            tripRequestid:
+                                            "${dataList.id}")
+                                            .future)
+                                            .then((value) {
+                                          ref
+                                              .watch(
+                                              createBiltyPdfProvider(
+                                                  context:
+                                                  context,
+                                                  model: value)
+                                                  .future)
+                                              .then((value) async {
+                                            if (value != null) {
+                                              PDFDocument doc =
+                                              await PDFDocument
+                                                  .fromFile(value ??
+                                                  File(''));
+                                              showBarModalBottomSheet(
+                                                  context: context,
+                                                  builder: (context) =>
+                                                      PDFViewer(
+                                                          document:
+                                                          doc));
+                                            }
+                                          });
+                                        });
+                                      },
+                                      child: const Icon(
+                                        CupertinoIcons.eye,
+                                        color: ColorConstants
+                                            .primaryColorWSP,
+                                      ),
+                                    ),
+                                  )
+                                ]),
+                            const SizedBox(
+                              height: 10,
+                            ),
+                            imageLayout(dataList),
+                            const Divider(
+                              height: 2,
+                            ),
+                          ],
+                        ),
+                      ),
+                    ));
+              },
+              child: Text(
+                'View Details',
+                style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    decoration: TextDecoration.underline,
+                    fontSize: Adaptive.sp(13)),
+              ))
+        ]),
+        const SizedBox(
+          height: 10,
+        ),
+        const Divider(
+          height: 2,
+        ),
+        const SizedBox(
+          height: 10,
+        ),
+        Row(children: [
+          Expanded(
+              child: Text(
+                'Date'.tr(),
+                textAlign: TextAlign.start,
+                style: TextStyle(
+                    color: ColorConstants.primaryColorWSP,
+                    fontSize: Adaptive.sp(14),
+                    fontWeight: FontWeight.w800),
+              )),
+          Expanded(
+              child: Text(
+                '${dataList.tripDate ?? ""}',
+                textAlign: TextAlign.end,
+                style: TextStyle(
+                    color: ColorConstants.primaryColorWSP,
+                    fontSize: Adaptive.sp(14),
+                    fontWeight: FontWeight.w800),
+              )),
+        ]),
+        const SizedBox(
+          height: 10,
+        ),
+        Row(children: [
+          Expanded(
+              child: Text(
                 'from'.tr(),
                 textAlign: TextAlign.start,
                 style: TextStyle(
@@ -119,22 +517,22 @@ class _TripshistoryState extends ConsumerState<Tripshistory> {
                     fontSize: Adaptive.sp(14),
                     fontWeight: FontWeight.w800),
               )),
-              Expanded(
-                  child: Text(
-                ' ${dataList?.fromAddress}',
+          Expanded(
+              child: Text(
+                ' ${dataList.fromAddress}',
                 textAlign: TextAlign.end,
                 style: TextStyle(
                     color: ColorConstants.primaryColorWSP,
                     fontSize: Adaptive.sp(14),
                     fontWeight: FontWeight.w800),
               )),
-            ]),
-            SizedBox(
-              height: 10,
-            ),
-            Row(children: [
-              Expanded(
-                  child: Text(
+        ]),
+        const SizedBox(
+          height: 10,
+        ),
+        Row(children: [
+          Expanded(
+              child: Text(
                 'to'.tr(),
                 textAlign: TextAlign.start,
                 style: TextStyle(
@@ -142,314 +540,76 @@ class _TripshistoryState extends ConsumerState<Tripshistory> {
                     fontSize: Adaptive.sp(14),
                     fontWeight: FontWeight.w800),
               )),
-              Expanded(
-                  child: Text(
-                ' ${dataList?.toAddress}',
+          Expanded(
+              child: Text(
+                ' ${dataList.toAddress}',
                 textAlign: TextAlign.end,
                 style: TextStyle(
                     color: ColorConstants.primaryColorWSP,
                     fontSize: Adaptive.sp(14),
                     fontWeight: FontWeight.w800),
               )),
-            ]),
-            SizedBox(
-              height: 10,
-            ),
-            RowSuper(fill: true, children: [
-              Text(
-                'vehicleNumber'.tr(),
-                textAlign: TextAlign.start,
-                style: TextStyle(
-                    color: ColorConstants.primaryColorWSP,
-                    fontSize: Adaptive.sp(14),
-                    fontWeight: FontWeight.w800),
-              ),
-              Text(
-                '${dataList.truckNumber ?? "--"}',
-                textAlign: TextAlign.end,
-                style: TextStyle(
-                    color: ColorConstants.primaryColorWSP,
-                    fontSize: Adaptive.sp(14),
-                    fontWeight: FontWeight.w800),
-              ),
-            ]),
-            const SizedBox(
-              height: 10,
-            ),
-            RowSuper(fill: true, children: [
-              Text(
-                'driverName'.tr(),
-                textAlign: TextAlign.start,
-                style: TextStyle(
-                    color: ColorConstants.primaryColorWSP,
-                    fontSize: Adaptive.sp(14),
-                    fontWeight: FontWeight.w800),
-              ),
-              Text(
-                '${dataList.driverName ?? "--"}',
-                textAlign: TextAlign.end,
-                style: TextStyle(
-                    color: ColorConstants.primaryColorWSP,
-                    fontSize: Adaptive.sp(14),
-                    fontWeight: FontWeight.w800),
-              ),
-            ]),
-            const SizedBox(
-              height: 10,
-            ),
-            RowSuper(fill: true, children: [
-              Text(
-                'driverPhone'.tr(),
-                textAlign: TextAlign.start,
-                style: TextStyle(
-                    color: ColorConstants.primaryColorWSP,
-                    fontSize: Adaptive.sp(14),
-                    fontWeight: FontWeight.w800),
-              ),
-              Text(
-                '${dataList.driverPhone ?? "--"}',
-                textAlign: TextAlign.end,
-                style: TextStyle(
-                    color: ColorConstants.primaryColorWSP,
-                    fontSize: Adaptive.sp(14),
-                    fontWeight: FontWeight.w800),
-              ),
-            ]),
-            const SizedBox(
-              height: 10,
-            ),
-            RowSuper(fill: true, children: [
-              Text(
-                'customer'.tr(),
-                textAlign: TextAlign.start,
-                style: TextStyle(
-                    color: ColorConstants.primaryColorWSP,
-                    fontSize: Adaptive.sp(14),
-                    fontWeight: FontWeight.w800),
-              ),
-              Text.rich(
-                  textAlign: TextAlign.end,
-                  TextSpan(
-                    text: '${dataList.userName}',
-                    style: TextStyle(
-                        color: ColorConstants.primaryColorWSP,
-                        fontSize: Adaptive.sp(14),
-                        fontWeight: FontWeight.w800),
-                  )),
-            ]),
-            const SizedBox(
-              height: 10,
-            ),
-            RowSuper(fill: true, alignment: Alignment.center, children: [
-              Text(
-                'customerPhone'.tr(),
-                textAlign: TextAlign.start,
-                style: TextStyle(
-                    color: ColorConstants.primaryColorWSP,
-                    fontSize: Adaptive.sp(14),
-                    fontWeight: FontWeight.w800),
-              ),
-              Text(
-                '${dataList.userPhone}',
-                textAlign: TextAlign.end,
-                style: TextStyle(
-                    color: ColorConstants.primaryColorWSP,
-                    fontSize: Adaptive.sp(14),
-                    fontWeight: FontWeight.w800),
-              ),
-            ]),
-            const SizedBox(
-              height: 10,
-            ),
-            RowSuper(fill: true, alignment: Alignment.center, children: [
-              Text(
-                'ratePerQtl'.tr(),
-                textAlign: TextAlign.start,
-                style: TextStyle(
-                    color: ColorConstants.primaryColorWSP,
-                    fontSize: Adaptive.sp(14),
-                    fontWeight: FontWeight.w800),
-              ),
-              Text(
-                '${currencyFormat.format(int.parse("${dataList.rate ?? 0}"))} / perQtl'
-                    .tr(),
-                textAlign: TextAlign.end,
-                style: TextStyle(
-                    color: ColorConstants.primaryColorWSP,
-                    fontSize: Adaptive.sp(14),
-                    fontWeight: FontWeight.w800),
-              ),
-            ]),
-            const SizedBox(
-              height: 10,
-            ),
-            RowSuper(fill: true, alignment: Alignment.center, children: [
-              Text(
-                'commodity'.tr(),
-                textAlign: TextAlign.start,
-                style: TextStyle(
-                    color: ColorConstants.primaryColorWSP,
-                    fontSize: Adaptive.sp(14),
-                    fontWeight: FontWeight.w800),
-              ),
-              Text(
-                '${dataList?.commodity}',
-                textAlign: TextAlign.end,
-                style: TextStyle(
-                    color: ColorConstants.primaryColorWSP,
-                    fontSize: Adaptive.sp(14),
-                    fontWeight: FontWeight.w800),
-              ),
-            ]),
-            const SizedBox(
-              height: 10,
-            ),
-            RowSuper(fill: true, alignment: Alignment.center, children: [
-              Text(
-                'finalWeight'.tr(),
-                textAlign: TextAlign.start,
-                style: TextStyle(
-                    color: ColorConstants.primaryColorWSP,
-                    fontSize: Adaptive.sp(14),
-                    fontWeight: FontWeight.w800),
-              ),
-              Text(
-                '${dataList.weight ?? "pending".tr()}',
-                textAlign: TextAlign.end,
-                style: TextStyle(
-                    color: ColorConstants.primaryColorWSP,
-                    fontSize: Adaptive.sp(14),
-                    fontWeight: FontWeight.w800),
-              ),
-            ]),
-            const SizedBox(
-              height: 10,
-            ),
-            RowSuper(fill: true, alignment: Alignment.center, children: [
-              Text(
-                'finalNoOfBags'.tr(),
-                textAlign: TextAlign.start,
-                style: TextStyle(
-                    color: ColorConstants.primaryColorWSP,
-                    fontSize: Adaptive.sp(14),
-                    fontWeight: FontWeight.w800),
-              ),
-              Text(
-                '${dataList.noOfBags ?? "pending".tr()}',
-                textAlign: TextAlign.end,
-                style: TextStyle(
-                    color: ColorConstants.primaryColorWSP,
-                    fontSize: Adaptive.sp(14),
-                    fontWeight: FontWeight.w800),
-              ),
-            ]),
-            const SizedBox(
-              height: 10,
-            ),
-            RowSuper(fill: true, alignment: Alignment.center, children: [
-              Text(
-                'receivingWeight'.tr(),
-                textAlign: TextAlign.start,
-                style: TextStyle(
-                    color: ColorConstants.primaryColorWSP,
-                    fontSize: Adaptive.sp(14),
-                    fontWeight: FontWeight.w800),
-              ),
-              Text(
-                '${dataList.recevingWeight ?? "pending".tr()}',
-                textAlign: TextAlign.end,
-                style: TextStyle(
-                    color: ColorConstants.primaryColorWSP,
-                    fontSize: Adaptive.sp(14),
-                    fontWeight: FontWeight.w800),
-              ),
-            ]),
-            const SizedBox(
-              height: 10,
-            ),
-            RowSuper(fill: true, alignment: Alignment.center, children: [
-              Text(
-                'receivingBags'.tr(),
-                textAlign: TextAlign.start,
-                style: TextStyle(
-                    color: ColorConstants.primaryColorWSP,
-                    fontSize: Adaptive.sp(14),
-                    fontWeight: FontWeight.w800),
-              ),
-              Text(
-                '${dataList.recevingBags ?? "pending".tr()}',
-                textAlign: TextAlign.end,
-                style: TextStyle(
-                    color: ColorConstants.primaryColorWSP,
-                    fontSize: Adaptive.sp(14),
-                    fontWeight: FontWeight.w800),
-              ),
-            ]),
-            const SizedBox(
-              height: 10,
-            ),
-            RowSuper(fill: true, alignment: Alignment.center, children: [
-              Text(
-                '${dataList?.weight == null ? 'provBilty'.tr() : "provBilty".tr()}',
-                textAlign: TextAlign.start,
-                style: TextStyle(
-                    color: ColorConstants.primaryColorWSP,
-                    fontSize: Adaptive.sp(14),
-                    fontWeight: FontWeight.w800),
-              ),
-              Align(
-                alignment: Alignment.centerRight,
-                child: InkWell(
-                  onTap: () async {
-                    ref
-                        .watch(tripDataProvider(tripRequestid: "${dataList.id}")
-                            .future)
-                        .then((value) {
-                      ref
-                          .watch(createBiltyPdfProvider(
-                                  context: context, model: value)
-                              .future)
-                          .then((value) async {
-                        if (value != null) {
-                          PDFDocument doc =
-                              await PDFDocument.fromFile(value ?? File(''));
-                          showBarModalBottomSheet(
-                              context: context,
-                              builder: (context) => PDFViewer(document: doc));
-                        }
-                      });
-                    });
-                  },
-                  child: Icon(
-                    CupertinoIcons.eye,
-                    color: ColorConstants.primaryColorWSP,
-                  ),
-                ),
-              )
-            ]),
-            const SizedBox(
-              height: 10,
-            ),
-            imageLayout(dataList),
-            Divider(
-              height: 2,
-            ),
-            const SizedBox(
-              height: 10,
-            ),
-            actionLayout(dataList),
-            const SizedBox(
-              height: 10,
-            ),
-          ]),
+        ]),
+        const SizedBox(
+          height: 10,
         ),
-      );
+        RowSuper(fill: true, alignment: Alignment.center, children: [
+          Text(
+            'commodity'.tr(),
+            textAlign: TextAlign.start,
+            style: TextStyle(
+                color: ColorConstants.primaryColorWSP,
+                fontSize: Adaptive.sp(14),
+                fontWeight: FontWeight.w800),
+          ),
+          Text(
+            '${dataList.commodity}',
+            textAlign: TextAlign.end,
+            style: TextStyle(
+                color: ColorConstants.primaryColorWSP,
+                fontSize: Adaptive.sp(14),
+                fontWeight: FontWeight.w800),
+          ),
+        ]),
+        const SizedBox(
+          height: 10,
+        ),
+        RowSuper(fill: true, children: [
+          Text(
+            'vehicleNumber'.tr(),
+            textAlign: TextAlign.start,
+            style: TextStyle(
+                color: ColorConstants.primaryColorWSP,
+                fontSize: Adaptive.sp(14),
+                fontWeight: FontWeight.w800),
+          ),
+          Text(
+            '${dataList.truckNumber ?? "--"}',
+            textAlign: TextAlign.end,
+            style: TextStyle(
+                color: ColorConstants.primaryColorWSP,
+                fontSize: Adaptive.sp(14),
+                fontWeight: FontWeight.w800),
+          ),
+        ]),
+        const Divider(),
+        const SizedBox(
+          height: 10,
+        ),
+        actionLayout(dataList),
+        const SizedBox(
+          height: 10,
+        ),
+      ]),
+    ),
+  );
+
 
   imageLayout(Datum data) => data.inOutTypes.toString().toLowerCase() == "in"
       ? Column(
           children: [
             data.poId == null
-                ? SizedBox()
+                ? const SizedBox()
                 : RowSuper(fill: true, alignment: Alignment.center, children: [
                     Text(
                       'goodsInvoiceImage'.tr(),
@@ -465,7 +625,7 @@ class _TripshistoryState extends ConsumerState<Tripshistory> {
                         onTap: () {},
                         child: InstaImageViewer(
                           imageUrl: "${data.goodsInvoiceImage}",
-                          child: Icon(
+                          child: const Icon(
                             CupertinoIcons.eye,
                             color: ColorConstants.primaryColorDriver,
                           ),
@@ -491,7 +651,7 @@ class _TripshistoryState extends ConsumerState<Tripshistory> {
                   onTap: () {},
                   child: InstaImageViewer(
                     imageUrl: "${data.kantaImage}",
-                    child: Icon(
+                    child: const Icon(
                       CupertinoIcons.eye,
                       color: ColorConstants.primaryColorWSP,
                     ),
@@ -517,7 +677,7 @@ class _TripshistoryState extends ConsumerState<Tripshistory> {
                   onTap: () {},
                   child: InstaImageViewer(
                     imageUrl: "${data.qualityReport}",
-                    child: Icon(
+                    child: const Icon(
                       CupertinoIcons.eye,
                       color: ColorConstants.primaryColorWSP,
                     ),
@@ -543,7 +703,7 @@ class _TripshistoryState extends ConsumerState<Tripshistory> {
                   onTap: () {},
                   child: InstaImageViewer(
                     imageUrl: "${data.invoiceImg}",
-                    child: Icon(
+                    child: const Icon(
                       CupertinoIcons.eye,
                       color: ColorConstants.primaryColorWSP,
                     ),
@@ -569,7 +729,7 @@ class _TripshistoryState extends ConsumerState<Tripshistory> {
                   onTap: () {},
                   child: InstaImageViewer(
                     imageUrl: "${data.eWayBill}",
-                    child: Icon(
+                    child: const Icon(
                       CupertinoIcons.eye,
                       color: ColorConstants.primaryColorWSP,
                     ),
@@ -595,7 +755,7 @@ class _TripshistoryState extends ConsumerState<Tripshistory> {
                   onTap: () {},
                   child: InstaImageViewer(
                     imageUrl: "${data.mandiTaxImg}",
-                    child: Icon(
+                    child: const Icon(
                       CupertinoIcons.eye,
                       color: ColorConstants.primaryColorWSP,
                     ),
@@ -611,7 +771,7 @@ class _TripshistoryState extends ConsumerState<Tripshistory> {
       : Column(
           children: [
             data.poId == null
-                ? SizedBox()
+                ? const SizedBox()
                 : RowSuper(fill: true, alignment: Alignment.center, children: [
                     Text(
                       'goodsInvoiceImage'.tr(),
@@ -627,7 +787,7 @@ class _TripshistoryState extends ConsumerState<Tripshistory> {
                         onTap: () {},
                         child: InstaImageViewer(
                           imageUrl: "${data.goodsInvoiceImage}",
-                          child: Icon(
+                          child: const Icon(
                             CupertinoIcons.eye,
                             color: ColorConstants.primaryColorDriver,
                           ),
@@ -653,7 +813,7 @@ class _TripshistoryState extends ConsumerState<Tripshistory> {
                   onTap: () {},
                   child: InstaImageViewer(
                     imageUrl: "${data.recevingKantaImage}",
-                    child: Icon(
+                    child: const Icon(
                       CupertinoIcons.eye,
                       color: ColorConstants.primaryColorWSP,
                     ),
@@ -679,7 +839,7 @@ class _TripshistoryState extends ConsumerState<Tripshistory> {
                   onTap: () {},
                   child: InstaImageViewer(
                     imageUrl: "${data.paotiImage}",
-                    child: Icon(
+                    child: const Icon(
                       CupertinoIcons.eye,
                       color: ColorConstants.primaryColorWSP,
                     ),
@@ -705,7 +865,7 @@ class _TripshistoryState extends ConsumerState<Tripshistory> {
                   onTap: () {},
                   child: InstaImageViewer(
                     imageUrl: "${data.recevingQualityImg}",
-                    child: Icon(
+                    child: const Icon(
                       CupertinoIcons.eye,
                       color: ColorConstants.primaryColorWSP,
                     ),
@@ -763,7 +923,7 @@ class _TripshistoryState extends ConsumerState<Tripshistory> {
                     Padding(
                       padding: const Pad(all: 10),
                       child: Text(
-                        "${terminal?.truckNumber ?? "--"}",
+                        terminal?.truckNumber ?? "--",
                         style: TextStyle(
                             fontWeight: FontWeight.bold,
                             fontSize: Adaptive.sp(16)),
@@ -791,14 +951,14 @@ class _TripshistoryState extends ConsumerState<Tripshistory> {
           // asyncItems: (String filter) => getData(filter),
 
           items: data ?? [],
-          itemAsString: (TruckDatum? u) => "${u?.truckNumber ?? "--"}",
+          itemAsString: (TruckDatum? u) => u?.truckNumber ?? "--",
           onChanged: (TruckDatum? data) =>
               ref.watch(truckProvider.notifier).state = data,
           dropdownDecoratorProps: DropDownDecoratorProps(
             dropdownSearchDecoration: InputDecoration(
-                contentPadding: Pad(left: 10, bottom: 5, top: 5),
+                contentPadding: const Pad(left: 10, bottom: 5, top: 5),
                 hintText: 'selectTruck'.tr(),
-                border: OutlineInputBorder(
+                border: const OutlineInputBorder(
                     borderRadius: BorderRadius.all(Radius.circular(8)),
                     borderSide:
                         BorderSide(color: ColorConstants.primaryColorWSP))),
@@ -849,7 +1009,7 @@ class _TripshistoryState extends ConsumerState<Tripshistory> {
                     Padding(
                       padding: const Pad(all: 10),
                       child: Text(
-                        "${terminal?.driverName ?? "--"}",
+                        terminal?.driverName ?? "--",
                         style: TextStyle(
                             fontWeight: FontWeight.bold,
                             fontSize: Adaptive.sp(16)),
@@ -877,14 +1037,14 @@ class _TripshistoryState extends ConsumerState<Tripshistory> {
           // asyncItems: (String filter) => getData(filter),
 
           items: data ?? [],
-          itemAsString: (DriverDatum? u) => "${u?.driverName ?? "--"}",
+          itemAsString: (DriverDatum? u) => u?.driverName ?? "--",
           onChanged: (DriverDatum? data) =>
               ref.watch(driverProvider.notifier).state = data,
           dropdownDecoratorProps: DropDownDecoratorProps(
             dropdownSearchDecoration: InputDecoration(
-                contentPadding: Pad(left: 10, bottom: 5, top: 5),
+                contentPadding: const Pad(left: 10, bottom: 5, top: 5),
                 hintText: 'selectDriver'.tr(),
-                border: OutlineInputBorder(
+                border: const OutlineInputBorder(
                     borderRadius: BorderRadius.all(Radius.circular(8)),
                     borderSide:
                         BorderSide(color: ColorConstants.primaryColorWSP))),
@@ -898,7 +1058,7 @@ class _TripshistoryState extends ConsumerState<Tripshistory> {
             width: MediaQuery.of(context).size.width / 1.2,
             isOutline: true,
             isMultiColor: true,
-            colors: [
+            colors: const [
               ColorConstants.primaryColorWSP,
               ColorConstants.primaryColorWSP,
             ],
@@ -910,16 +1070,16 @@ class _TripshistoryState extends ConsumerState<Tripshistory> {
                       context: context,
                       builder: (modalContext) => SafeArea(
                               child: Padding(
-                            padding: Pad(all: 10),
+                            padding: const Pad(all: 10),
                             child: ColumnSuper(children: [
                               truckSelection(
                                   ref, context, truckData.truckData ?? []),
-                              SizedBox(
+                              const SizedBox(
                                 height: 10,
                               ),
                               driverSelection(
                                   ref, context, truckData.driverData ?? []),
-                              SizedBox(
+                              const SizedBox(
                                 height: 10,
                               ),
                               AnimatedButton(
@@ -971,13 +1131,13 @@ class _TripshistoryState extends ConsumerState<Tripshistory> {
                           ))));
             },
             child: Text(
-              "selectTruck / selectDriver".tr(),
+              "selectTruck / selectDriver",
               textAlign: TextAlign.center,
               style: TextStyle(
                   color: Colors.white,
                   fontSize: Adaptive.sp(14),
                   fontWeight: FontWeight.w800),
-            ),
+            ).tr(),
           )
         : dataList.weight != null && dataList.tripStart == null
             ? AnimatedButton(
@@ -1041,7 +1201,7 @@ class _TripshistoryState extends ConsumerState<Tripshistory> {
                               builder: (context) => Consumer(
                                   builder: (context, ref, child) => SafeArea(
                                           child: Padding(
-                                        padding: Pad(all: 10),
+                                        padding: const Pad(all: 10),
                                         child: Form(
                                             key: form,
                                             child: ListView(
@@ -1077,7 +1237,7 @@ class _TripshistoryState extends ConsumerState<Tripshistory> {
                                                                       .circular(
                                                                           10))),
                                                 ),
-                                                SizedBox(
+                                                const SizedBox(
                                                   height: 10,
                                                 ),
                                                 TextFormField(
@@ -1113,7 +1273,7 @@ class _TripshistoryState extends ConsumerState<Tripshistory> {
                                                                       .circular(
                                                                           10))),
                                                 ),
-                                                SizedBox(
+                                                const SizedBox(
                                                   height: 10,
                                                 ),
                                                 TextFormField(
@@ -1141,7 +1301,7 @@ class _TripshistoryState extends ConsumerState<Tripshistory> {
                                                                       .circular(
                                                                           10))),
                                                 ),
-                                                SizedBox(
+                                                const SizedBox(
                                                   height: 10,
                                                 ),
                                                 DottedBorder(
@@ -1193,13 +1353,13 @@ class _TripshistoryState extends ConsumerState<Tripshistory> {
                                                             : InkWell(
                                                                 child: ColumnSuper(
                                                                     children: [
-                                                                      Icon(
+                                                                      const Icon(
                                                                         Icons
                                                                             .cloud_upload,
                                                                         color: ColorConstants
                                                                             .primaryColorDriver,
                                                                       ),
-                                                                      SizedBox(
+                                                                      const SizedBox(
                                                                         height:
                                                                             5,
                                                                       ),
@@ -1214,7 +1374,7 @@ class _TripshistoryState extends ConsumerState<Tripshistory> {
                                                                             fontWeight: FontWeight.bold,
                                                                             fontSize: Adaptive.sp(16)),
                                                                       ),
-                                                                      SizedBox(
+                                                                      const SizedBox(
                                                                         height:
                                                                             5,
                                                                       ),
@@ -1249,7 +1409,7 @@ class _TripshistoryState extends ConsumerState<Tripshistory> {
                                                               ),
                                                       ),
                                                     )),
-                                                SizedBox(
+                                                const SizedBox(
                                                   height: 10,
                                                 ),
                                                 DottedBorder(
@@ -1301,13 +1461,13 @@ class _TripshistoryState extends ConsumerState<Tripshistory> {
                                                             : InkWell(
                                                                 child: ColumnSuper(
                                                                     children: [
-                                                                      Icon(
+                                                                      const Icon(
                                                                         Icons
                                                                             .cloud_upload,
                                                                         color: ColorConstants
                                                                             .primaryColorDriver,
                                                                       ),
-                                                                      SizedBox(
+                                                                      const SizedBox(
                                                                         height:
                                                                             5,
                                                                       ),
@@ -1322,7 +1482,7 @@ class _TripshistoryState extends ConsumerState<Tripshistory> {
                                                                             fontWeight: FontWeight.bold,
                                                                             fontSize: Adaptive.sp(16)),
                                                                       ),
-                                                                      SizedBox(
+                                                                      const SizedBox(
                                                                         height:
                                                                             5,
                                                                       ),
@@ -1357,7 +1517,7 @@ class _TripshistoryState extends ConsumerState<Tripshistory> {
                                                               ),
                                                       ),
                                                     )),
-                                                SizedBox(
+                                                const SizedBox(
                                                   height: 10,
                                                 ),
                                                 DottedBorder(
@@ -1409,13 +1569,13 @@ class _TripshistoryState extends ConsumerState<Tripshistory> {
                                                             : InkWell(
                                                                 child: ColumnSuper(
                                                                     children: [
-                                                                      Icon(
+                                                                      const Icon(
                                                                         Icons
                                                                             .cloud_upload,
                                                                         color: ColorConstants
                                                                             .primaryColorDriver,
                                                                       ),
-                                                                      SizedBox(
+                                                                      const SizedBox(
                                                                         height:
                                                                             5,
                                                                       ),
@@ -1430,7 +1590,7 @@ class _TripshistoryState extends ConsumerState<Tripshistory> {
                                                                             fontWeight: FontWeight.bold,
                                                                             fontSize: Adaptive.sp(16)),
                                                                       ),
-                                                                      SizedBox(
+                                                                      const SizedBox(
                                                                         height:
                                                                             5,
                                                                       ),
@@ -1522,11 +1682,11 @@ class _TripshistoryState extends ConsumerState<Tripshistory> {
                                                         ref
                                                             .watch(endTripProvider(
                                                                     tripRequestId:
-                                                                        '${dataList?.id ?? 0}',
+                                                                        '${dataList.id ?? 0}',
                                                                     kantaWeight:
-                                                                        '${weightController.text.toString()}',
+                                                                        weightController.text.toString(),
                                                                     bags:
-                                                                        "${bagsController.text.toString()}",
+                                                                        bagsController.text.toString(),
                                                                     kantaImage:
                                                                         img64,
                                                                     qualityImage:
@@ -1543,7 +1703,9 @@ class _TripshistoryState extends ConsumerState<Tripshistory> {
                                                           if (value['status']
                                                                   .toString() ==
                                                               "1") {
-                                                            successToast(OneContext().context!,
+                                                            successToast(
+                                                                OneContext()
+                                                                    .context!,
                                                                 "${value['message'] ?? value['Message']}");
                                                             ref.invalidate(
                                                                 tripsListProvider);

@@ -45,91 +45,108 @@ class _DashboardState extends ConsumerState<Dashboard> {
       drawer: Drawer(
         child: ListView(
           children: [
-            CupertinoActionSheet(
-              actions: [
-                CupertinoActionSheetAction(
-                    onPressed: () {
-                      context.goNamed(RoutesStrings.profile);
-                    },
-                    child: RowSuper(
-                      alignment: Alignment.centerLeft,
-                      children: [
-                        ClipOval(
-                          child: Icon(Icons.person_2),
-                        ),
-                        // CircleAvatar(
-                        //   foregroundImage: NetworkImage(ref
-                        //       .watch(sharedUtilityProvider)
-                        //       .getUser()
-                        //       ?.profileImage ??
-                        //       ""),
-                        // ),
-                        SizedBox(
-                          width: 10,
-                        ),
-                        Text(
-                          '${ref.watch(sharedUtilityProvider).getUser()?.name ?? ""}',
-                          style: TextStyle(
-                              fontSize: Adaptive.sp(16),
-                              color: Colors.black,
-                              fontWeight: FontWeight.w700),
-                        )
-                      ],
-                    )),
-              ],
-            ),
-            ExpansionTile(
-              backgroundColor: Colors.white,
-              collapsedBackgroundColor: Colors.white,
-              title: Text(
-                'trips'.tr(),
-                style: TextStyle(
-                    fontWeight: FontWeight.bold, fontSize: Adaptive.sp(16)),
-              ),
-              children: [
-                ListTile(
-                  title: Text(
-                    'tripsHistory'.tr(),
-                    style: TextStyle(
-                        fontWeight: FontWeight.w600, fontSize: Adaptive.sp(16)),
-                  ),
-                  onTap: () {
-                    ref
-                        .watch(goRouterProvider)
-                        .goNamed(RoutesStrings.tripsHistory);
-                  },
+            InkWell(
+              child: Card(
+                color: Colors.white,
+                margin: Pad(all: 10),
+                elevation: 5,
+                child: Column(
+                  children: [
+                    SizedBox(
+                      height: 10,
+                    ),
+                    CircleAvatar(
+                      foregroundImage: NetworkImage(ref
+                              .watch(sharedUtilityProvider)
+                              .getUser()
+                              ?.chequeImage ??
+                          ""),
+                      radius: 50,
+                    ),
+                    CupertinoActionSheetAction(
+                        onPressed: () {
+                          context.goNamed(RoutesStrings.profile);
+                        },
+                        child: RowSuper(
+                          alignment: Alignment.centerLeft,
+                          children: [
+                            SizedBox(
+                              width: 10,
+                            ),
+                            Text(
+                              '${ref.watch(sharedUtilityProvider).getUser()?.name ?? ""}',
+                              style: TextStyle(
+                                  fontSize: Adaptive.sp(16),
+                                  color: Colors.black,
+                                  fontWeight: FontWeight.w700),
+                            )
+                          ],
+                        )),
+                  ],
                 ),
-                ListTile(
-                  title: Text(
-                    'tripsInProcess'.tr(),
-                    style: TextStyle(
-                        fontWeight: FontWeight.w600, fontSize: Adaptive.sp(16)),
-                  ),
-                  onTap: () {
-                    ref
-                        .watch(goRouterProvider)
-                        .goNamed(RoutesStrings.tripsInProcess);
-                  },
-                )
-              ],
-            ),
-            ListTile(
-              title: Text(
-                'changeLanguage'.tr(),
-                style: TextStyle(
-                    fontWeight: FontWeight.w600, fontSize: Adaptive.sp(16)),
               ),
               onTap: () {
-                if (ref.watch(sharedUtilityProvider).getLocale() ==
-                    Locale('hi', 'IN')) {
-                  ref.watch(sharedUtilityProvider).setLocale("en");
-                } else {
-                  ref.watch(sharedUtilityProvider).setLocale("hi");
-                }
-                Restart.restartApp().then((value) {
-                  setState(() {});
-                });
+                ref.watch(goRouterProvider).goNamed(RoutesStrings.profile);
               },
+            ),
+            Card(
+              color: Colors.white,
+              margin: Pad(all: 10),
+              elevation: 5,
+              child: Column(
+                children: [
+                  ListTile(
+                    title: Text(
+                      'tripsHistory'.tr(),
+                      style: TextStyle(
+                          fontWeight: FontWeight.w600,
+                          fontSize: Adaptive.sp(16)),
+                    ),
+                    leading: Image.network('https://static-00.iconduck.com/assets.00/delivery-car-icon-512x423-t7gs5e74.png',width: 25,height: 25,),
+                    onTap: () {
+                      ref
+                          .watch(goRouterProvider)
+                          .goNamed(RoutesStrings.tripsHistory);
+                    },
+                  ),
+                  Divider(),
+                  ListTile(
+                    leading: Image.network('https://banner2.cleanpng.com/20181207/psa/kisspng-clip-art-vector-graphics-computer-icons-illustrati-kalyan-profi-shop-1713912417297.webp',width: 30,height: 30,),
+
+                    title: Text(
+                      'tripsInProcess'.tr(),
+                      style: TextStyle(
+                          fontWeight: FontWeight.w600,
+                          fontSize: Adaptive.sp(16)),
+                    ),
+                    onTap: () {
+                      ref
+                          .watch(goRouterProvider)
+                          .goNamed(RoutesStrings.tripsInProcess);
+                    },
+                  ),
+                  Divider(),
+                  ListTile(
+                    title: Text(
+                      'changeLanguage'.tr(),
+                      style: TextStyle(
+                          fontWeight: FontWeight.w600,
+                          fontSize: Adaptive.sp(16)),
+                    ),
+                    onTap: () {
+                      if (ref.watch(sharedUtilityProvider).getLocale() ==
+                          Locale('hi', 'IN')) {
+                        ref.watch(sharedUtilityProvider).setLocale("en");
+                      } else {
+                        ref.watch(sharedUtilityProvider).setLocale("hi");
+                      }
+                      Restart.restartApp().then((value) {
+                        setState(() {});
+                      });
+                    },
+                  ),
+                ],
+              ),
             ),
 
             // CupertinoActionSheet(
@@ -376,7 +393,7 @@ class _DashboardState extends ConsumerState<Dashboard> {
               ),
             ),
             onTap: () {
-              ref.watch(goRouterProvider).goNamed(RoutesStrings.tripsInProcess);
+              ref.watch(goRouterProvider).goNamed(RoutesStrings.startTrips);
             },
           )),
           Expanded(
@@ -422,7 +439,7 @@ class _DashboardState extends ConsumerState<Dashboard> {
                   )),
             ),
             onTap: () {
-              ref.watch(goRouterProvider).goNamed(RoutesStrings.tripsHistory);
+              ref.watch(goRouterProvider).goNamed(RoutesStrings.endTrips);
             },
           ))
         ]),
@@ -1431,7 +1448,7 @@ class _DashboardState extends ConsumerState<Dashboard> {
                           ))));
             },
             child: Text(
-              "selectTruck / selectDriver".tr(),
+              "${"selectTruck".tr()} / ${'selectDriver'.tr()}",
               textAlign: TextAlign.center,
               style: TextStyle(
                   color: Colors.white,

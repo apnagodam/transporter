@@ -82,5 +82,8 @@
   "endTrip": "यात्रा समाप्त",
   "completed": "पूरा हुआ",
   "processing": "प्रोसेसिंग",
-  "changeLanguage": "भाषा बदलें"
+  "changeLanguage": "भाषा बदलें",
+  "tripStatus": "यात्रा स्थिति",
+  "selectTripStatus": "यात्रा स्थिति चुनें"
+
 }

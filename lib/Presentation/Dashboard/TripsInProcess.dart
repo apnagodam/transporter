@@ -18,7 +18,6 @@ import 'package:transporter/Domain/Trips/TripsService.dart';
 
 import '../../Data/Model/TripDataResponse.dart';
 import '../../Data/Model/TruckDriverResponse.dart';
-import '../../Domain/Dio/DioProvider.dart';
 import '../Routes/routes.dart';
 import '../Utils/Widgets/Widgets.dart';
 import '../Utils/color_constants.dart';
@@ -44,11 +43,12 @@ class _TripsinprocessState extends ConsumerState<Tripsinprocess> {
   var qualityImage = StateProvider<File?>((ref) => null);
   final paotiController = TextEditingController();
   var paotiImage = StateProvider<File?>((ref) => null);
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Trips In process'),
+        title: const Text('Trips In process'),
       ),
       body: SafeArea(
           child: RefreshIndicator.adaptive(
@@ -58,9 +58,9 @@ class _TripsinprocessState extends ConsumerState<Tripsinprocess> {
                       data: (data) {
                         var dataList = data.data
                             ?.where((datum) =>
-                        datum.weight == null ||
-                            datum.tripStart == null ||
-                            datum.tripEnd == null)
+                                datum.weight == null ||
+                                datum.tripStart == null ||
+                                datum.tripEnd == null)
                             .toList();
                         return ListView.builder(
                             physics: const NeverScrollableScrollPhysics(),
@@ -71,7 +71,7 @@ class _TripsinprocessState extends ConsumerState<Tripsinprocess> {
                             });
                       },
                       error: (e, s) => Container(),
-                      loading: () => CupertinoActivityIndicator())
+                      loading: () => const CupertinoActivityIndicator())
                 ],
               ),
               onRefresh: () {
@@ -83,655 +83,754 @@ class _TripsinprocessState extends ConsumerState<Tripsinprocess> {
   }
 
   tripRequestLayout(Datum dataList) => Container(
-    margin: Pad(all: 10),
-    decoration: BoxDecoration(
-        border: Border.all(color: ColorConstants.primaryColorWSP),
-        borderRadius: BorderRadius.circular(10)),
-    child: Padding(
-      padding: const Pad(all: 10),
-      child: ColumnSuper(alignment: Alignment.center, children: [
-        RowSuper(fill: true, alignment: Alignment.center, children: [
-          Padding(
-            padding: Pad(all: 10),
-            child: Text(
-              '${'tripId'.tr()}: ${dataList?.tripId ?? "--"}',
-              style: TextStyle(
-                  color: Colors.black,
-                  fontSize: Adaptive.sp(16),
-                  fontWeight: FontWeight.bold),
-              textAlign: TextAlign.center,
+        margin: const Pad(all: 10),
+        decoration: BoxDecoration(
+            border: Border.all(color: ColorConstants.primaryColorWSP),
+            borderRadius: BorderRadius.circular(10)),
+        child: Padding(
+          padding: const Pad(all: 10),
+          child: ColumnSuper(alignment: Alignment.center, children: [
+            RowSuper(fill: true, alignment: Alignment.centerRight, children: [
+              Padding(
+                padding: const Pad(all: 10),
+                child: Text(
+                  dataList.tripId == null
+                      ? "--"
+                      : '${'tripId'.tr()}: ${dataList.tripId.toString()}',
+                  style: TextStyle(
+                      color: Colors.black,
+                      fontSize: Adaptive.sp(16),
+                      fontWeight: FontWeight.bold),
+                  textAlign: TextAlign.end,
+                ),
+              ),
+              TextButton(
+                  onPressed: () {
+                    showCupertinoModalBottomSheet(
+                        context: context,
+                        builder: (context) => Material(
+                              color: Colors.white,
+                              child: Padding(
+                                padding: const Pad(all: 10),
+                                child: Column(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    Text(
+                                      "Trip Details",
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: Adaptive.sp(18),
+                                          color: ColorConstants
+                                              .primaryColorDriver),
+                                    ),
+                                    const SizedBox(
+                                      height: 10,
+                                    ),
+                                    RowSuper(fill: true, children: [
+                                      Text(
+                                        'driverName'.tr(),
+                                        textAlign: TextAlign.start,
+                                        style: TextStyle(
+                                            color:
+                                                ColorConstants.primaryColorWSP,
+                                            fontSize: Adaptive.sp(14),
+                                            fontWeight: FontWeight.w800),
+                                      ),
+                                      Text(
+                                        '${dataList.driverName ?? "--"}',
+                                        textAlign: TextAlign.end,
+                                        style: TextStyle(
+                                            color:
+                                                ColorConstants.primaryColorWSP,
+                                            fontSize: Adaptive.sp(14),
+                                            fontWeight: FontWeight.w800),
+                                      ),
+                                    ]),
+                                    const SizedBox(
+                                      height: 10,
+                                    ),
+                                    RowSuper(fill: true, children: [
+                                      Text(
+                                        'driverPhone'.tr(),
+                                        textAlign: TextAlign.start,
+                                        style: TextStyle(
+                                            color:
+                                                ColorConstants.primaryColorWSP,
+                                            fontSize: Adaptive.sp(14),
+                                            fontWeight: FontWeight.w800),
+                                      ),
+                                      Text(
+                                        '${dataList.driverPhone ?? "--"}',
+                                        textAlign: TextAlign.end,
+                                        style: TextStyle(
+                                            color:
+                                                ColorConstants.primaryColorWSP,
+                                            fontSize: Adaptive.sp(14),
+                                            fontWeight: FontWeight.w800),
+                                      ),
+                                    ]),
+                                    const SizedBox(
+                                      height: 10,
+                                    ),
+                                    RowSuper(fill: true, children: [
+                                      Text(
+                                        'customer'.tr(),
+                                        textAlign: TextAlign.start,
+                                        style: TextStyle(
+                                            color:
+                                                ColorConstants.primaryColorWSP,
+                                            fontSize: Adaptive.sp(14),
+                                            fontWeight: FontWeight.w800),
+                                      ),
+                                      Text.rich(
+                                          textAlign: TextAlign.end,
+                                          TextSpan(
+                                            text: '${dataList.userName}',
+                                            style: TextStyle(
+                                                color: ColorConstants
+                                                    .primaryColorWSP,
+                                                fontSize: Adaptive.sp(14),
+                                                fontWeight: FontWeight.w800),
+                                          )),
+                                    ]),
+                                    const SizedBox(
+                                      height: 10,
+                                    ),
+                                    RowSuper(
+                                        fill: true,
+                                        alignment: Alignment.center,
+                                        children: [
+                                          Text(
+                                            'customerPhone'.tr(),
+                                            textAlign: TextAlign.start,
+                                            style: TextStyle(
+                                                color: ColorConstants
+                                                    .primaryColorWSP,
+                                                fontSize: Adaptive.sp(14),
+                                                fontWeight: FontWeight.w800),
+                                          ),
+                                          Text(
+                                            '${dataList.userPhone}',
+                                            textAlign: TextAlign.end,
+                                            style: TextStyle(
+                                                color: ColorConstants
+                                                    .primaryColorWSP,
+                                                fontSize: Adaptive.sp(14),
+                                                fontWeight: FontWeight.w800),
+                                          ),
+                                        ]),
+                                    const SizedBox(
+                                      height: 10,
+                                    ),
+                                    RowSuper(
+                                        fill: true,
+                                        alignment: Alignment.center,
+                                        children: [
+                                          Text(
+                                            'ratePerQtl'.tr(),
+                                            textAlign: TextAlign.start,
+                                            style: TextStyle(
+                                                color: ColorConstants
+                                                    .primaryColorWSP,
+                                                fontSize: Adaptive.sp(14),
+                                                fontWeight: FontWeight.w800),
+                                          ),
+                                          Text(
+                                            '${currencyFormat.format(num.parse("${dataList.rate ?? 0}"))} / perQtl'
+                                                .tr(),
+                                            textAlign: TextAlign.end,
+                                            style: TextStyle(
+                                                color: ColorConstants
+                                                    .primaryColorWSP,
+                                                fontSize: Adaptive.sp(14),
+                                                fontWeight: FontWeight.w800),
+                                          ),
+                                        ]),
+                                    const SizedBox(
+                                      height: 10,
+                                    ),
+                                    RowSuper(
+                                        fill: true,
+                                        alignment: Alignment.center,
+                                        children: [
+                                          Text(
+                                            'finalWeight'.tr(),
+                                            textAlign: TextAlign.start,
+                                            style: TextStyle(
+                                                color: ColorConstants
+                                                    .primaryColorWSP,
+                                                fontSize: Adaptive.sp(14),
+                                                fontWeight: FontWeight.w800),
+                                          ),
+                                          Text(
+                                            '${dataList.weight ?? "pending".tr()}',
+                                            textAlign: TextAlign.end,
+                                            style: TextStyle(
+                                                color: ColorConstants
+                                                    .primaryColorWSP,
+                                                fontSize: Adaptive.sp(14),
+                                                fontWeight: FontWeight.w800),
+                                          ),
+                                        ]),
+                                    const SizedBox(
+                                      height: 10,
+                                    ),
+                                    RowSuper(
+                                        fill: true,
+                                        alignment: Alignment.center,
+                                        children: [
+                                          Text(
+                                            'finalNoOfBags'.tr(),
+                                            textAlign: TextAlign.start,
+                                            style: TextStyle(
+                                                color: ColorConstants
+                                                    .primaryColorWSP,
+                                                fontSize: Adaptive.sp(14),
+                                                fontWeight: FontWeight.w800),
+                                          ),
+                                          Text(
+                                            '${dataList.noOfBags ?? "pending".tr()}',
+                                            textAlign: TextAlign.end,
+                                            style: TextStyle(
+                                                color: ColorConstants
+                                                    .primaryColorWSP,
+                                                fontSize: Adaptive.sp(14),
+                                                fontWeight: FontWeight.w800),
+                                          ),
+                                        ]),
+                                    const SizedBox(
+                                      height: 10,
+                                    ),
+                                    RowSuper(
+                                        fill: true,
+                                        alignment: Alignment.center,
+                                        children: [
+                                          Text(
+                                            'receivingWeight'.tr(),
+                                            textAlign: TextAlign.start,
+                                            style: TextStyle(
+                                                color: ColorConstants
+                                                    .primaryColorWSP,
+                                                fontSize: Adaptive.sp(14),
+                                                fontWeight: FontWeight.w800),
+                                          ),
+                                          Text(
+                                            '${dataList.recevingWeight ?? "pending".tr()}',
+                                            textAlign: TextAlign.end,
+                                            style: TextStyle(
+                                                color: ColorConstants
+                                                    .primaryColorWSP,
+                                                fontSize: Adaptive.sp(14),
+                                                fontWeight: FontWeight.w800),
+                                          ),
+                                        ]),
+                                    const SizedBox(
+                                      height: 10,
+                                    ),
+                                    RowSuper(
+                                        fill: true,
+                                        alignment: Alignment.center,
+                                        children: [
+                                          Text(
+                                            'receivingBags'.tr(),
+                                            textAlign: TextAlign.start,
+                                            style: TextStyle(
+                                                color: ColorConstants
+                                                    .primaryColorWSP,
+                                                fontSize: Adaptive.sp(14),
+                                                fontWeight: FontWeight.w800),
+                                          ),
+                                          Text(
+                                            '${dataList.recevingBags ?? "pending".tr()}',
+                                            textAlign: TextAlign.end,
+                                            style: TextStyle(
+                                                color: ColorConstants
+                                                    .primaryColorWSP,
+                                                fontSize: Adaptive.sp(14),
+                                                fontWeight: FontWeight.w800),
+                                          ),
+                                        ]),
+                                    const SizedBox(
+                                      height: 10,
+                                    ),
+                                    RowSuper(
+                                        fill: true,
+                                        alignment: Alignment.center,
+                                        children: [
+                                          Text(
+                                            dataList.weight == null
+                                                ? 'provBilty'.tr()
+                                                : "provBilty".tr(),
+                                            textAlign: TextAlign.start,
+                                            style: TextStyle(
+                                                color: ColorConstants
+                                                    .primaryColorWSP,
+                                                fontSize: Adaptive.sp(14),
+                                                fontWeight: FontWeight.w800),
+                                          ),
+                                          Align(
+                                            alignment: Alignment.centerRight,
+                                            child: InkWell(
+                                              onTap: () async {
+                                                ref
+                                                    .watch(tripDataProvider(
+                                                            tripRequestid:
+                                                                "${dataList.id}")
+                                                        .future)
+                                                    .then((value) {
+                                                  ref
+                                                      .watch(
+                                                          createBiltyPdfProvider(
+                                                                  context:
+                                                                      context,
+                                                                  model: value)
+                                                              .future)
+                                                      .then((value) async {
+                                                    if (value != null) {
+                                                      PDFDocument doc =
+                                                          await PDFDocument
+                                                              .fromFile(value ??
+                                                                  File(''));
+                                                      showBarModalBottomSheet(
+                                                          context: context,
+                                                          builder: (context) =>
+                                                              PDFViewer(
+                                                                  document:
+                                                                      doc));
+                                                    }
+                                                  });
+                                                });
+                                              },
+                                              child: const Icon(
+                                                CupertinoIcons.eye,
+                                                color: ColorConstants
+                                                    .primaryColorWSP,
+                                              ),
+                                            ),
+                                          )
+                                        ]),
+                                    const SizedBox(
+                                      height: 10,
+                                    ),
+                                    imageLayout(dataList),
+                                    const Divider(
+                                      height: 2,
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ));
+                  },
+                  child: Text(
+                    'View Details',
+                    style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        decoration: TextDecoration.underline,
+                        fontSize: Adaptive.sp(13)),
+                  ))
+            ]),
+            const SizedBox(
+              height: 10,
             ),
-          ),
-        ]),
-        const SizedBox(
-          height: 5,
-        ),
-        RowSuper(fill: true, alignment: Alignment.center, children: [
-          Padding(
-            padding: Pad(all: 0),
-            child: Text("${dataList.tripDate??""}",
-              style: TextStyle(
-                  color: Colors.black,
-                  fontSize: Adaptive.sp(14),
-                  fontWeight: FontWeight.bold),
-              textAlign: TextAlign.center,
+            const Divider(
+              height: 2,
             ),
-          ),
-        ]),
-        const SizedBox(
-          height: 10,
-        ),
-        Divider(
-          height: 2,
-        ),
-        SizedBox(
-          height: 10,
-        ),
-        Row( children: [
-          Expanded(child: Text(
-            'from'.tr(),
-            textAlign: TextAlign.start,
-            style: TextStyle(
-                color: ColorConstants.primaryColorWSP,
-                fontSize: Adaptive.sp(14),
-                fontWeight: FontWeight.w800),
-          )),
-          Expanded(child: Text(
-            ' ${dataList?.fromAddress}',
-            textAlign: TextAlign.end,
-            style: TextStyle(
-                color: ColorConstants.primaryColorWSP,
-                fontSize: Adaptive.sp(14),
-                fontWeight: FontWeight.w800),
-          )),
-        ]),
-        SizedBox(
-          height: 10,
-        ),
-        Row( children: [
-          Expanded(child: Text(
-            'to'.tr(),
-            textAlign: TextAlign.start,
-            style: TextStyle(
-                color: ColorConstants.primaryColorWSP,
-                fontSize: Adaptive.sp(14),
-                fontWeight: FontWeight.w800),
-          )),
-          Expanded(child: Text(
-            ' ${dataList?.toAddress}',
-            textAlign: TextAlign.end,
-            style: TextStyle(
-                color: ColorConstants.primaryColorWSP,
-                fontSize: Adaptive.sp(14),
-                fontWeight: FontWeight.w800),
-          )),
-        ]),
-        SizedBox(
-          height: 10,
-        ),
-        RowSuper(fill: true, children: [
-          Text(
-            'vehicleNumber'.tr(),
-            textAlign: TextAlign.start,
-            style: TextStyle(
-                color: ColorConstants.primaryColorWSP,
-                fontSize: Adaptive.sp(14),
-                fontWeight: FontWeight.w800),
-          ),
-          Text(
-            '${dataList.truckNumber ?? "--"}',
-            textAlign: TextAlign.end,
-            style: TextStyle(
-                color: ColorConstants.primaryColorWSP,
-                fontSize: Adaptive.sp(14),
-                fontWeight: FontWeight.w800),
-          ),
-        ]),
-        const SizedBox(
-          height: 10,
-        ),
-        RowSuper(fill: true, children: [
-          Text(
-            'driverName'.tr(),
-            textAlign: TextAlign.start,
-            style: TextStyle(
-                color: ColorConstants.primaryColorWSP,
-                fontSize: Adaptive.sp(14),
-                fontWeight: FontWeight.w800),
-          ),
-          Text(
-            '${dataList.driverName ?? "--"}',
-            textAlign: TextAlign.end,
-            style: TextStyle(
-                color: ColorConstants.primaryColorWSP,
-                fontSize: Adaptive.sp(14),
-                fontWeight: FontWeight.w800),
-          ),
-        ]),
-        const SizedBox(
-          height: 10,
-        ),
-        RowSuper(fill: true, children: [
-          Text(
-            'driverPhone'.tr(),
-            textAlign: TextAlign.start,
-            style: TextStyle(
-                color: ColorConstants.primaryColorWSP,
-                fontSize: Adaptive.sp(14),
-                fontWeight: FontWeight.w800),
-          ),
-          Text(
-            '${dataList.driverPhone ?? "--"}',
-            textAlign: TextAlign.end,
-            style: TextStyle(
-                color: ColorConstants.primaryColorWSP,
-                fontSize: Adaptive.sp(14),
-                fontWeight: FontWeight.w800),
-          ),
-        ]),
-        const SizedBox(
-          height: 10,
-        ),
-        RowSuper(fill: true, children: [
-          Text(
-            'customer'.tr(),
-            textAlign: TextAlign.start,
-            style: TextStyle(
-                color: ColorConstants.primaryColorWSP,
-                fontSize: Adaptive.sp(14),
-                fontWeight: FontWeight.w800),
-          ),
-          Text.rich(
-              textAlign: TextAlign.end,
-              TextSpan(
-                text: '${dataList.userName}',
+            const SizedBox(
+              height: 10,
+            ),
+            Row(children: [
+              Expanded(
+                  child: Text(
+                'Date'.tr(),
+                textAlign: TextAlign.start,
                 style: TextStyle(
                     color: ColorConstants.primaryColorWSP,
                     fontSize: Adaptive.sp(14),
                     fontWeight: FontWeight.w800),
               )),
-        ]),
-        const SizedBox(
-          height: 10,
-        ),
-        RowSuper(fill: true, alignment: Alignment.center, children: [
-          Text(
-            'customerPhone'.tr(),
-            textAlign: TextAlign.start,
-            style: TextStyle(
-                color: ColorConstants.primaryColorWSP,
-                fontSize: Adaptive.sp(14),
-                fontWeight: FontWeight.w800),
-          ),
-          Text(
-            '${dataList.userPhone}',
-            textAlign: TextAlign.end,
-            style: TextStyle(
-                color: ColorConstants.primaryColorWSP,
-                fontSize: Adaptive.sp(14),
-                fontWeight: FontWeight.w800),
-          ),
-        ]),
-        const SizedBox(
-          height: 10,
-        ),
-        RowSuper(fill: true, alignment: Alignment.center, children: [
-          Text(
-            'ratePerQtl'.tr(),
-            textAlign: TextAlign.start,
-            style: TextStyle(
-                color: ColorConstants.primaryColorWSP,
-                fontSize: Adaptive.sp(14),
-                fontWeight: FontWeight.w800),
-          ),
-          Text(
-            '${currencyFormat.format(int.parse("${dataList.rate ?? 0}"))} / perQtl'
-                .tr(),
-            textAlign: TextAlign.end,
-            style: TextStyle(
-                color: ColorConstants.primaryColorWSP,
-                fontSize: Adaptive.sp(14),
-                fontWeight: FontWeight.w800),
-          ),
-        ]),
-        const SizedBox(
-          height: 10,
-        ),
-        RowSuper(fill: true, alignment: Alignment.center, children: [
-          Text(
-            'commodity'.tr(),
-            textAlign: TextAlign.start,
-            style: TextStyle(
-                color: ColorConstants.primaryColorWSP,
-                fontSize: Adaptive.sp(14),
-                fontWeight: FontWeight.w800),
-          ),
-          Text(
-            '${dataList?.commodity}',
-            textAlign: TextAlign.end,
-            style: TextStyle(
-                color: ColorConstants.primaryColorWSP,
-                fontSize: Adaptive.sp(14),
-                fontWeight: FontWeight.w800),
-          ),
-        ]),
-        const SizedBox(
-          height: 10,
-        ),
-        RowSuper(fill: true, alignment: Alignment.center, children: [
-          Text(
-            'finalWeight'.tr(),
-            textAlign: TextAlign.start,
-            style: TextStyle(
-                color: ColorConstants.primaryColorWSP,
-                fontSize: Adaptive.sp(14),
-                fontWeight: FontWeight.w800),
-          ),
-          Text(
-            '${dataList.weight ?? "pending".tr()}',
-            textAlign: TextAlign.end,
-            style: TextStyle(
-                color: ColorConstants.primaryColorWSP,
-                fontSize: Adaptive.sp(14),
-                fontWeight: FontWeight.w800),
-          ),
-        ]),
-        const SizedBox(
-          height: 10,
-        ),
-        RowSuper(fill: true, alignment: Alignment.center, children: [
-          Text(
-            'finalNoOfBags'.tr(),
-            textAlign: TextAlign.start,
-            style: TextStyle(
-                color: ColorConstants.primaryColorWSP,
-                fontSize: Adaptive.sp(14),
-                fontWeight: FontWeight.w800),
-          ),
-          Text(
-            '${dataList.noOfBags ?? "pending".tr()}',
-            textAlign: TextAlign.end,
-            style: TextStyle(
-                color: ColorConstants.primaryColorWSP,
-                fontSize: Adaptive.sp(14),
-                fontWeight: FontWeight.w800),
-          ),
-        ]),
-        const SizedBox(
-          height: 10,
-        ),
-        RowSuper(fill: true, alignment: Alignment.center, children: [
-          Text(
-            'receivingWeight'.tr(),
-            textAlign: TextAlign.start,
-            style: TextStyle(
-                color: ColorConstants.primaryColorWSP,
-                fontSize: Adaptive.sp(14),
-                fontWeight: FontWeight.w800),
-          ),
-          Text(
-            '${dataList.recevingWeight ?? "pending".tr()}',
-            textAlign: TextAlign.end,
-            style: TextStyle(
-                color: ColorConstants.primaryColorWSP,
-                fontSize: Adaptive.sp(14),
-                fontWeight: FontWeight.w800),
-          ),
-        ]),
-        const SizedBox(
-          height: 10,
-        ),
-        RowSuper(fill: true, alignment: Alignment.center, children: [
-          Text(
-            'receivingBags'.tr(),
-            textAlign: TextAlign.start,
-            style: TextStyle(
-                color: ColorConstants.primaryColorWSP,
-                fontSize: Adaptive.sp(14),
-                fontWeight: FontWeight.w800),
-          ),
-          Text(
-            '${dataList.recevingBags ?? "pending".tr()}',
-            textAlign: TextAlign.end,
-            style: TextStyle(
-                color: ColorConstants.primaryColorWSP,
-                fontSize: Adaptive.sp(14),
-                fontWeight: FontWeight.w800),
-          ),
-        ]),
-        const SizedBox(
-          height: 10,
-        ),
-        RowSuper(fill: true, alignment: Alignment.center, children: [
-          Text(
-            '${dataList?.weight == null ? 'provBilty'.tr() : "provBilty".tr()}',
-            textAlign: TextAlign.start,
-            style: TextStyle(
-                color: ColorConstants.primaryColorWSP,
-                fontSize: Adaptive.sp(14),
-                fontWeight: FontWeight.w800),
-          ),
-          Align(
-            alignment: Alignment.centerRight,
-            child: InkWell(
-              onTap: () async {
-                ref
-                    .watch(tripDataProvider(tripRequestid: "${dataList.id}")
-                    .future)
-                    .then((value) {
-                  ref
-                      .watch(createBiltyPdfProvider(
-                      context: context, model: value)
-                      .future)
-                      .then((value) async {
-                    if (value != null) {
-                      PDFDocument doc =
-                      await PDFDocument.fromFile(value ?? File(''));
-                      showBarModalBottomSheet(
-                          context: context,
-                          builder: (context) => PDFViewer(document: doc));
-                    }
-                  });
-                });
-              },
-              child: Icon(
-                CupertinoIcons.eye,
-                color: ColorConstants.primaryColorWSP,
-              ),
+              Expanded(
+                  child: Text(
+                '${dataList.tripDate ?? ""}',
+                textAlign: TextAlign.end,
+                style: TextStyle(
+                    color: ColorConstants.primaryColorWSP,
+                    fontSize: Adaptive.sp(14),
+                    fontWeight: FontWeight.w800),
+              )),
+            ]),
+            const SizedBox(
+              height: 10,
             ),
-          )
-        ]),
-        const SizedBox(
-          height: 10,
+            Row(children: [
+              Expanded(
+                  child: Text(
+                'from'.tr(),
+                textAlign: TextAlign.start,
+                style: TextStyle(
+                    color: ColorConstants.primaryColorWSP,
+                    fontSize: Adaptive.sp(14),
+                    fontWeight: FontWeight.w800),
+              )),
+              Expanded(
+                  child: Text(
+                ' ${dataList.fromAddress}',
+                textAlign: TextAlign.end,
+                style: TextStyle(
+                    color: ColorConstants.primaryColorWSP,
+                    fontSize: Adaptive.sp(14),
+                    fontWeight: FontWeight.w800),
+              )),
+            ]),
+            const SizedBox(
+              height: 10,
+            ),
+            Row(children: [
+              Expanded(
+                  child: Text(
+                'to'.tr(),
+                textAlign: TextAlign.start,
+                style: TextStyle(
+                    color: ColorConstants.primaryColorWSP,
+                    fontSize: Adaptive.sp(14),
+                    fontWeight: FontWeight.w800),
+              )),
+              Expanded(
+                  child: Text(
+                ' ${dataList.toAddress}',
+                textAlign: TextAlign.end,
+                style: TextStyle(
+                    color: ColorConstants.primaryColorWSP,
+                    fontSize: Adaptive.sp(14),
+                    fontWeight: FontWeight.w800),
+              )),
+            ]),
+            const SizedBox(
+              height: 10,
+            ),
+            RowSuper(fill: true, alignment: Alignment.center, children: [
+              Text(
+                'commodity'.tr(),
+                textAlign: TextAlign.start,
+                style: TextStyle(
+                    color: ColorConstants.primaryColorWSP,
+                    fontSize: Adaptive.sp(14),
+                    fontWeight: FontWeight.w800),
+              ),
+              Text(
+                '${dataList.commodity}',
+                textAlign: TextAlign.end,
+                style: TextStyle(
+                    color: ColorConstants.primaryColorWSP,
+                    fontSize: Adaptive.sp(14),
+                    fontWeight: FontWeight.w800),
+              ),
+            ]),
+            const SizedBox(
+              height: 10,
+            ),
+            RowSuper(fill: true, children: [
+              Text(
+                'vehicleNumber'.tr(),
+                textAlign: TextAlign.start,
+                style: TextStyle(
+                    color: ColorConstants.primaryColorWSP,
+                    fontSize: Adaptive.sp(14),
+                    fontWeight: FontWeight.w800),
+              ),
+              Text(
+                '${dataList.truckNumber ?? "--"}',
+                textAlign: TextAlign.end,
+                style: TextStyle(
+                    color: ColorConstants.primaryColorWSP,
+                    fontSize: Adaptive.sp(14),
+                    fontWeight: FontWeight.w800),
+              ),
+            ]),
+            const Divider(),
+            const SizedBox(
+              height: 10,
+            ),
+            actionLayout(dataList),
+            const SizedBox(
+              height: 10,
+            ),
+          ]),
         ),
-        imageLayout(dataList),
-        Divider(
-          height: 2,
-        ),
-        const SizedBox(
-          height: 10,
-        ),
-        actionLayout(dataList),
-        const SizedBox(
-          height: 10,
-        ),
-      ]),
-    ),
-  );
+      );
 
   imageLayout(Datum data) => data.inOutTypes.toString().toLowerCase() == "in"
       ? Column(
-    children: [
-      data.poId == null
-          ? SizedBox()
-          : RowSuper(fill: true, alignment: Alignment.center, children: [
-        Text(
-          'goodsInvoiceImage'.tr(),
-          textAlign: TextAlign.start,
-          style: TextStyle(
-              color: ColorConstants.primaryColorDriver,
-              fontSize: Adaptive.sp(14),
-              fontWeight: FontWeight.w800),
-        ),
-        Align(
-          alignment: Alignment.centerRight,
-          child: InkWell(
-            onTap: () {},
-            child: InstaImageViewer(
-              imageUrl: "${data.goodsInvoiceImage}",
-              child: Icon(
-                CupertinoIcons.eye,
-                color: ColorConstants.primaryColorDriver,
-              ),
+          children: [
+            data.poId == null
+                ? const SizedBox()
+                : RowSuper(fill: true, alignment: Alignment.center, children: [
+                    Text(
+                      'goodsInvoiceImage'.tr(),
+                      textAlign: TextAlign.start,
+                      style: TextStyle(
+                          color: ColorConstants.primaryColorDriver,
+                          fontSize: Adaptive.sp(14),
+                          fontWeight: FontWeight.w800),
+                    ),
+                    Align(
+                      alignment: Alignment.centerRight,
+                      child: InkWell(
+                        onTap: () {},
+                        child: InstaImageViewer(
+                          imageUrl: "${data.goodsInvoiceImage}",
+                          child: const Icon(
+                            CupertinoIcons.eye,
+                            color: ColorConstants.primaryColorDriver,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ]),
+            const SizedBox(
+              height: 10,
             ),
-          ),
-        ),
-      ]),
-      const SizedBox(
-        height: 10,
-      ),
-      RowSuper(fill: true, alignment: Alignment.center, children: [
-        Text(
-          'Kanta Parchi Image'.tr(),
-          textAlign: TextAlign.start,
-          style: TextStyle(
-              color: ColorConstants.primaryColorWSP,
-              fontSize: Adaptive.sp(14),
-              fontWeight: FontWeight.w800),
-        ),
-        Align(
-          alignment: Alignment.centerRight,
-          child: InkWell(
-            onTap: () {},
-            child: InstaImageViewer(
-              imageUrl: "${data.kantaImage}",
-              child: Icon(
-                CupertinoIcons.eye,
-                color: ColorConstants.primaryColorWSP,
+            RowSuper(fill: true, alignment: Alignment.center, children: [
+              Text(
+                'Kanta Parchi Image'.tr(),
+                textAlign: TextAlign.start,
+                style: TextStyle(
+                    color: ColorConstants.primaryColorWSP,
+                    fontSize: Adaptive.sp(14),
+                    fontWeight: FontWeight.w800),
               ),
-            ),
-          ),
-        ),
-      ]),
-      const SizedBox(
-        height: 10,
-      ),
-      RowSuper(fill: true, alignment: Alignment.center, children: [
-        Text(
-          'Quality Report Image'.tr(),
-          textAlign: TextAlign.start,
-          style: TextStyle(
-              color: ColorConstants.primaryColorWSP,
-              fontSize: Adaptive.sp(14),
-              fontWeight: FontWeight.w800),
-        ),
-        Align(
-          alignment: Alignment.centerRight,
-          child: InkWell(
-            onTap: () {},
-            child: InstaImageViewer(
-              imageUrl: "${data.qualityReport}",
-              child: Icon(
-                CupertinoIcons.eye,
-                color: ColorConstants.primaryColorWSP,
+              Align(
+                alignment: Alignment.centerRight,
+                child: InkWell(
+                  onTap: () {},
+                  child: InstaImageViewer(
+                    imageUrl: "${data.kantaImage}",
+                    child: const Icon(
+                      CupertinoIcons.eye,
+                      color: ColorConstants.primaryColorWSP,
+                    ),
+                  ),
+                ),
               ),
+            ]),
+            const SizedBox(
+              height: 10,
             ),
-          ),
-        ),
-      ]),
-      const SizedBox(
-        height: 10,
-      ),
-      RowSuper(fill: true, alignment: Alignment.center, children: [
-        Text(
-          'Invoice Image'.tr(),
-          textAlign: TextAlign.start,
-          style: TextStyle(
-              color: ColorConstants.primaryColorWSP,
-              fontSize: Adaptive.sp(14),
-              fontWeight: FontWeight.w800),
-        ),
-        Align(
-          alignment: Alignment.centerRight,
-          child: InkWell(
-            onTap: () {},
-            child: InstaImageViewer(
-              imageUrl: "${data.invoiceImg}",
-              child: Icon(
-                CupertinoIcons.eye,
-                color: ColorConstants.primaryColorWSP,
+            RowSuper(fill: true, alignment: Alignment.center, children: [
+              Text(
+                'Quality Report Image'.tr(),
+                textAlign: TextAlign.start,
+                style: TextStyle(
+                    color: ColorConstants.primaryColorWSP,
+                    fontSize: Adaptive.sp(14),
+                    fontWeight: FontWeight.w800),
               ),
-            ),
-          ),
-        ),
-      ]),
-      const SizedBox(
-        height: 10,
-      ),
-      RowSuper(fill: true, alignment: Alignment.center, children: [
-        Text(
-          'E-way bill  Image'.tr(),
-          textAlign: TextAlign.start,
-          style: TextStyle(
-              color: ColorConstants.primaryColorWSP,
-              fontSize: Adaptive.sp(14),
-              fontWeight: FontWeight.w800),
-        ),
-        Align(
-          alignment: Alignment.centerRight,
-          child: InkWell(
-            onTap: () {},
-            child: InstaImageViewer(
-              imageUrl: "${data.eWayBill}",
-              child: Icon(
-                CupertinoIcons.eye,
-                color: ColorConstants.primaryColorWSP,
+              Align(
+                alignment: Alignment.centerRight,
+                child: InkWell(
+                  onTap: () {},
+                  child: InstaImageViewer(
+                    imageUrl: "${data.qualityReport}",
+                    child: const Icon(
+                      CupertinoIcons.eye,
+                      color: ColorConstants.primaryColorWSP,
+                    ),
+                  ),
+                ),
               ),
+            ]),
+            const SizedBox(
+              height: 10,
             ),
-          ),
-        ),
-      ]),
-      const SizedBox(
-        height: 10,
-      ),
-      RowSuper(fill: true, alignment: Alignment.center, children: [
-        Text(
-          'Mandi Tax Image'.tr(),
-          textAlign: TextAlign.start,
-          style: TextStyle(
-              color: ColorConstants.primaryColorWSP,
-              fontSize: Adaptive.sp(14),
-              fontWeight: FontWeight.w800),
-        ),
-        Align(
-          alignment: Alignment.centerRight,
-          child: InkWell(
-            onTap: () {},
-            child: InstaImageViewer(
-              imageUrl: "${data.mandiTaxImg}",
-              child: Icon(
-                CupertinoIcons.eye,
-                color: ColorConstants.primaryColorWSP,
+            RowSuper(fill: true, alignment: Alignment.center, children: [
+              Text(
+                'Invoice Image'.tr(),
+                textAlign: TextAlign.start,
+                style: TextStyle(
+                    color: ColorConstants.primaryColorWSP,
+                    fontSize: Adaptive.sp(14),
+                    fontWeight: FontWeight.w800),
               ),
+              Align(
+                alignment: Alignment.centerRight,
+                child: InkWell(
+                  onTap: () {},
+                  child: InstaImageViewer(
+                    imageUrl: "${data.invoiceImg}",
+                    child: const Icon(
+                      CupertinoIcons.eye,
+                      color: ColorConstants.primaryColorWSP,
+                    ),
+                  ),
+                ),
+              ),
+            ]),
+            const SizedBox(
+              height: 10,
             ),
-          ),
-        ),
-      ]),
-      const SizedBox(
-        height: 10,
-      ),
-    ],
-  )
+            RowSuper(fill: true, alignment: Alignment.center, children: [
+              Text(
+                'E-way bill  Image'.tr(),
+                textAlign: TextAlign.start,
+                style: TextStyle(
+                    color: ColorConstants.primaryColorWSP,
+                    fontSize: Adaptive.sp(14),
+                    fontWeight: FontWeight.w800),
+              ),
+              Align(
+                alignment: Alignment.centerRight,
+                child: InkWell(
+                  onTap: () {},
+                  child: InstaImageViewer(
+                    imageUrl: "${data.eWayBill}",
+                    child: const Icon(
+                      CupertinoIcons.eye,
+                      color: ColorConstants.primaryColorWSP,
+                    ),
+                  ),
+                ),
+              ),
+            ]),
+            const SizedBox(
+              height: 10,
+            ),
+            RowSuper(fill: true, alignment: Alignment.center, children: [
+              Text(
+                'Mandi Tax Image'.tr(),
+                textAlign: TextAlign.start,
+                style: TextStyle(
+                    color: ColorConstants.primaryColorWSP,
+                    fontSize: Adaptive.sp(14),
+                    fontWeight: FontWeight.w800),
+              ),
+              Align(
+                alignment: Alignment.centerRight,
+                child: InkWell(
+                  onTap: () {},
+                  child: InstaImageViewer(
+                    imageUrl: "${data.mandiTaxImg}",
+                    child: const Icon(
+                      CupertinoIcons.eye,
+                      color: ColorConstants.primaryColorWSP,
+                    ),
+                  ),
+                ),
+              ),
+            ]),
+            const SizedBox(
+              height: 10,
+            ),
+          ],
+        )
       : Column(
-    children: [
-      data.poId == null
-          ? SizedBox()
-          : RowSuper(fill: true, alignment: Alignment.center, children: [
-        Text(
-          'goodsInvoiceImage'.tr(),
-          textAlign: TextAlign.start,
-          style: TextStyle(
-              color: ColorConstants.primaryColorDriver,
-              fontSize: Adaptive.sp(14),
-              fontWeight: FontWeight.w800),
-        ),
-        Align(
-          alignment: Alignment.centerRight,
-          child: InkWell(
-            onTap: () {},
-            child: InstaImageViewer(
-              imageUrl: "${data.goodsInvoiceImage}",
-              child: Icon(
-                CupertinoIcons.eye,
-                color: ColorConstants.primaryColorDriver,
-              ),
+          children: [
+            data.poId == null
+                ? const SizedBox()
+                : RowSuper(fill: true, alignment: Alignment.center, children: [
+                    Text(
+                      'goodsInvoiceImage'.tr(),
+                      textAlign: TextAlign.start,
+                      style: TextStyle(
+                          color: ColorConstants.primaryColorDriver,
+                          fontSize: Adaptive.sp(14),
+                          fontWeight: FontWeight.w800),
+                    ),
+                    Align(
+                      alignment: Alignment.centerRight,
+                      child: InkWell(
+                        onTap: () {},
+                        child: InstaImageViewer(
+                          imageUrl: "${data.goodsInvoiceImage}",
+                          child: const Icon(
+                            CupertinoIcons.eye,
+                            color: ColorConstants.primaryColorDriver,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ]),
+            const SizedBox(
+              height: 10,
             ),
-          ),
-        ),
-      ]),
-      const SizedBox(
-        height: 10,
-      ),
-      RowSuper(fill: true, alignment: Alignment.center, children: [
-        Text(
-          'receivingKanta'.tr(),
-          textAlign: TextAlign.start,
-          style: TextStyle(
-              color: ColorConstants.primaryColorWSP,
-              fontSize: Adaptive.sp(14),
-              fontWeight: FontWeight.w800),
-        ),
-        Align(
-          alignment: Alignment.centerRight,
-          child: InkWell(
-            onTap: () {},
-            child: InstaImageViewer(
-              imageUrl: "${data.recevingKantaImage}",
-              child: Icon(
-                CupertinoIcons.eye,
-                color: ColorConstants.primaryColorWSP,
+            RowSuper(fill: true, alignment: Alignment.center, children: [
+              Text(
+                'receivingKanta'.tr(),
+                textAlign: TextAlign.start,
+                style: TextStyle(
+                    color: ColorConstants.primaryColorWSP,
+                    fontSize: Adaptive.sp(14),
+                    fontWeight: FontWeight.w800),
               ),
-            ),
-          ),
-        ),
-      ]),
-      const SizedBox(
-        height: 10,
-      ),
-      RowSuper(fill: true, alignment: Alignment.center, children: [
-        Text(
-          'Paoti Image'.tr(),
-          textAlign: TextAlign.start,
-          style: TextStyle(
-              color: ColorConstants.primaryColorWSP,
-              fontSize: Adaptive.sp(14),
-              fontWeight: FontWeight.w800),
-        ),
-        Align(
-          alignment: Alignment.centerRight,
-          child: InkWell(
-            onTap: () {},
-            child: InstaImageViewer(
-              imageUrl: "${data.paotiImage}",
-              child: Icon(
-                CupertinoIcons.eye,
-                color: ColorConstants.primaryColorWSP,
+              Align(
+                alignment: Alignment.centerRight,
+                child: InkWell(
+                  onTap: () {},
+                  child: InstaImageViewer(
+                    imageUrl: "${data.recevingKantaImage}",
+                    child: const Icon(
+                      CupertinoIcons.eye,
+                      color: ColorConstants.primaryColorWSP,
+                    ),
+                  ),
+                ),
               ),
+            ]),
+            const SizedBox(
+              height: 10,
             ),
-          ),
-        ),
-      ]),
-      const SizedBox(
-        height: 10,
-      ),
-      RowSuper(fill: true, alignment: Alignment.center, children: [
-        Text(
-          'Receiving Quality Image'.tr(),
-          textAlign: TextAlign.start,
-          style: TextStyle(
-              color: ColorConstants.primaryColorWSP,
-              fontSize: Adaptive.sp(14),
-              fontWeight: FontWeight.w800),
-        ),
-        Align(
-          alignment: Alignment.centerRight,
-          child: InkWell(
-            onTap: () {},
-            child: InstaImageViewer(
-              imageUrl: "${data.recevingQualityImg}",
-              child: Icon(
-                CupertinoIcons.eye,
-                color: ColorConstants.primaryColorWSP,
+            RowSuper(fill: true, alignment: Alignment.center, children: [
+              Text(
+                'Paoti Image'.tr(),
+                textAlign: TextAlign.start,
+                style: TextStyle(
+                    color: ColorConstants.primaryColorWSP,
+                    fontSize: Adaptive.sp(14),
+                    fontWeight: FontWeight.w800),
               ),
+              Align(
+                alignment: Alignment.centerRight,
+                child: InkWell(
+                  onTap: () {},
+                  child: InstaImageViewer(
+                    imageUrl: "${data.paotiImage}",
+                    child: const Icon(
+                      CupertinoIcons.eye,
+                      color: ColorConstants.primaryColorWSP,
+                    ),
+                  ),
+                ),
+              ),
+            ]),
+            const SizedBox(
+              height: 10,
             ),
-          ),
-        ),
-      ]),
-      const SizedBox(
-        height: 10,
-      ),
-    ],
-  );
+            RowSuper(fill: true, alignment: Alignment.center, children: [
+              Text(
+                'Receiving Quality Image'.tr(),
+                textAlign: TextAlign.start,
+                style: TextStyle(
+                    color: ColorConstants.primaryColorWSP,
+                    fontSize: Adaptive.sp(14),
+                    fontWeight: FontWeight.w800),
+              ),
+              Align(
+                alignment: Alignment.centerRight,
+                child: InkWell(
+                  onTap: () {},
+                  child: InstaImageViewer(
+                    imageUrl: "${data.recevingQualityImg}",
+                    child: const Icon(
+                      CupertinoIcons.eye,
+                      color: ColorConstants.primaryColorWSP,
+                    ),
+                  ),
+                ),
+              ),
+            ]),
+            const SizedBox(
+              height: 10,
+            ),
+          ],
+        );
 
   truckSelection(WidgetRef ref, BuildContext context, List<TruckDatum?> data) =>
       DropdownSearch<TruckDatum?>(
@@ -777,7 +876,7 @@ class _TripsinprocessState extends ConsumerState<Tripsinprocess> {
                     Padding(
                       padding: const Pad(all: 10),
                       child: Text(
-                        "${terminal?.truckNumber ?? "--"}",
+                        terminal?.truckNumber ?? "--",
                         style: TextStyle(
                             fontWeight: FontWeight.bold,
                             fontSize: Adaptive.sp(16)),
@@ -801,25 +900,25 @@ class _TripsinprocessState extends ConsumerState<Tripsinprocess> {
               showSearchBox: true,
               searchDelay: const Duration(microseconds: 500)),
           filterFn: (user, filter) =>
-          user?.districtFilterByName(filter) ?? false,
+              user?.districtFilterByName(filter) ?? false,
           // asyncItems: (String filter) => getData(filter),
 
           items: data ?? [],
-          itemAsString: (TruckDatum? u) => "${u?.truckNumber ?? "--"}",
+          itemAsString: (TruckDatum? u) => u?.truckNumber ?? "--",
           onChanged: (TruckDatum? data) =>
-          ref.watch(truckProvider.notifier).state = data,
+              ref.watch(truckProvider.notifier).state = data,
           dropdownDecoratorProps: DropDownDecoratorProps(
             dropdownSearchDecoration: InputDecoration(
-                contentPadding: Pad(left: 10, bottom: 5, top: 5),
+                contentPadding: const Pad(left: 10, bottom: 5, top: 5),
                 hintText: 'selectTruck'.tr(),
-                border: OutlineInputBorder(
+                border: const OutlineInputBorder(
                     borderRadius: BorderRadius.all(Radius.circular(8)),
                     borderSide:
-                    BorderSide(color: ColorConstants.primaryColorWSP))),
+                        BorderSide(color: ColorConstants.primaryColorWSP))),
           ));
 
   driverSelection(
-      WidgetRef ref, BuildContext context, List<DriverDatum?> data) =>
+          WidgetRef ref, BuildContext context, List<DriverDatum?> data) =>
       DropdownSearch<DriverDatum?>(
           popupProps: PopupProps.menu(
               searchFieldProps: const TextFieldProps(
@@ -863,7 +962,7 @@ class _TripsinprocessState extends ConsumerState<Tripsinprocess> {
                     Padding(
                       padding: const Pad(all: 10),
                       child: Text(
-                        "${terminal?.driverName ?? "--"}",
+                        terminal?.driverName ?? "--",
                         style: TextStyle(
                             fontWeight: FontWeight.bold,
                             fontSize: Adaptive.sp(16)),
@@ -887,726 +986,731 @@ class _TripsinprocessState extends ConsumerState<Tripsinprocess> {
               showSearchBox: true,
               searchDelay: const Duration(microseconds: 500)),
           filterFn: (user, filter) =>
-          user?.districtFilterByName(filter) ?? false,
+              user?.districtFilterByName(filter) ?? false,
           // asyncItems: (String filter) => getData(filter),
 
           items: data ?? [],
-          itemAsString: (DriverDatum? u) => "${u?.driverName ?? "--"}",
+          itemAsString: (DriverDatum? u) => u?.driverName ?? "--",
           onChanged: (DriverDatum? data) =>
-          ref.watch(driverProvider.notifier).state = data,
+              ref.watch(driverProvider.notifier).state = data,
           dropdownDecoratorProps: DropDownDecoratorProps(
             dropdownSearchDecoration: InputDecoration(
-                contentPadding: Pad(left: 10, bottom: 5, top: 5),
+                contentPadding: const Pad(left: 10, bottom: 5, top: 5),
                 hintText: 'selectDriver'.tr(),
-                border: OutlineInputBorder(
+                border: const OutlineInputBorder(
                     borderRadius: BorderRadius.all(Radius.circular(8)),
                     borderSide:
-                    BorderSide(color: ColorConstants.primaryColorWSP))),
+                        BorderSide(color: ColorConstants.primaryColorWSP))),
           ));
 
   actionLayout(Datum dataList) {
     return dataList.truckNumber == null && dataList.driverName == null
         ? AnimatedButton(
-      height: 35,
-      color: ColorConstants.primaryColorWSP,
-      width: MediaQuery.of(context).size.width / 1.2,
-      isOutline: true,
-      isMultiColor: true,
-      colors: [
-        ColorConstants.primaryColorWSP,
-        ColorConstants.primaryColorWSP,
-      ],
-      borderWidth: 1,
-      onTap: () async {
-        ref
-            .watch(truckDriverProvider.future)
-            .then((truckData) => showBarModalBottomSheet(
-            context: context,
-            builder: (modalContext) => SafeArea(
-                child: Padding(
-                  padding: Pad(all: 10),
-                  child: ColumnSuper(children: [
-                    truckSelection(
-                        ref, context, truckData.truckData ?? []),
-                    SizedBox(
-                      height: 10,
-                    ),
-                    driverSelection(
-                        ref, context, truckData.driverData ?? []),
-                    SizedBox(
-                      height: 10,
-                    ),
-                    AnimatedButton(
-                      height: 35,
-                      color: ColorConstants.primaryColorWSP,
-                      width: MediaQuery.of(context).size.width / 1.2,
-                      isOutline: true,
-                      isMultiColor: true,
-                      colors: [
-                        ColorConstants.primaryColorWSP,
-                        ColorConstants.primaryColorWSP,
-                      ],
-                      borderWidth: 1,
-                      onTap: () async {
-                        if (ref.watch(truckProvider) == null) {
-                          errorToast(context, 'selectTruck'.tr());
-                        }
-                        if (ref.watch(driverProvider) == null) {
-                          errorToast(context, 'selectDriver'.tr());
-                        } else {
-                          ref
-                              .watch(updateTruckDriverProvider(
-                              driverId:
-                              "${ref.watch(driverProvider)?.id ?? 0}",
-                              truckId:
-                              "${ref.watch(truckProvider)?.id ?? 0}",
-                              tripRequestId: "${dataList.id}")
-                              .future)
-                              .then((value) {
-                            if (value['status'].toString() == "1") {
-                              ref.invalidate(tripsListProvider);
-                              ref
-                                  .watch(goRouterProvider)
-                                  .pop(modalContext);
-                            }
-                          });
-                        }
-                      },
-                      child: Text(
-                        "submit".tr(),
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                            color: Colors.white,
-                            fontSize: Adaptive.sp(14),
-                            fontWeight: FontWeight.w800),
-                      ),
-                    )
-                  ]),
-                ))));
-      },
-      child: Text(
-        "selectTruck / selectDriver".tr(),
-        textAlign: TextAlign.center,
-        style: TextStyle(
-            color: Colors.white,
-            fontSize: Adaptive.sp(14),
-            fontWeight: FontWeight.w800),
-      ),
-    )
-        : dataList.weight != null && dataList.tripStart == null
-        ? AnimatedButton(
-      height: 35,
-      color: ColorConstants.primaryColorWSP,
-      width: MediaQuery.of(context).size.width / 1.2,
-      isOutline: true,
-      isMultiColor: true,
-      colors: [
-        ColorConstants.secondaryColorWSP,
-        ColorConstants.secondaryColorWSP,
-      ],
-      borderWidth: 1,
-      onTap: () async {
-        ref
-            .watch(startTripProvider(tripRequestId: "${dataList.id}")
-            .future)
-            .then((value) {
-          if (value['status'].toString() == "1") {
-            ref.invalidate(tripsListProvider);
-          }
-        });
-      },
-      child: Text(
-        "startTrip".tr(),
-        textAlign: TextAlign.center,
-        style: TextStyle(
-            color: Colors.white,
-            fontSize: Adaptive.sp(14),
-            fontWeight: FontWeight.w800),
-      ),
-    )
-        : dataList.paymentTo.toString() == "1" &&
-        dataList.tripStart != null &&
-        dataList.tripEnd == null
-        ? Text(
-      "End Trip pending from driver".tr(),
-      textAlign: TextAlign.center,
-      style: TextStyle(
-          color: ColorConstants.primaryColorDriver,
-          fontSize: Adaptive.sp(14),
-          fontWeight: FontWeight.w800),
-    )
-        : dataList.weight != null &&
-        dataList.tripStart != null &&
-        dataList.tripEnd == null
-        ? AnimatedButton(
-      height: 35,
-      color: ColorConstants.primaryColorWSP,
-      width: MediaQuery.of(context).size.width / 1.2,
-      isOutline: true,
-      isMultiColor: true,
-      colors: [
-        ColorConstants.primaryColorDriver,
-        ColorConstants.primaryColorDriver,
-      ],
-      borderWidth: 1,
-      onTap: () async {
-        showBarModalBottomSheet(
-            context: context,
-            builder: (context) => Consumer(
-                builder: (context, ref, child) => SafeArea(
-                    child: Padding(
-                      padding: Pad(all: 10),
-                      child: Form(
-                          key: form,
-                          child: ListView(
-                            children: [
-                              TextFormField(
-                                controller: bagsController,
-                                keyboardType:
-                                TextInputType.text,
-                                validator: (value) {
-                                  if (value == null ||
-                                      value.isEmpty) {
-                                    return 'inputBags'.tr();
-                                  }
-                                  return null;
-                                },
-                                decoration: InputDecoration(
-                                    label: Text(
-                                        'inputBags'.tr()),
-                                    contentPadding: const Pad(
-                                        top: 0,
-                                        bottom: 0,
-                                        left: 10),
-                                    border:
-                                    OutlineInputBorder(
-                                        borderRadius:
-                                        BorderRadius
-                                            .circular(
-                                            10)),
-                                    enabledBorder:
-                                    OutlineInputBorder(
-                                        borderRadius:
-                                        BorderRadius
-                                            .circular(
-                                            10))),
-                              ),
-                              SizedBox(
+            height: 35,
+            color: ColorConstants.primaryColorWSP,
+            width: MediaQuery.of(context).size.width / 1.2,
+            isOutline: true,
+            isMultiColor: true,
+            colors: const [
+              ColorConstants.primaryColorWSP,
+              ColorConstants.primaryColorWSP,
+            ],
+            borderWidth: 1,
+            onTap: () async {
+              ref
+                  .watch(truckDriverProvider.future)
+                  .then((truckData) => showBarModalBottomSheet(
+                      context: context,
+                      builder: (modalContext) => SafeArea(
+                              child: Padding(
+                            padding: const Pad(all: 10),
+                            child: ColumnSuper(children: [
+                              const SizedBox(
                                 height: 10,
                               ),
-                              TextFormField(
-                                controller: weightController,
-                                keyboardType:
-                                TextInputType.text,
-                                validator: (value) {
-                                  if (value == null ||
-                                      value.isEmpty) {
-                                    return 'enterRecevingBags'
-                                        .tr();
-                                  }
-                                  return null;
-                                },
-                                decoration: InputDecoration(
-                                    label: Text(
-                                        'recievingWeight'
-                                            .tr()),
-                                    contentPadding: const Pad(
-                                        top: 0,
-                                        bottom: 0,
-                                        left: 10),
-                                    border:
-                                    OutlineInputBorder(
-                                        borderRadius:
-                                        BorderRadius
-                                            .circular(
-                                            10)),
-                                    enabledBorder:
-                                    OutlineInputBorder(
-                                        borderRadius:
-                                        BorderRadius
-                                            .circular(
-                                            10))),
-                              ),
-                              SizedBox(
+                              truckSelection(
+                                  ref, context, truckData.truckData ?? []),
+                              const SizedBox(
                                 height: 10,
                               ),
-                              TextFormField(
-                                controller: paotiController,
-                                keyboardType:
-                                TextInputType.text,
-                                decoration: InputDecoration(
-                                    label: Text(
-                                        'enterPaotiNumber'
-                                            .tr()),
-                                    contentPadding: const Pad(
-                                        top: 0,
-                                        bottom: 0,
-                                        left: 10),
-                                    border:
-                                    OutlineInputBorder(
-                                        borderRadius:
-                                        BorderRadius
-                                            .circular(
-                                            10)),
-                                    enabledBorder:
-                                    OutlineInputBorder(
-                                        borderRadius:
-                                        BorderRadius
-                                            .circular(
-                                            10))),
-                              ),
-                              SizedBox(
+                              driverSelection(
+                                  ref, context, truckData.driverData ?? []),
+                              const SizedBox(
                                 height: 10,
                               ),
-                              DottedBorder(
-                                  borderType:
-                                  BorderType.RRect,
-                                  dashPattern: const [
-                                    5,
-                                    5,
-                                    5,
-                                    5
-                                  ],
-                                  color: ColorConstants
-                                      .primaryColorDriver,
-                                  child: Padding(
-                                    padding:
-                                    const Pad(all: 20),
-                                    child: Center(
-                                      child: ref.watch(
-                                          kantaImage) !=
-                                          null
-                                          ? Stack(
-                                        children: [
-                                          Image.file(ref
-                                              .watch(
-                                              kantaImage) ??
-                                              File('')),
-                                          Container(
-                                            decoration: BoxDecoration(
-                                                color: Colors
-                                                    .black
-                                                    .withOpacity(
-                                                    0.6),
-                                                shape: BoxShape
-                                                    .circle),
-                                            child: IconButton(
-                                                onPressed: () {
-                                                  ref.invalidate(
-                                                      kantaImage);
-                                                },
-                                                icon: const Icon(
-                                                  Icons
-                                                      .close,
-                                                  color:
-                                                  Colors.white,
-                                                )),
-                                          )
-                                        ],
-                                      )
-                                          : InkWell(
-                                        child: ColumnSuper(
-                                            children: [
-                                              Icon(
-                                                Icons
-                                                    .cloud_upload,
-                                                color: ColorConstants
-                                                    .primaryColorDriver,
-                                              ),
-                                              SizedBox(
-                                                height:
-                                                5,
-                                              ),
-                                              Text(
-                                                "selectKanta"
-                                                    .tr(),
-                                                textAlign:
-                                                TextAlign.center,
-                                                style: TextStyle(
-                                                    color:
-                                                    ColorConstants.primaryColorDriver,
-                                                    fontWeight: FontWeight.bold,
-                                                    fontSize: Adaptive.sp(16)),
-                                              ),
-                                              SizedBox(
-                                                height:
-                                                5,
-                                              ),
-                                              Text(
-                                                "uploadDocumentImage"
-                                                    .tr(),
-                                                textAlign:
-                                                TextAlign.center,
-                                                style: TextStyle(
-                                                    color:
-                                                    ColorConstants.primaryColorDriver,
-                                                    fontWeight: FontWeight.w700,
-                                                    fontSize: Adaptive.sp(13)),
-                                              )
-                                            ]),
-                                        onTap:
-                                            () async {
-                                          imagePicker
-                                              .pickImage(
-                                              source: ImageSource
-                                                  .camera)
-                                              .then(
-                                                  (file) {
-                                                if (file !=
-                                                    null) {
-                                                  ref.watch(kantaImage.notifier).state =
-                                                      File(file
-                                                          .path);
-                                                }
-                                              });
-                                        },
-                                      ),
-                                    ),
-                                  )),
-                              SizedBox(
-                                height: 10,
-                              ),
-                              DottedBorder(
-                                  borderType:
-                                  BorderType.RRect,
-                                  dashPattern: const [
-                                    5,
-                                    5,
-                                    5,
-                                    5
-                                  ],
-                                  color: ColorConstants
-                                      .primaryColorDriver,
-                                  child: Padding(
-                                    padding:
-                                    const Pad(all: 20),
-                                    child: Center(
-                                      child: ref.watch(
-                                          qualityImage) !=
-                                          null
-                                          ? Stack(
-                                        children: [
-                                          Image.file(ref
-                                              .watch(
-                                              qualityImage) ??
-                                              File('')),
-                                          Container(
-                                            decoration: BoxDecoration(
-                                                color: Colors
-                                                    .black
-                                                    .withOpacity(
-                                                    0.6),
-                                                shape: BoxShape
-                                                    .circle),
-                                            child: IconButton(
-                                                onPressed: () {
-                                                  ref.invalidate(
-                                                      qualityImage);
-                                                },
-                                                icon: const Icon(
-                                                  Icons
-                                                      .close,
-                                                  color:
-                                                  Colors.white,
-                                                )),
-                                          )
-                                        ],
-                                      )
-                                          : InkWell(
-                                        child: ColumnSuper(
-                                            children: [
-                                              Icon(
-                                                Icons
-                                                    .cloud_upload,
-                                                color: ColorConstants
-                                                    .primaryColorDriver,
-                                              ),
-                                              SizedBox(
-                                                height:
-                                                5,
-                                              ),
-                                              Text(
-                                                "selectQualityImage"
-                                                    .tr(),
-                                                textAlign:
-                                                TextAlign.center,
-                                                style: TextStyle(
-                                                    color:
-                                                    ColorConstants.primaryColorDriver,
-                                                    fontWeight: FontWeight.bold,
-                                                    fontSize: Adaptive.sp(16)),
-                                              ),
-                                              SizedBox(
-                                                height:
-                                                5,
-                                              ),
-                                              Text(
-                                                "uploadDocumentImage"
-                                                    .tr(),
-                                                textAlign:
-                                                TextAlign.center,
-                                                style: TextStyle(
-                                                    color:
-                                                    ColorConstants.primaryColorDriver,
-                                                    fontWeight: FontWeight.w700,
-                                                    fontSize: Adaptive.sp(13)),
-                                              )
-                                            ]),
-                                        onTap:
-                                            () async {
-                                          imagePicker
-                                              .pickImage(
-                                              source: ImageSource
-                                                  .camera)
-                                              .then(
-                                                  (file) {
-                                                if (file !=
-                                                    null) {
-                                                  ref.watch(qualityImage.notifier).state =
-                                                      File(file
-                                                          .path);
-                                                }
-                                              });
-                                        },
-                                      ),
-                                    ),
-                                  )),
-                              SizedBox(
-                                height: 10,
-                              ),
-                              DottedBorder(
-                                  borderType:
-                                  BorderType.RRect,
-                                  dashPattern: const [
-                                    5,
-                                    5,
-                                    5,
-                                    5
-                                  ],
-                                  color: ColorConstants
-                                      .primaryColorDriver,
-                                  child: Padding(
-                                    padding:
-                                    const Pad(all: 20),
-                                    child: Center(
-                                      child: ref.watch(
-                                          paotiImage) !=
-                                          null
-                                          ? Stack(
-                                        children: [
-                                          Image.file(ref
-                                              .watch(
-                                              paotiImage) ??
-                                              File('')),
-                                          Container(
-                                            decoration: BoxDecoration(
-                                                color: Colors
-                                                    .black
-                                                    .withOpacity(
-                                                    0.6),
-                                                shape: BoxShape
-                                                    .circle),
-                                            child: IconButton(
-                                                onPressed: () {
-                                                  ref.invalidate(
-                                                      paotiImage);
-                                                },
-                                                icon: const Icon(
-                                                  Icons
-                                                      .close,
-                                                  color:
-                                                  Colors.white,
-                                                )),
-                                          )
-                                        ],
-                                      )
-                                          : InkWell(
-                                        child: ColumnSuper(
-                                            children: [
-                                              Icon(
-                                                Icons
-                                                    .cloud_upload,
-                                                color: ColorConstants
-                                                    .primaryColorDriver,
-                                              ),
-                                              SizedBox(
-                                                height:
-                                                5,
-                                              ),
-                                              Text(
-                                                "selectPaotiImage"
-                                                    .tr(),
-                                                textAlign:
-                                                TextAlign.center,
-                                                style: TextStyle(
-                                                    color:
-                                                    ColorConstants.primaryColorDriver,
-                                                    fontWeight: FontWeight.bold,
-                                                    fontSize: Adaptive.sp(16)),
-                                              ),
-                                              SizedBox(
-                                                height:
-                                                5,
-                                              ),
-                                              Text(
-                                                "uploadDocumentImage"
-                                                    .tr(),
-                                                textAlign:
-                                                TextAlign.center,
-                                                style: TextStyle(
-                                                    color:
-                                                    ColorConstants.primaryColorDriver,
-                                                    fontWeight: FontWeight.w700,
-                                                    fontSize: Adaptive.sp(13)),
-                                              )
-                                            ]),
-                                        onTap:
-                                            () async {
-                                          imagePicker
-                                              .pickImage(
-                                              source: ImageSource
-                                                  .camera)
-                                              .then(
-                                                  (file) {
-                                                if (file !=
-                                                    null) {
-                                                  ref.watch(paotiImage.notifier).state =
-                                                      File(file
-                                                          .path);
-                                                }
-                                              });
-                                        },
-                                      ),
-                                    ),
-                                  )),
                               AnimatedButton(
                                 height: 35,
-                                color: ColorConstants
-                                    .primaryColorDriver,
-                                width: MediaQuery.of(context)
-                                    .size
-                                    .width /
-                                    1.2,
+                                color: ColorConstants.primaryColorWSP,
+                                width: MediaQuery.of(context).size.width / 1.2,
                                 isOutline: true,
                                 isMultiColor: true,
-                                colors: [
-                                  ColorConstants
-                                      .primaryColorDriver,
-                                  ColorConstants
-                                      .primaryColorDriver,
+                                colors: const [
+                                  ColorConstants.primaryColorWSP,
+                                  ColorConstants.primaryColorWSP,
                                 ],
                                 borderWidth: 1,
-                                child: Text(
-                                  "submit".tr(),
-                                ),
                                 onTap: () async {
-                                  if (form.currentState!
-                                      .validate()) {
-                                    if (ref.watch(
-                                        kantaImage) ==
-                                        null) {
-                                      errorToast(context,
-                                          "kantaImage".tr());
-                                    }
-                                    if (ref.watch(
-                                        qualityImage) ==
-                                        null) {
-                                      errorToast(
-                                          context,
-                                          'selectQualityImage'
-                                              .tr());
-                                    } else {
-                                      final bytes = File(ref
-                                          .watch(
-                                          kantaImage)
-                                          ?.path ??
-                                          "")
-                                          .readAsBytesSync();
-                                      String img64 =
-                                      base64Encode(bytes);
-
-                                      final bytes2 = File(ref
-                                          .watch(
-                                          qualityImage)
-                                          ?.path ??
-                                          "")
-                                          .readAsBytesSync();
-                                      String img642 =
-                                      base64Encode(bytes);
-                                      ref
-                                          .watch(endTripProvider(
-                                          tripRequestId:
-                                          '${dataList?.id ?? 0}',
-                                          kantaWeight:
-                                          '${weightController.text.toString()}',
-                                          bags:
-                                          "${bagsController.text.toString()}",
-                                          kantaImage:
-                                          img64,
-                                          qualityImage:
-                                          img642,
-                                          paotiNumber:
-                                          paotiController
-                                              .text,
-                                          paotiImage: base64Encode(File(
-                                              ref.watch(paotiImage)?.path ??
-                                                  "")
-                                              .readAsBytesSync()))
-                                          .future)
-                                          .then((value) {
-                                        if (value['status']
-                                            .toString() ==
-                                            "1") {
-                                          ref.invalidate(
-                                              tripsListProvider);
-                                          ref.invalidate(
-                                              kantaImage);
-                                          ref.invalidate(
-                                              qualityImage);
-                                          bagsController
-                                              .clear();
-                                          weightController
-                                              .clear();
-                                          ref
-                                              .watch(
-                                              goRouterProvider)
-                                              .pop(context);
-                                        }
-                                      });
-                                    }
+                                  if (ref.watch(truckProvider) == null) {
+                                    errorToast(context, 'selectTruck'.tr());
+                                  }
+                                  if (ref.watch(driverProvider) == null) {
+                                    errorToast(context, 'selectDriver'.tr());
+                                  } else {
+                                    ref
+                                        .watch(updateTruckDriverProvider(
+                                                driverId:
+                                                    "${ref.watch(driverProvider)?.id ?? 0}",
+                                                truckId:
+                                                    "${ref.watch(truckProvider)?.id ?? 0}",
+                                                tripRequestId: "${dataList.id}")
+                                            .future)
+                                        .then((value) {
+                                      if (value['status'].toString() == "1") {
+                                        ref.invalidate(tripsListProvider);
+                                        ref
+                                            .watch(goRouterProvider)
+                                            .pop(modalContext);
+                                      }
+                                    });
                                   }
                                 },
+                                child: Text(
+                                  "submit".tr(),
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                      color: Colors.white,
+                                      fontSize: Adaptive.sp(14),
+                                      fontWeight: FontWeight.w800),
+                                ),
                               )
-                            ],
-                          )),
-                    ))));
-      },
-      child: Text(
-        "endTrip".tr(),
-        textAlign: TextAlign.center,
-        style: TextStyle(
-            color: Colors.white,
-            fontSize: Adaptive.sp(14),
-            fontWeight: FontWeight.w800),
-      ),
-    )
-        : dataList.tripEnd != null && dataList.tripStart != null
-        ? Text(
-      "completed".tr(),
-      textAlign: TextAlign.center,
-      style: TextStyle(
-          color: ColorConstants.primaryColorDriver,
-          fontSize: Adaptive.sp(14),
-          fontWeight: FontWeight.w800),
-    )
-        : Text(
-      "processing".tr(),
-      textAlign: TextAlign.center,
-      style: TextStyle(
-          color: ColorConstants.primaryColorDriver,
-          fontSize: Adaptive.sp(14),
-          fontWeight: FontWeight.w800),
-    );
-  }
+                            ]),
+                          ))));
+            },
+            child: Text(
+              "${"selectTruck".tr()} / ${'selectDriver'.tr()}",
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                  color: Colors.white,
+                  fontSize: Adaptive.sp(14),
+                  fontWeight: FontWeight.w800),
+            ),
+          )
+        : dataList.weight != null && dataList.tripStart == null
+            ? AnimatedButton(
+                height: 35,
+                color: ColorConstants.primaryColorWSP,
+                width: MediaQuery.of(context).size.width / 1.2,
+                isOutline: true,
+                isMultiColor: true,
+                colors: const [
+                  ColorConstants.secondaryColorWSP,
+                  ColorConstants.secondaryColorWSP,
+                ],
+                borderWidth: 1,
+                onTap: () async {
+                  ref
+                      .watch(startTripProvider(tripRequestId: "${dataList.id}")
+                          .future)
+                      .then((value) {
+                    if (value['status'].toString() == "1") {
+                      ref.invalidate(tripsListProvider);
+                    }
+                  });
+                },
+                child: Text(
+                  "startTrip".tr(),
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                      color: Colors.white,
+                      fontSize: Adaptive.sp(14),
+                      fontWeight: FontWeight.w800),
+                ),
+              )
+            : dataList.paymentTo.toString() == "1" &&
+                    dataList.tripStart != null &&
+                    dataList.tripEnd == null
+                ? Text(
+                    "End Trip pending from driver".tr(),
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                        color: ColorConstants.primaryColorDriver,
+                        fontSize: Adaptive.sp(14),
+                        fontWeight: FontWeight.w800),
+                  )
+                : dataList.weight != null &&
+                        dataList.tripStart != null &&
+                        dataList.tripEnd == null
+                    ? AnimatedButton(
+                        height: 35,
+                        color: ColorConstants.primaryColorWSP,
+                        width: MediaQuery.of(context).size.width / 1.2,
+                        isOutline: true,
+                        isMultiColor: true,
+                        colors: const [
+                          ColorConstants.primaryColorDriver,
+                          ColorConstants.primaryColorDriver,
+                        ],
+                        borderWidth: 1,
+                        onTap: () async {
+                          showBarModalBottomSheet(
+                              context: context,
+                              builder: (context) => Consumer(
+                                  builder: (context, ref, child) => SafeArea(
+                                          child: Padding(
+                                        padding: const Pad(all: 10),
+                                        child: Form(
+                                            key: form,
+                                            child: ListView(
+                                              children: [
+                                                TextFormField(
+                                                  controller: bagsController,
+                                                  keyboardType:
+                                                      TextInputType.text,
+                                                  validator: (value) {
+                                                    if (value == null ||
+                                                        value.isEmpty) {
+                                                      return 'inputBags'.tr();
+                                                    }
+                                                    return null;
+                                                  },
+                                                  decoration: InputDecoration(
+                                                      label: Text(
+                                                          'inputBags'.tr()),
+                                                      contentPadding: const Pad(
+                                                          top: 0,
+                                                          bottom: 0,
+                                                          left: 10),
+                                                      border:
+                                                          OutlineInputBorder(
+                                                              borderRadius:
+                                                                  BorderRadius
+                                                                      .circular(
+                                                                          10)),
+                                                      enabledBorder:
+                                                          OutlineInputBorder(
+                                                              borderRadius:
+                                                                  BorderRadius
+                                                                      .circular(
+                                                                          10))),
+                                                ),
+                                                const SizedBox(
+                                                  height: 10,
+                                                ),
+                                                TextFormField(
+                                                  controller: weightController,
+                                                  keyboardType:
+                                                      TextInputType.text,
+                                                  validator: (value) {
+                                                    if (value == null ||
+                                                        value.isEmpty) {
+                                                      return 'enterRecevingBags'
+                                                          .tr();
+                                                    }
+                                                    return null;
+                                                  },
+                                                  decoration: InputDecoration(
+                                                      label: Text(
+                                                          'recievingWeight'
+                                                              .tr()),
+                                                      contentPadding: const Pad(
+                                                          top: 0,
+                                                          bottom: 0,
+                                                          left: 10),
+                                                      border:
+                                                          OutlineInputBorder(
+                                                              borderRadius:
+                                                                  BorderRadius
+                                                                      .circular(
+                                                                          10)),
+                                                      enabledBorder:
+                                                          OutlineInputBorder(
+                                                              borderRadius:
+                                                                  BorderRadius
+                                                                      .circular(
+                                                                          10))),
+                                                ),
+                                                const SizedBox(
+                                                  height: 10,
+                                                ),
+                                                TextFormField(
+                                                  controller: paotiController,
+                                                  keyboardType:
+                                                      TextInputType.text,
+                                                  decoration: InputDecoration(
+                                                      label: Text(
+                                                          'enterPaotiNumber'
+                                                              .tr()),
+                                                      contentPadding: const Pad(
+                                                          top: 0,
+                                                          bottom: 0,
+                                                          left: 10),
+                                                      border:
+                                                          OutlineInputBorder(
+                                                              borderRadius:
+                                                                  BorderRadius
+                                                                      .circular(
+                                                                          10)),
+                                                      enabledBorder:
+                                                          OutlineInputBorder(
+                                                              borderRadius:
+                                                                  BorderRadius
+                                                                      .circular(
+                                                                          10))),
+                                                ),
+                                                const SizedBox(
+                                                  height: 10,
+                                                ),
+                                                DottedBorder(
+                                                    borderType:
+                                                        BorderType.RRect,
+                                                    dashPattern: const [
+                                                      5,
+                                                      5,
+                                                      5,
+                                                      5
+                                                    ],
+                                                    color: ColorConstants
+                                                        .primaryColorDriver,
+                                                    child: Padding(
+                                                      padding:
+                                                          const Pad(all: 20),
+                                                      child: Center(
+                                                        child: ref.watch(
+                                                                    kantaImage) !=
+                                                                null
+                                                            ? Stack(
+                                                                children: [
+                                                                  Image.file(ref
+                                                                          .watch(
+                                                                              kantaImage) ??
+                                                                      File('')),
+                                                                  Container(
+                                                                    decoration: BoxDecoration(
+                                                                        color: Colors
+                                                                            .black
+                                                                            .withOpacity(
+                                                                                0.6),
+                                                                        shape: BoxShape
+                                                                            .circle),
+                                                                    child: IconButton(
+                                                                        onPressed: () {
+                                                                          ref.invalidate(
+                                                                              kantaImage);
+                                                                        },
+                                                                        icon: const Icon(
+                                                                          Icons
+                                                                              .close,
+                                                                          color:
+                                                                              Colors.white,
+                                                                        )),
+                                                                  )
+                                                                ],
+                                                              )
+                                                            : InkWell(
+                                                                child: ColumnSuper(
+                                                                    children: [
+                                                                      const Icon(
+                                                                        Icons
+                                                                            .cloud_upload,
+                                                                        color: ColorConstants
+                                                                            .primaryColorDriver,
+                                                                      ),
+                                                                      const SizedBox(
+                                                                        height:
+                                                                            5,
+                                                                      ),
+                                                                      Text(
+                                                                        "selectKanta"
+                                                                            .tr(),
+                                                                        textAlign:
+                                                                            TextAlign.center,
+                                                                        style: TextStyle(
+                                                                            color:
+                                                                                ColorConstants.primaryColorDriver,
+                                                                            fontWeight: FontWeight.bold,
+                                                                            fontSize: Adaptive.sp(16)),
+                                                                      ),
+                                                                      const SizedBox(
+                                                                        height:
+                                                                            5,
+                                                                      ),
+                                                                      Text(
+                                                                        "uploadDocumentImage"
+                                                                            .tr(),
+                                                                        textAlign:
+                                                                            TextAlign.center,
+                                                                        style: TextStyle(
+                                                                            color:
+                                                                                ColorConstants.primaryColorDriver,
+                                                                            fontWeight: FontWeight.w700,
+                                                                            fontSize: Adaptive.sp(13)),
+                                                                      )
+                                                                    ]),
+                                                                onTap:
+                                                                    () async {
+                                                                  imagePicker
+                                                                      .pickImage(
+                                                                          source: ImageSource
+                                                                              .camera)
+                                                                      .then(
+                                                                          (file) {
+                                                                    if (file !=
+                                                                        null) {
+                                                                      ref.watch(kantaImage.notifier).state =
+                                                                          File(file
+                                                                              .path);
+                                                                    }
+                                                                  });
+                                                                },
+                                                              ),
+                                                      ),
+                                                    )),
+                                                const SizedBox(
+                                                  height: 10,
+                                                ),
+                                                DottedBorder(
+                                                    borderType:
+                                                        BorderType.RRect,
+                                                    dashPattern: const [
+                                                      5,
+                                                      5,
+                                                      5,
+                                                      5
+                                                    ],
+                                                    color: ColorConstants
+                                                        .primaryColorDriver,
+                                                    child: Padding(
+                                                      padding:
+                                                          const Pad(all: 20),
+                                                      child: Center(
+                                                        child: ref.watch(
+                                                                    qualityImage) !=
+                                                                null
+                                                            ? Stack(
+                                                                children: [
+                                                                  Image.file(ref
+                                                                          .watch(
+                                                                              qualityImage) ??
+                                                                      File('')),
+                                                                  Container(
+                                                                    decoration: BoxDecoration(
+                                                                        color: Colors
+                                                                            .black
+                                                                            .withOpacity(
+                                                                                0.6),
+                                                                        shape: BoxShape
+                                                                            .circle),
+                                                                    child: IconButton(
+                                                                        onPressed: () {
+                                                                          ref.invalidate(
+                                                                              qualityImage);
+                                                                        },
+                                                                        icon: const Icon(
+                                                                          Icons
+                                                                              .close,
+                                                                          color:
+                                                                              Colors.white,
+                                                                        )),
+                                                                  )
+                                                                ],
+                                                              )
+                                                            : InkWell(
+                                                                child: ColumnSuper(
+                                                                    children: [
+                                                                      const Icon(
+                                                                        Icons
+                                                                            .cloud_upload,
+                                                                        color: ColorConstants
+                                                                            .primaryColorDriver,
+                                                                      ),
+                                                                      const SizedBox(
+                                                                        height:
+                                                                            5,
+                                                                      ),
+                                                                      Text(
+                                                                        "selectQualityImage"
+                                                                            .tr(),
+                                                                        textAlign:
+                                                                            TextAlign.center,
+                                                                        style: TextStyle(
+                                                                            color:
+                                                                                ColorConstants.primaryColorDriver,
+                                                                            fontWeight: FontWeight.bold,
+                                                                            fontSize: Adaptive.sp(16)),
+                                                                      ),
+                                                                      const SizedBox(
+                                                                        height:
+                                                                            5,
+                                                                      ),
+                                                                      Text(
+                                                                        "uploadDocumentImage"
+                                                                            .tr(),
+                                                                        textAlign:
+                                                                            TextAlign.center,
+                                                                        style: TextStyle(
+                                                                            color:
+                                                                                ColorConstants.primaryColorDriver,
+                                                                            fontWeight: FontWeight.w700,
+                                                                            fontSize: Adaptive.sp(13)),
+                                                                      )
+                                                                    ]),
+                                                                onTap:
+                                                                    () async {
+                                                                  imagePicker
+                                                                      .pickImage(
+                                                                          source: ImageSource
+                                                                              .camera)
+                                                                      .then(
+                                                                          (file) {
+                                                                    if (file !=
+                                                                        null) {
+                                                                      ref.watch(qualityImage.notifier).state =
+                                                                          File(file
+                                                                              .path);
+                                                                    }
+                                                                  });
+                                                                },
+                                                              ),
+                                                      ),
+                                                    )),
+                                                const SizedBox(
+                                                  height: 10,
+                                                ),
+                                                DottedBorder(
+                                                    borderType:
+                                                        BorderType.RRect,
+                                                    dashPattern: const [
+                                                      5,
+                                                      5,
+                                                      5,
+                                                      5
+                                                    ],
+                                                    color: ColorConstants
+                                                        .primaryColorDriver,
+                                                    child: Padding(
+                                                      padding:
+                                                          const Pad(all: 20),
+                                                      child: Center(
+                                                        child: ref.watch(
+                                                                    paotiImage) !=
+                                                                null
+                                                            ? Stack(
+                                                                children: [
+                                                                  Image.file(ref
+                                                                          .watch(
+                                                                              paotiImage) ??
+                                                                      File('')),
+                                                                  Container(
+                                                                    decoration: BoxDecoration(
+                                                                        color: Colors
+                                                                            .black
+                                                                            .withOpacity(
+                                                                                0.6),
+                                                                        shape: BoxShape
+                                                                            .circle),
+                                                                    child: IconButton(
+                                                                        onPressed: () {
+                                                                          ref.invalidate(
+                                                                              paotiImage);
+                                                                        },
+                                                                        icon: const Icon(
+                                                                          Icons
+                                                                              .close,
+                                                                          color:
+                                                                              Colors.white,
+                                                                        )),
+                                                                  )
+                                                                ],
+                                                              )
+                                                            : InkWell(
+                                                                child: ColumnSuper(
+                                                                    children: [
+                                                                      const Icon(
+                                                                        Icons
+                                                                            .cloud_upload,
+                                                                        color: ColorConstants
+                                                                            .primaryColorDriver,
+                                                                      ),
+                                                                      const SizedBox(
+                                                                        height:
+                                                                            5,
+                                                                      ),
+                                                                      Text(
+                                                                        "selectPaotiImage"
+                                                                            .tr(),
+                                                                        textAlign:
+                                                                            TextAlign.center,
+                                                                        style: TextStyle(
+                                                                            color:
+                                                                                ColorConstants.primaryColorDriver,
+                                                                            fontWeight: FontWeight.bold,
+                                                                            fontSize: Adaptive.sp(16)),
+                                                                      ),
+                                                                      const SizedBox(
+                                                                        height:
+                                                                            5,
+                                                                      ),
+                                                                      Text(
+                                                                        "uploadDocumentImage"
+                                                                            .tr(),
+                                                                        textAlign:
+                                                                            TextAlign.center,
+                                                                        style: TextStyle(
+                                                                            color:
+                                                                                ColorConstants.primaryColorDriver,
+                                                                            fontWeight: FontWeight.w700,
+                                                                            fontSize: Adaptive.sp(13)),
+                                                                      )
+                                                                    ]),
+                                                                onTap:
+                                                                    () async {
+                                                                  imagePicker
+                                                                      .pickImage(
+                                                                          source: ImageSource
+                                                                              .camera)
+                                                                      .then(
+                                                                          (file) {
+                                                                    if (file !=
+                                                                        null) {
+                                                                      ref.watch(paotiImage.notifier).state =
+                                                                          File(file
+                                                                              .path);
+                                                                    }
+                                                                  });
+                                                                },
+                                                              ),
+                                                      ),
+                                                    )),
+                                                AnimatedButton(
+                                                  height: 35,
+                                                  color: ColorConstants
+                                                      .primaryColorDriver,
+                                                  width: MediaQuery.of(context)
+                                                          .size
+                                                          .width /
+                                                      1.2,
+                                                  isOutline: true,
+                                                  isMultiColor: true,
+                                                  colors: const [
+                                                    ColorConstants
+                                                        .primaryColorDriver,
+                                                    ColorConstants
+                                                        .primaryColorDriver,
+                                                  ],
+                                                  borderWidth: 1,
+                                                  child: Text(
+                                                    "submit".tr(),
+                                                  ),
+                                                  onTap: () async {
+                                                    if (form.currentState!
+                                                        .validate()) {
+                                                      if (ref.watch(
+                                                              kantaImage) ==
+                                                          null) {
+                                                        errorToast(context,
+                                                            "kantaImage".tr());
+                                                      }
+                                                      if (ref.watch(
+                                                              qualityImage) ==
+                                                          null) {
+                                                        errorToast(
+                                                            context,
+                                                            'selectQualityImage'
+                                                                .tr());
+                                                      } else {
+                                                        final bytes = File(ref
+                                                                    .watch(
+                                                                        kantaImage)
+                                                                    ?.path ??
+                                                                "")
+                                                            .readAsBytesSync();
+                                                        String img64 =
+                                                            base64Encode(bytes);
 
+                                                        final bytes2 = File(ref
+                                                                    .watch(
+                                                                        qualityImage)
+                                                                    ?.path ??
+                                                                "")
+                                                            .readAsBytesSync();
+                                                        String img642 =
+                                                            base64Encode(bytes);
+                                                        ref
+                                                            .watch(endTripProvider(
+                                                                    tripRequestId:
+                                                                        '${dataList.id ?? 0}',
+                                                                    kantaWeight:
+                                                                        weightController
+                                                                            .text
+                                                                            .toString(),
+                                                                    bags: bagsController
+                                                                        .text
+                                                                        .toString(),
+                                                                    kantaImage:
+                                                                        img64,
+                                                                    qualityImage:
+                                                                        img642,
+                                                                    paotiNumber:
+                                                                        paotiController
+                                                                            .text,
+                                                                    paotiImage: base64Encode(File(
+                                                                            ref.watch(paotiImage)?.path ??
+                                                                                "")
+                                                                        .readAsBytesSync()))
+                                                                .future)
+                                                            .then((value) {
+                                                          if (value['status']
+                                                                  .toString() ==
+                                                              "1") {
+                                                            ref.invalidate(
+                                                                tripsListProvider);
+                                                            ref.invalidate(
+                                                                kantaImage);
+                                                            ref.invalidate(
+                                                                qualityImage);
+                                                            bagsController
+                                                                .clear();
+                                                            weightController
+                                                                .clear();
+                                                            ref
+                                                                .watch(
+                                                                    goRouterProvider)
+                                                                .pop(context);
+                                                          }
+                                                        });
+                                                      }
+                                                    }
+                                                  },
+                                                )
+                                              ],
+                                            )),
+                                      ))));
+                        },
+                        child: Text(
+                          "endTrip".tr(),
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                              color: Colors.white,
+                              fontSize: Adaptive.sp(14),
+                              fontWeight: FontWeight.w800),
+                        ),
+                      )
+                    : dataList.tripEnd != null && dataList.tripStart != null
+                        ? Text(
+                            "completed".tr(),
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                                color: ColorConstants.primaryColorDriver,
+                                fontSize: Adaptive.sp(14),
+                                fontWeight: FontWeight.w800),
+                          )
+                        : Text(
+                            "processing".tr(),
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                                color: ColorConstants.primaryColorDriver,
+                                fontSize: Adaptive.sp(14),
+                                fontWeight: FontWeight.w800),
+                          );
+  }
 }

@@ -5,6 +5,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:go_router/go_router.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
 import 'package:transporter/Data/Model/BaseApiResponse.dart';
@@ -42,14 +43,18 @@ class _LoginscreenState extends ConsumerState<Loginscreen> {
                     mainAxisSize: MainAxisSize.max,
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Image.asset(
-                        'assets/logo.png',
-                        fit: BoxFit.contain,
+
+                    SvgPicture.asset(
+                    'assets/logo.svg',
+                    semanticsLabel: 'Dart Logo',
+                  ),
+                      const SizedBox(
+                        height: 20,
                       ),
                       Align(
                         alignment: Alignment.center,
                         child: Text(
-                          'transporterLogin'.tr(),
+                          'login'.tr(),
                           style: largeTitleTextStyle,
                         ),
                       ),

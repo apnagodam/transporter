@@ -51,7 +51,8 @@ void main() async {
         return ToastificationWrapper(
             child: EasyLocalization(
                 fallbackLocale: Locale('en', 'IN'),
-                startLocale: Locale(sharedPreferences.getString('language_code')??"en", 'IN'),
+                startLocale: Locale(
+                    sharedPreferences.getString('language_code') ?? "en", 'IN'),
                 supportedLocales: [Locale('en', 'IN'), Locale('en', 'IN')],
                 path: 'assets/translations',
                 child: MaterialApp(
@@ -78,22 +79,22 @@ class MyApp extends ConsumerWidget {
       locale: ref.watch(sharedUtilityProvider).getLocale(),
       title: 'transporter'.tr(),
       theme: ThemeData(
-          fontFamily: GoogleFonts.roboto().fontFamily,
-          colorScheme: ColorScheme.fromSeed(
-              seedColor: ColorConstants.primaryColorDriver),
-          useMaterial3: true,
-          scaffoldBackgroundColor: Colors.white,
-          appBarTheme: AppBarTheme(color: ColorConstants.primaryColorDriver,
-              centerTitle: true,
-              iconTheme: IconThemeData(color: Colors.white),
-              titleTextStyle: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  fontSize: Adaptive.sp(18),
-                  color: Colors.white)),
-
+        fontFamily: GoogleFonts.roboto().fontFamily,
+        colorScheme:
+            ColorScheme.fromSeed(seedColor: ColorConstants.primaryColorDriver),
+        useMaterial3: true,
+        scaffoldBackgroundColor: Colors.white,
+        appBarTheme: AppBarTheme(
+            color: ColorConstants.primaryColorDriver,
+            centerTitle: true,
+            iconTheme: IconThemeData(color: Colors.white),
+            titleTextStyle: TextStyle(
+                fontWeight: FontWeight.bold,
+                fontSize: Adaptive.sp(18),
+                color: Colors.white)),
         pageTransitionsTheme: const PageTransitionsTheme(
           builders: <TargetPlatform, PageTransitionsBuilder>{
-            TargetPlatform.android:CupertinoPageTransitionsBuilder(),
+            TargetPlatform.android: CupertinoPageTransitionsBuilder(),
             TargetPlatform.iOS: CupertinoPageTransitionsBuilder(),
             TargetPlatform.linux: CupertinoPageTransitionsBuilder(),
             TargetPlatform.macOS: CupertinoPageTransitionsBuilder(),

@@ -28,19 +28,21 @@ class Paotiendtrip extends ConsumerStatefulWidget {
   ConsumerState<Paotiendtrip> createState() => _PaotiendtripState();
 }
 
-final form = GlobalKey<FormState>();
-
-final bagsController = TextEditingController();
-final weightController = TextEditingController();
-final imagePicker = ImagePicker();
-var kantaImage = StateProvider<File?>((ref) => null);
-var qualityImage = StateProvider<File?>((ref) => null);
-final paotiController = TextEditingController();
-var paotiImage = StateProvider<File?>((ref) => null);
-var tripStatusProvider =
-    StateProvider<TripStatus>((ref) => TripStatus.accepted);
 
 class _PaotiendtripState extends ConsumerState<Paotiendtrip> {
+  final form = GlobalKey<FormState>();
+
+  final bagsController = TextEditingController();
+  final weightController = TextEditingController();
+  final imagePicker = ImagePicker();
+  var kantaImage = StateProvider<File?>((ref) => null);
+  var qualityImage = StateProvider<File?>((ref) => null);
+  final paotiController = TextEditingController();
+  var paotiImage = StateProvider<File?>((ref) => null);
+  var tripStatusProvider =
+  StateProvider<TripStatus>((ref) => TripStatus.accepted);
+
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -53,10 +55,10 @@ class _PaotiendtripState extends ConsumerState<Paotiendtrip> {
         padding: Pad(all: 10),
         child: Form(
             key: form,
-            child: ListView(
+            child: SingleChildScrollView(child: Column(
               children: [
                 Text(
-                  "Trip Status",
+                  "tripStatus".tr(),
                   style: TextStyle(
                       fontSize: Adaptive.sp(16),
                       fontWeight: FontWeight.bold,
@@ -125,7 +127,7 @@ class _PaotiendtripState extends ConsumerState<Paotiendtrip> {
                       title: Padding(
                         padding: const Pad(all: 10),
                         child: Text(
-                          'Select Trip Status'.tr(),
+                          'selectTripStatus'.tr(),
                           textAlign: TextAlign.center,
                           style: TextStyle(
                               fontSize: Adaptive.sp(16),
@@ -137,11 +139,11 @@ class _PaotiendtripState extends ConsumerState<Paotiendtrip> {
                   items: TripStatus.values ?? [],
                   itemAsString: (TripStatus? u) => u!.label,
                   onChanged: (TripStatus? data) =>
-                      ref.watch(tripStatusProvider.notifier).state = data!,
+                  ref.watch(tripStatusProvider.notifier).state = data!,
                   dropdownDecoratorProps: DropDownDecoratorProps(
                     dropdownSearchDecoration: InputDecoration(
                         contentPadding: Pad(left: 10, bottom: 5, top: 5),
-                        hintText: "Select Trip Status".tr(),
+                        hintText: "selectTripStatus".tr(),
                         border: OutlineInputBorder(
                             borderRadius: BorderRadius.all(Radius.circular(8)),
                             borderSide: BorderSide(
@@ -247,70 +249,70 @@ class _PaotiendtripState extends ConsumerState<Paotiendtrip> {
                               child: Center(
                                 child: ref.watch(kantaImage) != null
                                     ? Stack(
-                                        children: [
-                                          Image.file(ref.watch(kantaImage) ??
-                                              File('')),
-                                          Container(
-                                            decoration: BoxDecoration(
-                                                color: Colors.black
-                                                    .withOpacity(0.6),
-                                                shape: BoxShape.circle),
-                                            child: IconButton(
-                                                onPressed: () {
-                                                  ref.invalidate(kantaImage);
-                                                },
-                                                icon: const Icon(
-                                                  Icons.close,
-                                                  color: Colors.white,
-                                                )),
-                                          )
-                                        ],
-                                      )
+                                  children: [
+                                    Image.file(ref.watch(kantaImage) ??
+                                        File('')),
+                                    Container(
+                                      decoration: BoxDecoration(
+                                          color: Colors.black
+                                              .withOpacity(0.6),
+                                          shape: BoxShape.circle),
+                                      child: IconButton(
+                                          onPressed: () {
+                                            ref.invalidate(kantaImage);
+                                          },
+                                          icon: const Icon(
+                                            Icons.close,
+                                            color: Colors.white,
+                                          )),
+                                    )
+                                  ],
+                                )
                                     : InkWell(
-                                        child: ColumnSuper(children: [
-                                          Icon(
-                                            Icons.cloud_upload,
-                                            color: ColorConstants
-                                                .primaryColorDriver,
-                                          ),
-                                          SizedBox(
-                                            height: 5,
-                                          ),
-                                          Text(
-                                            "Select Kanta Image".tr(),
-                                            textAlign: TextAlign.center,
-                                            style: TextStyle(
-                                                color: ColorConstants
-                                                    .primaryColorDriver,
-                                                fontWeight: FontWeight.bold,
-                                                fontSize: Adaptive.sp(16)),
-                                          ),
-                                          SizedBox(
-                                            height: 5,
-                                          ),
-                                          Text(
-                                            "uploadDocumentImage".tr(),
-                                            textAlign: TextAlign.center,
-                                            style: TextStyle(
-                                                color: ColorConstants
-                                                    .primaryColorDriver,
-                                                fontWeight: FontWeight.w700,
-                                                fontSize: Adaptive.sp(13)),
-                                          )
-                                        ]),
-                                        onTap: () async {
-                                          imagePicker
-                                              .pickImage(
-                                                  source: ImageSource.camera)
-                                              .then((file) {
-                                            if (file != null) {
-                                              ref
-                                                  .watch(kantaImage.notifier)
-                                                  .state = File(file.path);
-                                            }
-                                          });
-                                        },
-                                      ),
+                                  child: ColumnSuper(children: [
+                                    Icon(
+                                      Icons.cloud_upload,
+                                      color: ColorConstants
+                                          .primaryColorDriver,
+                                    ),
+                                    SizedBox(
+                                      height: 5,
+                                    ),
+                                    Text(
+                                      "Select Kanta Image".tr(),
+                                      textAlign: TextAlign.center,
+                                      style: TextStyle(
+                                          color: ColorConstants
+                                              .primaryColorDriver,
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: Adaptive.sp(16)),
+                                    ),
+                                    SizedBox(
+                                      height: 5,
+                                    ),
+                                    Text(
+                                      "uploadDocumentImage".tr(),
+                                      textAlign: TextAlign.center,
+                                      style: TextStyle(
+                                          color: ColorConstants
+                                              .primaryColorDriver,
+                                          fontWeight: FontWeight.w700,
+                                          fontSize: Adaptive.sp(13)),
+                                    )
+                                  ]),
+                                  onTap: () async {
+                                    imagePicker
+                                        .pickImage(
+                                        source: ImageSource.camera)
+                                        .then((file) {
+                                      if (file != null) {
+                                        ref
+                                            .watch(kantaImage.notifier)
+                                            .state = File(file.path);
+                                      }
+                                    });
+                                  },
+                                ),
                               ),
                             ))),
                     SizedBox(
@@ -326,70 +328,70 @@ class _PaotiendtripState extends ConsumerState<Paotiendtrip> {
                               child: Center(
                                 child: ref.watch(qualityImage) != null
                                     ? Stack(
-                                        children: [
-                                          Image.file(ref.watch(qualityImage) ??
-                                              File('')),
-                                          Container(
-                                            decoration: BoxDecoration(
-                                                color: Colors.black
-                                                    .withOpacity(0.6),
-                                                shape: BoxShape.circle),
-                                            child: IconButton(
-                                                onPressed: () {
-                                                  ref.invalidate(qualityImage);
-                                                },
-                                                icon: const Icon(
-                                                  Icons.close,
-                                                  color: Colors.white,
-                                                )),
-                                          )
-                                        ],
-                                      )
+                                  children: [
+                                    Image.file(ref.watch(qualityImage) ??
+                                        File('')),
+                                    Container(
+                                      decoration: BoxDecoration(
+                                          color: Colors.black
+                                              .withOpacity(0.6),
+                                          shape: BoxShape.circle),
+                                      child: IconButton(
+                                          onPressed: () {
+                                            ref.invalidate(qualityImage);
+                                          },
+                                          icon: const Icon(
+                                            Icons.close,
+                                            color: Colors.white,
+                                          )),
+                                    )
+                                  ],
+                                )
                                     : InkWell(
-                                        child: ColumnSuper(children: [
-                                          Icon(
-                                            Icons.cloud_upload,
-                                            color: ColorConstants
-                                                .primaryColorDriver,
-                                          ),
-                                          SizedBox(
-                                            height: 5,
-                                          ),
-                                          Text(
-                                            "Quality Image ".tr(),
-                                            textAlign: TextAlign.center,
-                                            style: TextStyle(
-                                                color: ColorConstants
-                                                    .primaryColorDriver,
-                                                fontWeight: FontWeight.bold,
-                                                fontSize: Adaptive.sp(16)),
-                                          ),
-                                          SizedBox(
-                                            height: 5,
-                                          ),
-                                          Text(
-                                            "uploadDocumentImage".tr(),
-                                            textAlign: TextAlign.center,
-                                            style: TextStyle(
-                                                color: ColorConstants
-                                                    .primaryColorDriver,
-                                                fontWeight: FontWeight.w700,
-                                                fontSize: Adaptive.sp(13)),
-                                          )
-                                        ]),
-                                        onTap: () async {
-                                          imagePicker
-                                              .pickImage(
-                                                  source: ImageSource.camera)
-                                              .then((file) {
-                                            if (file != null) {
-                                              ref
-                                                  .watch(qualityImage.notifier)
-                                                  .state = File(file.path);
-                                            }
-                                          });
-                                        },
-                                      ),
+                                  child: ColumnSuper(children: [
+                                    Icon(
+                                      Icons.cloud_upload,
+                                      color: ColorConstants
+                                          .primaryColorDriver,
+                                    ),
+                                    SizedBox(
+                                      height: 5,
+                                    ),
+                                    Text(
+                                      "Quality Image ".tr(),
+                                      textAlign: TextAlign.center,
+                                      style: TextStyle(
+                                          color: ColorConstants
+                                              .primaryColorDriver,
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: Adaptive.sp(16)),
+                                    ),
+                                    SizedBox(
+                                      height: 5,
+                                    ),
+                                    Text(
+                                      "uploadDocumentImage".tr(),
+                                      textAlign: TextAlign.center,
+                                      style: TextStyle(
+                                          color: ColorConstants
+                                              .primaryColorDriver,
+                                          fontWeight: FontWeight.w700,
+                                          fontSize: Adaptive.sp(13)),
+                                    )
+                                  ]),
+                                  onTap: () async {
+                                    imagePicker
+                                        .pickImage(
+                                        source: ImageSource.camera)
+                                        .then((file) {
+                                      if (file != null) {
+                                        ref
+                                            .watch(qualityImage.notifier)
+                                            .state = File(file.path);
+                                      }
+                                    });
+                                  },
+                                ),
                               ),
                             ))),
                   ],
@@ -406,65 +408,65 @@ class _PaotiendtripState extends ConsumerState<Paotiendtrip> {
                       child: Center(
                         child: ref.watch(paotiImage) != null
                             ? Stack(
-                                children: [
-                                  Image.file(ref.watch(paotiImage) ?? File('')),
-                                  Container(
-                                    decoration: BoxDecoration(
-                                        color: Colors.black.withOpacity(0.6),
-                                        shape: BoxShape.circle),
-                                    child: IconButton(
-                                        onPressed: () {
-                                          ref.invalidate(paotiImage);
-                                        },
-                                        icon: const Icon(
-                                          Icons.close,
-                                          color: Colors.white,
-                                        )),
-                                  )
-                                ],
-                              )
+                          children: [
+                            Image.file(ref.watch(paotiImage) ?? File('')),
+                            Container(
+                              decoration: BoxDecoration(
+                                  color: Colors.black.withOpacity(0.6),
+                                  shape: BoxShape.circle),
+                              child: IconButton(
+                                  onPressed: () {
+                                    ref.invalidate(paotiImage);
+                                  },
+                                  icon: const Icon(
+                                    Icons.close,
+                                    color: Colors.white,
+                                  )),
+                            )
+                          ],
+                        )
                             : InkWell(
-                                child: ColumnSuper(children: [
-                                  Icon(
-                                    Icons.cloud_upload,
-                                    color: ColorConstants.primaryColorDriver,
-                                  ),
-                                  SizedBox(
-                                    height: 5,
-                                  ),
-                                  Text(
-                                    "selectPaotiImage".tr(),
-                                    textAlign: TextAlign.center,
-                                    style: TextStyle(
-                                        color:
-                                            ColorConstants.primaryColorDriver,
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: Adaptive.sp(16)),
-                                  ),
-                                  SizedBox(
-                                    height: 5,
-                                  ),
-                                  Text(
-                                    "uploadDocumentImage".tr(),
-                                    textAlign: TextAlign.center,
-                                    style: TextStyle(
-                                        color:
-                                            ColorConstants.primaryColorDriver,
-                                        fontWeight: FontWeight.w700,
-                                        fontSize: Adaptive.sp(13)),
-                                  )
-                                ]),
-                                onTap: () async {
-                                  imagePicker
-                                      .pickImage(source: ImageSource.camera)
-                                      .then((file) {
-                                    if (file != null) {
-                                      ref.watch(paotiImage.notifier).state =
-                                          File(file.path);
-                                    }
-                                  });
-                                },
-                              ),
+                          child: ColumnSuper(children: [
+                            Icon(
+                              Icons.cloud_upload,
+                              color: ColorConstants.primaryColorDriver,
+                            ),
+                            SizedBox(
+                              height: 5,
+                            ),
+                            Text(
+                              "selectPaotiImage".tr(),
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                  color:
+                                  ColorConstants.primaryColorDriver,
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: Adaptive.sp(16)),
+                            ),
+                            SizedBox(
+                              height: 5,
+                            ),
+                            Text(
+                              "uploadDocumentImage".tr(),
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                  color:
+                                  ColorConstants.primaryColorDriver,
+                                  fontWeight: FontWeight.w700,
+                                  fontSize: Adaptive.sp(13)),
+                            )
+                          ]),
+                          onTap: () async {
+                            imagePicker
+                                .pickImage(source: ImageSource.camera)
+                                .then((file) {
+                              if (file != null) {
+                                ref.watch(paotiImage.notifier).state =
+                                    File(file.path);
+                              }
+                            });
+                          },
+                        ),
                       ),
                     )),
                 SizedBox(
@@ -500,23 +502,23 @@ class _PaotiendtripState extends ConsumerState<Paotiendtrip> {
 
                         final bytes2 = File(ref.watch(qualityImage)?.path ?? "")
                             .readAsBytesSync();
-                        String img642 = base64Encode(bytes);
+                        String img642 = base64Encode(bytes2);
                         ref
                             .watch(endTripProvider(
-                                    tripRequestId:
-                                        '${widget.dataList?.id ?? 0}',
-                                    kantaWeight:
-                                        '${weightController.text.toString()}',
-                                    bags: "${bagsController.text.toString()}",
-                                    kantaImage: img64,
-                                    qualityImage: img642,
-                                    paotiNumber: paotiController.text,
-                                    paotiImage: base64Encode(
-                                        File(ref.watch(paotiImage)?.path ?? "")
-                                            .readAsBytesSync()),
-                                    tripStatus:
-                                        ref.watch(tripStatusProvider)?.type)
-                                .future)
+                            tripRequestId:
+                            '${widget.dataList?.id ?? 0}',
+                            kantaWeight:
+                            '${num.parse(weightController.text.toString())*100}',
+                            bags: "${bagsController.text.toString()}",
+                            kantaImage: img64,
+                            qualityImage: img642,
+                            paotiNumber: paotiController.text,
+                            paotiImage: base64Encode(
+                                File(ref.watch(paotiImage)?.path ?? "")
+                                    .readAsBytesSync()),
+                            tripStatus:
+                            ref.watch(tripStatusProvider)?.type)
+                            .future)
                             .then((value) {
                           if (value['status'].toString() == "1") {
                             successToast(OneContext().context!,
@@ -534,7 +536,7 @@ class _PaotiendtripState extends ConsumerState<Paotiendtrip> {
                   },
                 )
               ],
-            )),
+            ),)),
       )),
     );
   }
