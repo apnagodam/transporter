@@ -59,8 +59,8 @@
   "selectKanta": "Select Kanta",
 
   "selectQualityImage": "Select Quality Image",
-  "selectPaotiImage": "Select Paoti Image",
-  "enterPaotiNumber": "Enter Paoti Number",
+  "selectPaotiImage": "Select Paoti(GetPass) Image",
+  "enterPaotiNumber": "Enter Paoti(GetPass) Number",
 
 
   "tripEnd": "Trip End",
@@ -74,6 +74,7 @@
   "bankDetails": "Bank Details",
   "firmName": "Firm Name",
   "selectTruck": "Select Truck",
+  "selectNumber": "Truck Number",
   "selectDriver": "Select Driver",
   "driverName": "Driver Name",
   "driverPhone": "Driver Phone",
@@ -91,9 +92,13 @@
   "processing": "Processing",
   "changeLanguage": "Change Language",
   "tripStatus": "Trip Status",
-  "selectTripStatus": "Select Trip Status"
-
-
+  "selectTripStatus": "Select Trip Status",
+  "tripDetails":"Trip Details",
+  "PaotiImage":"Paoti(GetPass) Image",
+  "BiltyImage":"Bilty Image", 
+  "KantaImage":"Kanta Image",  
+  "Profile":"Profile",  
+  "":""
 
 
 }

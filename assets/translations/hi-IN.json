@@ -34,8 +34,8 @@
   "tripsInProcess": "ट्रिप्स इन प्रोसेस",
   "logout": "लॉग आउट",
   "tripId": "ट्रिप आईडी",
-  "from": "से",
-  "to": "को",
+  "from": "कहां से",
+  "to": "कहां  को",
   "customer": "ग्राहक",
   "customerPhone": "ग्राहक का फ़ोन",
   "ratePerQtl": "प्रति क्विंटल दर. (भाड़ा दर)",
@@ -84,6 +84,11 @@
   "processing": "प्रोसेसिंग",
   "changeLanguage": "भाषा बदलें",
   "tripStatus": "यात्रा स्थिति",
-  "selectTripStatus": "यात्रा स्थिति चुनें"
+  "selectTripStatus": "यात्रा स्थिति चुनें",
+
+"Profile":"प्रोफ़ाइल",
+"PersonalDetails":"पर्सनल डिटेल्स",
+"FirmName":"फर्म का नाम",
+"MobileNumber":"मोबाइल नंबर"
 
 }
