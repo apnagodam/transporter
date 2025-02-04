@@ -124,10 +124,10 @@ flutter:
         - asset: assets/fonts/Devlys.ttf
     - family: roboto
       fonts:
-        - asset: assets/fonts/Roboto-Regular.ttf 
+        - asset: assets/fonts/Roboto-Regular.ttf
     - family: krutidev
       fonts:
-        - asset: assets/fonts/KRDEV.ttf           
+        - asset: assets/fonts/KRDEV.ttf
   #   - family: Trajan Pro
   #     fonts:
   #       - asset: fonts/TrajanPro.ttf
@@ -189,7 +189,7 @@ flutter_native_splash:
   # Please visit https://developer.android.com/guide/topics/ui/splash-screen
   # Following are specific parameters for Android 12+.
   android_12:
-   image: assets/splash_logo.png
+    image: assets/splash_logo.png
 
   # The image parameter sets the splash screen icon image.  If this parameter is not specified,
   # the app's launcher icon will be used instead.
