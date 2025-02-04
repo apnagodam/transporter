@@ -2,6 +2,7 @@ import 'package:flutter/foundation.dart';
 import 'package:go_router/go_router.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:transporter/Data/Model/TripDataResponse.dart';
+import 'package:transporter/Presentation/Authentication/OnBordScreen.dart';
 import 'package:transporter/Presentation/Dashboard/Paoti/PaotiEndTrip.dart';
 import 'package:transporter/Presentation/Dashboard/TripsHistory.dart';
 import 'package:transporter/Presentation/Dashboard/TripsInProcess.dart';
@@ -25,7 +26,7 @@ GoRouter goRouter(GoRouterRef ref) {
       redirect: (context, state) {
         if (ref.watch(sharedUtilityProvider).getToken().isEmpty) {
           if (state.fullPath == RoutesStrings.dashboard)
-            return RoutesStrings.login;
+            return RoutesStrings.onBoarding;
           return null;
         }
       },
@@ -47,7 +48,6 @@ GoRouter goRouter(GoRouterRef ref) {
                   path: RoutesStrings.tripsInProcess,
                   name: RoutesStrings.tripsInProcess,
                   builder: (context, state) => const Tripsinprocess()),
-
               GoRoute(
                 path: RoutesStrings.paotiEndTrip,
                 name: RoutesStrings.paotiEndTrip,
@@ -66,6 +66,11 @@ GoRouter goRouter(GoRouterRef ref) {
                   name: RoutesStrings.endTrips,
                   builder: (context, state) => const Endtrips()),
             ]),
+        GoRoute(
+          path: RoutesStrings.onBoarding,
+          name: RoutesStrings.onBoarding,
+          builder: (context, state) => OnBordingScreen(),
+        ),
         GoRoute(
             path: RoutesStrings.login,
             name: RoutesStrings.login,

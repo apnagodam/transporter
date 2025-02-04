@@ -1,8 +1,9 @@
 class RoutesStrings {
   static const dashboard = '/';
+  static const onBoarding = '/onBoarding';
   static const login = '/login';
   static const verifyOtp = 'verifyOtp';
-  static const onBoarding = '/onBoarding';
+
   static const register = 'register';
 
   static const applyForLoan = 'applyForLoan';
@@ -10,9 +11,9 @@ class RoutesStrings {
   static const profile = 'profile';
   static const tripsHistory = 'tripsHistory';
   static const tripsInProcess = 'tripsInProcess';
-  static  const paotiEndTrip  = 'paotiEndTrip';
+  static const paotiEndTrip = 'paotiEndTrip';
   static const startTrips = 'startTrips';
-  static const endTrips ='endTrips';
+  static const endTrips = 'endTrips';
 
   static const sanctionedAmount = 'sanctionedAmount';
   static const addMoney = 'addMoney';
