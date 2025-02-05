@@ -22,10 +22,11 @@ class SharedUtility {
 
   final SharedPreferences sharedPreferences;
 
-  Locale getLocale()=>Locale(sharedPreferences.getString('language_code')??"hi","IN");
-  setLocale(String languageCode)=>sharedPreferences.setString('language_code',languageCode);
-
-      String getToken() {
+  Locale getLocale() =>
+      Locale(sharedPreferences.getString('language_code') ?? "hi", "IN");
+  setLocale(String languageCode) =>
+      sharedPreferences.setString('language_code', languageCode);
+  String getToken() {
     return sharedPreferences.getString('token') ?? "";
   }
 
@@ -36,7 +37,7 @@ class SharedUtility {
   UserDetails? getUser() {
     return sharedPreferences.get('user') != null
         ? UserDetails.fromMap(
-        jsonDecode(sharedPreferences.getString('user') ?? ""))
+            jsonDecode(sharedPreferences.getString('user') ?? ""))
         : null;
   }
 

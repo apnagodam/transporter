@@ -1,5 +1,4 @@
 import 'dart:io';
-
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -9,7 +8,6 @@ import 'package:one_context/one_context.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:toastification/toastification.dart';
-
 import 'Presentation/Preferences/SharedPrefs/SharedUtility.dart';
 import 'Presentation/Routes/routes.dart';
 import 'Presentation/Utils/color_constants.dart';
@@ -23,17 +21,12 @@ void main() async {
     InAppUpdate.checkForUpdate().then((updateInfo) {
       if (updateInfo.updateAvailability == UpdateAvailability.updateAvailable) {
         if (updateInfo.immediateUpdateAllowed) {
-          // Perform immediate update
           InAppUpdate.performImmediateUpdate().then((appUpdateResult) {
-            if (appUpdateResult == AppUpdateResult.success) {
-              //App Update successful
-            }
+            if (appUpdateResult == AppUpdateResult.success) {}
           });
         } else if (updateInfo.flexibleUpdateAllowed) {
-          //Perform flexible update
           InAppUpdate.startFlexibleUpdate().then((appUpdateResult) {
             if (appUpdateResult == AppUpdateResult.success) {
-              //App Update successful
               InAppUpdate.completeFlexibleUpdate();
             }
           });
@@ -56,6 +49,7 @@ void main() async {
                 supportedLocales: [Locale('en', 'IN'), Locale('en', 'IN')],
                 path: 'assets/translations',
                 child: MaterialApp(
+                  debugShowCheckedModeBanner: false,
                   builder: OneContext().builder,
                   navigatorKey: OneContext().key,
                   home: const MyApp(),
@@ -68,7 +62,6 @@ void main() async {
 class MyApp extends ConsumerWidget {
   const MyApp({super.key});
 
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return MaterialApp.router(
