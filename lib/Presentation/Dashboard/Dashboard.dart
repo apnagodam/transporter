@@ -1,24 +1,26 @@
 import 'dart:io';
-
 import 'package:assorted_layout_widgets/assorted_layout_widgets.dart';
 import 'package:button_animations/button_animations.dart';
 import 'package:dropdown_search/dropdown_search.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:easy_pdf_viewer/easy_pdf_viewer.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:insta_image_viewer/insta_image_viewer.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:one_context/one_context.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
 import 'package:restart_app/restart_app.dart';
 import 'package:transporter/Data/Model/TruckDriverResponse.dart';
 import 'package:transporter/Domain/Trips/TripsService.dart';
 import 'package:transporter/Presentation/Routes/routes.dart';
 import 'package:transporter/Presentation/Utils/Widgets/Widgets.dart';
-
+import 'package:transporter/Presentation/Utils/height_wi.dart';
 import '../../Data/Model/TripDataResponse.dart';
 import '../Preferences/SharedPrefs/SharedUtility.dart';
 import '../Routes/routes_strings.dart';
@@ -40,266 +42,194 @@ class _DashboardState extends ConsumerState<Dashboard> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Dashboard'),
+        title: Text('Dashboard'.tr()),
       ),
       drawer: Drawer(
-        child: ListView(
-          children: [
-            InkWell(
-              child: Card(
-                color: Colors.white,
-                margin: Pad(all: 10),
-                elevation: 5,
+        child: Scaffold(
+          backgroundColor: ColorConstants.secondaryColor,
+          body: Column(
+            children: [
+              InkWell(
+                onTap: () {
+                  // context.goNamed(RoutesStrings.profile);
+                  ref.watch(goRouterProvider).goNamed(RoutesStrings.profile);
+                },
+                child: Container(
+                  padding: EdgeInsets.symmetric(horizontal: 10, vertical: 20),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      CircleAvatar(
+                        radius: 40,
+                        child: Icon(
+                          Icons.person,
+                          size: 40,
+                        ),
+                      ),
+                      Height10,
+                      RichText(
+                          text: TextSpan(
+                              text: '',
+                              style: GoogleFonts.aBeeZee(
+                                  fontSize: 14, fontWeight: FontWeight.w500),
+                              children: [
+                            TextSpan(
+                                text:
+                                    '${ref.watch(sharedUtilityProvider).getUser()?.name ?? ""}',
+                                style: GoogleFonts.aBeeZee(
+                                    fontSize: 14, fontWeight: FontWeight.w600))
+                          ])),
+                      RichText(
+                          text: TextSpan(
+                              text: '',
+                              style: GoogleFonts.aBeeZee(
+                                  fontSize: 13, fontWeight: FontWeight.w500),
+                              children: [
+                            TextSpan(
+                                text:
+                                    '${ref.watch(sharedUtilityProvider).getUser()?.phone ?? ""}',
+                                style: GoogleFonts.aBeeZee(
+                                    fontSize: 13, fontWeight: FontWeight.w600))
+                          ])),
+                      SizedBox(
+                        height: 20,
+                      ),
+                    ],
+                  ),
+                  width: double.infinity,
+                  decoration: BoxDecoration(
+                      borderRadius: BorderRadius.only(
+                        bottomRight: Radius.circular(40),
+                      ),
+                      color: ColorConstants.primaryColorVendor),
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.all(8.0),
                 child: Column(
                   children: [
+                    ListTile(
+                      title: Text(
+                        'Profile'.tr(),
+                        style: GoogleFonts.aBeeZee(
+                            color: ColorConstants.primaryColorDriver,
+                            fontWeight: FontWeight.w600,
+                            fontSize: Adaptive.sp(14)),
+                      ),
+                      leading: Icon(
+                        Icons.account_circle_outlined,
+                        color: ColorConstants.primaryColorDriver,
+                      ),
+                      onTap: () {
+                        context.goNamed(RoutesStrings.profile);
+                        // ref
+                        //     .watch(goRouterProvider)
+                        //     .goNamed(RoutesStrings.tripsHistory);
+                      },
+                    ),
+                    Divider(),
+                    ListTile(
+                      title: Text(
+                        'tripsHistory'.tr(),
+                        style: GoogleFonts.aBeeZee(
+                            fontWeight: FontWeight.w600,
+                            color: ColorConstants.primaryColorDriver,
+                            fontSize: Adaptive.sp(14)),
+                      ),
+                      leading: Image.asset(
+                        'assets/trip-history.png',
+                        width: 30,
+                        height: 30,
+                        // color: ColorConstants.primaryColorVendor,
+                      ),
+                      onTap: () {
+                        ref
+                            .watch(goRouterProvider)
+                            .goNamed(RoutesStrings.tripsHistory);
+                      },
+                    ),
+                    Divider(),
+                    ListTile(
+                      leading: Image.asset(
+                        'assets/trip-request-one.png',
+                        width: 30,
+                        height: 30,
+                      ),
+                      title: Text(
+                        'tripsInProcess'.tr(),
+                        style: GoogleFonts.aBeeZee(
+                            fontWeight: FontWeight.w600,
+                            color: ColorConstants.primaryColorDriver,
+                            fontSize: Adaptive.sp(14)),
+                      ),
+                      onTap: () {
+                        ref
+                            .watch(goRouterProvider)
+                            .goNamed(RoutesStrings.tripsInProcess);
+                      },
+                    ),
+                    Divider(),
+                    ListTile(
+                      leading: Icon(
+                        Icons.language,
+                        color: ColorConstants.primaryColorDriver,
+                      ),
+                      title: Text(
+                        'changeLanguage'.tr(),
+                        style: GoogleFonts.aBeeZee(
+                            fontWeight: FontWeight.w600,
+                            color: ColorConstants.primaryColorDriver,
+                            fontSize: Adaptive.sp(14)),
+                      ),
+                      onTap: () {
+                        if (ref.watch(sharedUtilityProvider).getLocale() ==
+                            Locale('hi', 'IN')) {
+                          ref.watch(sharedUtilityProvider).setLocale("en");
+                        } else {
+                          ref.watch(sharedUtilityProvider).setLocale("hi");
+                        }
+                        Restart.restartApp().then((value) {
+                          setState(() {});
+                        });
+                      },
+                    ),
                     SizedBox(
                       height: 10,
                     ),
-                    CircleAvatar(
-                      foregroundImage: NetworkImage(ref
-                              .watch(sharedUtilityProvider)
-                              .getUser()
-                              ?.chequeImage ??
-                          ""),
-                      radius: 50,
-                    ),
-                    CupertinoActionSheetAction(
-                        onPressed: () {
-                          context.goNamed(RoutesStrings.profile);
-                        },
-                        child: RowSuper(
-                          alignment: Alignment.centerLeft,
-                          children: [
-                            SizedBox(
-                              width: 10,
-                            ),
-                            Text(
-                              '${ref.watch(sharedUtilityProvider).getUser()?.name ?? ""}',
-                              style: TextStyle(
-                                  fontSize: Adaptive.sp(16),
-                                  color: Colors.black,
-                                  fontWeight: FontWeight.w700),
-                            )
-                          ],
-                        )),
                   ],
                 ),
-              ),
-              onTap: () {
-                ref.watch(goRouterProvider).goNamed(RoutesStrings.profile);
-              },
-            ),
-            Card(
-              color: Colors.white,
-              margin: Pad(all: 10),
-              elevation: 5,
-              child: Column(
-                children: [
-                  ListTile(
-                    title: Text(
-                      'tripsHistory'.tr(),
-                      style: TextStyle(
-                          fontWeight: FontWeight.w600,
-                          fontSize: Adaptive.sp(16)),
-                    ),
-                    leading: Image.network('https://static-00.iconduck.com/assets.00/delivery-car-icon-512x423-t7gs5e74.png',width: 25,height: 25,),
-                    onTap: () {
-                      ref
-                          .watch(goRouterProvider)
-                          .goNamed(RoutesStrings.tripsHistory);
-                    },
+              )
+            ],
+          ),
+          bottomSheet: InkWell(
+            onTap: () async {
+              ref.watch(sharedPreferencesProvider).clear();
+              context.go(RoutesStrings.login);
+            },
+            child: Container(
+              height: 40,
+              decoration: BoxDecoration(
+                  borderRadius: BorderRadius.only(
+                    topLeft: Radius.circular(25),
                   ),
-                  Divider(),
-                  ListTile(
-                    leading: Image.network('https://banner2.cleanpng.com/20181207/psa/kisspng-clip-art-vector-graphics-computer-icons-illustrati-kalyan-profi-shop-1713912417297.webp',width: 30,height: 30,),
-
-                    title: Text(
-                      'tripsInProcess'.tr(),
-                      style: TextStyle(
-                          fontWeight: FontWeight.w600,
-                          fontSize: Adaptive.sp(16)),
-                    ),
-                    onTap: () {
-                      ref
-                          .watch(goRouterProvider)
-                          .goNamed(RoutesStrings.tripsInProcess);
-                    },
+                  color: ColorConstants.primaryColorVendor
+                  // gradient: LinearGradient(colors: [
+                  //   ColorConstation.secondaryColorWSP,
+                  //   Colors.green,
+                  // ])
                   ),
-                  Divider(),
-                  ListTile(
-                    title: Text(
-                      'changeLanguage'.tr(),
-                      style: TextStyle(
-                          fontWeight: FontWeight.w600,
-                          fontSize: Adaptive.sp(16)),
-                    ),
-                    onTap: () {
-                      if (ref.watch(sharedUtilityProvider).getLocale() ==
-                          Locale('hi', 'IN')) {
-                        ref.watch(sharedUtilityProvider).setLocale("en");
-                      } else {
-                        ref.watch(sharedUtilityProvider).setLocale("hi");
-                      }
-                      Restart.restartApp().then((value) {
-                        setState(() {});
-                      });
-                    },
-                  ),
-                ],
+              child: Center(
+                child: Text(
+                  'Logout'.tr(),
+                  style: GoogleFonts.aBeeZee(
+                      color: ColorConstants.secondaryColor,
+                      fontWeight: FontWeight.w600,
+                      fontSize: 17),
+                ),
               ),
             ),
-
-            // CupertinoActionSheet(
-            //   actions: [
-            //     // CupertinoActionSheetAction(
-            //     //     onPressed: () async {
-            //     //       ref
-            //     //           .watch(createGoodsTaxInvoiceProvider(context: context)
-            //     //               .future)
-            //     //           .then((value) async {
-            //     //         if (value != null) {
-            //     //           await value
-            //     //               .copy('/storage/emulated/0/Download/bilty.pdf');
-            //     //           PDFDocument doc =
-            //     //               await PDFDocument.fromFile(value ?? File(''));
-            //     //           showBarModalBottomSheet(
-            //     //               context: context,
-            //     //               builder: (context) => PDFViewer(document: doc));
-            //     //         }
-            //     //       });
-            //     //       //context.goNamed(RoutesStrings.profile);
-            //     //     },
-            //     //     child: Text('Goods Invoice',
-            //     //         textAlign: TextAlign.start,
-            //     //         style: TextStyle(
-            //     //             fontSize: Adaptive.sp(16),
-            //     //             color: Colors.black,
-            //     //             fontWeight: FontWeight.w500))),
-            //     // CupertinoActionSheetAction(
-            //     //     onPressed: () async {
-            //     //       ref
-            //     //           .watch(
-            //     //               createFreightPdfProvider(context: context).future)
-            //     //           .then((value) async {
-            //     //         if (value != null) {
-            //     //           await value
-            //     //               .copy('/storage/emulated/0/Download/bilty.pdf');
-            //     //           PDFDocument doc =
-            //     //               await PDFDocument.fromFile(value ?? File(''));
-            //     //           showBarModalBottomSheet(
-            //     //               context: context,
-            //     //               builder: (context) => PDFViewer(document: doc));
-            //     //         }
-            //     //       });
-            //     //       //context.goNamed(RoutesStrings.profile);
-            //     //     },
-            //     //     child: Text('Freight Invoice',
-            //     //         textAlign: TextAlign.start,
-            //     //         style: TextStyle(
-            //     //             fontSize: Adaptive.sp(16),
-            //     //             color: Colors.black,
-            //     //             fontWeight: FontWeight.w500))),
-            //     // CupertinoActionSheetAction(
-            //     //     onPressed: () async {
-            //     //       // ref
-            //     //       //     .watch(
-            //     //       //         createBiltyPdfProvider(context: context).future)
-            //     //       //     .then((value) async {
-            //     //       //   if (value != null) {
-            //     //       //     await value
-            //     //       //         .copy('/storage/emulated/0/Download/bilty.pdf');
-            //     //       //     PDFDocument doc =
-            //     //       //         await PDFDocument.fromFile(value ?? File(''));
-            //     //       //     showBarModalBottomSheet(
-            //     //       //         context: context,
-            //     //       //         builder: (context) => PDFViewer(document: doc));
-            //     //       //   }
-            //     //       // });
-            //     //       //context.goNamed(RoutesStrings.profile);
-            //     //     },
-            //     //     child: Text('Bilty',
-            //     //         textAlign: TextAlign.start,
-            //     //         style: TextStyle(
-            //     //             fontSize: Adaptive.sp(16),
-            //     //             color: Colors.black,
-            //     //             fontWeight: FontWeight.w500))),
-            //     CupertinoActionSheetAction(
-            //         onPressed: () {
-            //           context.goNamed(RoutesStrings.moneyRequests);
-            //           // if (ref
-            //           //         .watch(sharedUtilityProvider)
-            //           //         .getUser()
-            //           //         ?.tryPartyStatus !=
-            //           //     2) {
-            //           //   tripartyDialog(context, ref);
-            //           // } else {
-            //           //   context.goNamed(RoutesStrings.sanctionedAmount);
-            //           // }
-            //         },
-            //         child: Text('Add Money Requests',
-            //             textAlign: TextAlign.start,
-            //             style: TextStyle(
-            //                 fontSize: Adaptive.sp(16),
-            //                 color: Colors.black,
-            //                 fontWeight: FontWeight.w500))),
-            //     CupertinoActionSheetAction(
-            //         onPressed: () {
-            //           context.goNamed(RoutesStrings.withdrawMoney);
-            //           // if (ref
-            //           //         .watch(sharedUtilityProvider)
-            //           //         .getUser()
-            //           //         ?.tryPartyStatus !=
-            //           //     2) {
-            //           //   tripartyDialog(context, ref);
-            //           // } else {
-            //           //   context.goNamed(RoutesStrings.sanctionedAmount);
-            //           // }
-            //         },
-            //         child: Text('Withdraw Money',
-            //             textAlign: TextAlign.start,
-            //             style: TextStyle(
-            //                 fontSize: Adaptive.sp(16),
-            //                 color: Colors.black,
-            //                 fontWeight: FontWeight.w500))),
-            //     CupertinoActionSheetAction(
-            //         onPressed: () {
-            //           context.goNamed(RoutesStrings.withdrawRequests);
-            //           // if (ref
-            //           //         .watch(sharedUtilityProvider)
-            //           //         .getUser()
-            //           //         ?.tryPartyStatus !=
-            //           //     2) {
-            //           //   tripartyDialog(context, ref);
-            //           // } else {
-            //           //   context.goNamed(RoutesStrings.sanctionedAmount);
-            //           // }
-            //         },
-            //         child: Text('Withdraw Requests',
-            //             textAlign: TextAlign.start,
-            //             style: TextStyle(
-            //                 fontSize: Adaptive.sp(16),
-            //                 color: Colors.black,
-            //                 fontWeight: FontWeight.w500))),
-            //   ],
-            // ),
-
-            CupertinoActionSheet(
-              actions: [
-                CupertinoActionSheetAction(
-                    onPressed: () async {
-                      ref.watch(sharedPreferencesProvider).clear();
-                      context.go(RoutesStrings.login);
-                    },
-                    child: Text(
-                      'logout'.tr(),
-                      style: TextStyle(
-                          fontSize: Adaptive.sp(16),
-                          color: Colors.red,
-                          fontWeight: FontWeight.w700),
-                    )),
-              ],
-            )
-          ],
+          ),
         ),
       ),
       body: SafeArea(
@@ -318,19 +248,814 @@ class _DashboardState extends ConsumerState<Dashboard> {
                         Padding(
                           padding: Pad(all: 10),
                           child: Text(
-                            "Running Trip Ids",
+                            "Running Trip ID".tr() + " :-",
                             style: TextStyle(
-                                fontSize: Adaptive.sp(18),
+                                fontSize: Adaptive.sp(15),
+                                color: ColorConstants.primaryColorVendor,
                                 fontWeight: FontWeight.bold),
                           ),
                         ),
-                        ListView.builder(
-                            physics: const NeverScrollableScrollPhysics(),
-                            itemCount: dataList?.length,
-                            shrinkWrap: true,
-                            itemBuilder: (context, index) {
-                              return tripRequestLayout(dataList![index]);
-                            })
+                        Column(
+                          children: [
+                            Container(
+                              color: ColorConstants.primaryColorWSP,
+                              padding: const Pad(all: 10),
+                              child: IntrinsicHeight(
+                                child: Row(children: [
+                                  Expanded(
+                                      child: Text(
+                                    'Date'.tr(),
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        color: Colors.white,
+                                        fontSize: Adaptive.sp(14)),
+                                  )),
+                                  const VerticalDivider(),
+                                  Expanded(
+                                      child: Text(
+                                    'tripId'.tr(),
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        color: Colors.white,
+                                        fontSize: Adaptive.sp(14)),
+                                  )),
+                                  const VerticalDivider(),
+                                  Expanded(
+                                      child: Text(
+                                    'from'.tr(),
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        color: Colors.white,
+                                        fontSize: Adaptive.sp(14)),
+                                  )),
+                                  const VerticalDivider(),
+                                  Expanded(
+                                      child: Text(
+                                    'to'.tr(),
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        color: Colors.white,
+                                        fontSize: Adaptive.sp(14)),
+                                  )),
+                                  const VerticalDivider(),
+                                  Expanded(
+                                      child: Text(
+                                    "commodity".tr(),
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        color: Colors.white,
+                                        fontSize: Adaptive.sp(14)),
+                                  )),
+                                  const VerticalDivider(),
+                                  Expanded(
+                                      child: Text(
+                                    'action'.tr(),
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        color: Colors.white,
+                                        fontSize: Adaptive.sp(14)),
+                                  )),
+                                ]),
+                              ),
+                            ),
+                            ListView.builder(
+                              itemCount: dataList?.length,
+                              shrinkWrap: true,
+                              physics: NeverScrollableScrollPhysics(),
+                              itemBuilder: (context, index) => Container(
+                                color: index % 2 == 0
+                                    ? Colors.grey.withOpacity(0.2)
+                                    : Colors.white,
+                                padding: const Pad(all: 10),
+                                child: IntrinsicHeight(
+                                  child: Row(children: [
+                                    Expanded(
+                                        child: Text.rich(
+                                      TextSpan(
+                                        text:
+                                            "${dataList![index].tripDate ?? "--"}",
+                                        recognizer: TapGestureRecognizer()
+                                          ..onTap = () {
+                                            showCupertinoModalBottomSheet(
+                                                context: context,
+                                                builder: (context) => Material(
+                                                      color: Colors.white,
+                                                      child: Padding(
+                                                        padding: Pad(all: 10),
+                                                        child: Column(
+                                                          mainAxisSize:
+                                                              MainAxisSize.min,
+                                                          children: [
+                                                            Text(
+                                                              "Trip Details"
+                                                                  .tr(),
+                                                              style: TextStyle(
+                                                                  fontWeight:
+                                                                      FontWeight
+                                                                          .bold,
+                                                                  fontSize:
+                                                                      Adaptive.sp(
+                                                                          18),
+                                                                  color: ColorConstants
+                                                                      .primaryColorDriver),
+                                                            ),
+                                                            const SizedBox(
+                                                              height: 10,
+                                                            ),
+                                                            RowSuper(
+                                                                fill: true,
+                                                                children: [
+                                                                  Text(
+                                                                    'tripId'
+                                                                        .tr(),
+                                                                    textAlign:
+                                                                        TextAlign
+                                                                            .start,
+                                                                    style: TextStyle(
+                                                                        color: ColorConstants
+                                                                            .primaryColorWSP,
+                                                                        fontSize:
+                                                                            Adaptive.sp(
+                                                                                14),
+                                                                        fontWeight:
+                                                                            FontWeight.w800),
+                                                                  ),
+                                                                  Text(
+                                                                    '${dataList[index].tripId ?? "--"}',
+                                                                    textAlign:
+                                                                        TextAlign
+                                                                            .end,
+                                                                    style: TextStyle(
+                                                                        color: ColorConstants
+                                                                            .primaryColorWSP,
+                                                                        fontSize:
+                                                                            Adaptive.sp(
+                                                                                14),
+                                                                        fontWeight:
+                                                                            FontWeight.w800),
+                                                                  ),
+                                                                ]),
+                                                            const SizedBox(
+                                                              height: 10,
+                                                            ),
+                                                            RowSuper(
+                                                                fill: true,
+                                                                children: [
+                                                                  Text(
+                                                                    'Truck number'
+                                                                        .tr(),
+                                                                    textAlign:
+                                                                        TextAlign
+                                                                            .start,
+                                                                    style: TextStyle(
+                                                                        color: ColorConstants
+                                                                            .primaryColorWSP,
+                                                                        fontSize:
+                                                                            Adaptive.sp(
+                                                                                14),
+                                                                        fontWeight:
+                                                                            FontWeight.w800),
+                                                                  ),
+                                                                  Text(
+                                                                    '${dataList[index].truckNumber ?? "--"}',
+                                                                    textAlign:
+                                                                        TextAlign
+                                                                            .end,
+                                                                    style: TextStyle(
+                                                                        color: ColorConstants
+                                                                            .primaryColorWSP,
+                                                                        fontSize:
+                                                                            Adaptive.sp(
+                                                                                14),
+                                                                        fontWeight:
+                                                                            FontWeight.w800),
+                                                                  ),
+                                                                ]),
+                                                            const SizedBox(
+                                                              height: 10,
+                                                            ),
+                                                            RowSuper(
+                                                                fill: true,
+                                                                children: [
+                                                                  Text(
+                                                                    'Transporter Name'
+                                                                        .tr(),
+                                                                    textAlign:
+                                                                        TextAlign
+                                                                            .start,
+                                                                    style: TextStyle(
+                                                                        color: ColorConstants
+                                                                            .primaryColorWSP,
+                                                                        fontSize:
+                                                                            Adaptive.sp(
+                                                                                14),
+                                                                        fontWeight:
+                                                                            FontWeight.w800),
+                                                                  ),
+                                                                  Text(
+                                                                    '${dataList[index].transporterName ?? "--"}',
+                                                                    textAlign:
+                                                                        TextAlign
+                                                                            .end,
+                                                                    style: TextStyle(
+                                                                        color: ColorConstants
+                                                                            .primaryColorWSP,
+                                                                        fontSize:
+                                                                            Adaptive.sp(
+                                                                                14),
+                                                                        fontWeight:
+                                                                            FontWeight.w800),
+                                                                  ),
+                                                                ]),
+                                                            const SizedBox(
+                                                              height: 10,
+                                                            ),
+                                                            RowSuper(
+                                                                fill: true,
+                                                                children: [
+                                                                  Text(
+                                                                    'Transporter Number'
+                                                                        .tr(),
+                                                                    textAlign:
+                                                                        TextAlign
+                                                                            .start,
+                                                                    style: TextStyle(
+                                                                        color: ColorConstants
+                                                                            .primaryColorWSP,
+                                                                        fontSize:
+                                                                            Adaptive.sp(
+                                                                                14),
+                                                                        fontWeight:
+                                                                            FontWeight.w800),
+                                                                  ),
+                                                                  Text(
+                                                                    '${dataList[index].transporterPhone ?? "--"}',
+                                                                    textAlign:
+                                                                        TextAlign
+                                                                            .end,
+                                                                    style: TextStyle(
+                                                                        color: ColorConstants
+                                                                            .primaryColorWSP,
+                                                                        fontSize:
+                                                                            Adaptive.sp(
+                                                                                14),
+                                                                        fontWeight:
+                                                                            FontWeight.w800),
+                                                                  ),
+                                                                ]),
+                                                            const SizedBox(
+                                                              height: 10,
+                                                            ),
+                                                            RowSuper(
+                                                                fill: true,
+                                                                children: [
+                                                                  Text(
+                                                                    'driverName'
+                                                                        .tr(),
+                                                                    textAlign:
+                                                                        TextAlign
+                                                                            .start,
+                                                                    style: TextStyle(
+                                                                        color: ColorConstants
+                                                                            .primaryColorWSP,
+                                                                        fontSize:
+                                                                            Adaptive.sp(
+                                                                                14),
+                                                                        fontWeight:
+                                                                            FontWeight.w800),
+                                                                  ),
+                                                                  Text(
+                                                                    '${dataList[index].driverName ?? "--"}',
+                                                                    textAlign:
+                                                                        TextAlign
+                                                                            .end,
+                                                                    style: TextStyle(
+                                                                        color: ColorConstants
+                                                                            .primaryColorWSP,
+                                                                        fontSize:
+                                                                            Adaptive.sp(
+                                                                                14),
+                                                                        fontWeight:
+                                                                            FontWeight.w800),
+                                                                  ),
+                                                                ]),
+                                                            const SizedBox(
+                                                              height: 10,
+                                                            ),
+                                                            RowSuper(
+                                                                fill: true,
+                                                                children: [
+                                                                  Text(
+                                                                    'driverPhone'
+                                                                        .tr(),
+                                                                    textAlign:
+                                                                        TextAlign
+                                                                            .start,
+                                                                    style: TextStyle(
+                                                                        color: ColorConstants
+                                                                            .primaryColorWSP,
+                                                                        fontSize:
+                                                                            Adaptive.sp(
+                                                                                14),
+                                                                        fontWeight:
+                                                                            FontWeight.w800),
+                                                                  ),
+                                                                  Text(
+                                                                    '${dataList[index].driverPhone ?? "--"}',
+                                                                    textAlign:
+                                                                        TextAlign
+                                                                            .end,
+                                                                    style: TextStyle(
+                                                                        color: ColorConstants
+                                                                            .primaryColorWSP,
+                                                                        fontSize:
+                                                                            Adaptive.sp(
+                                                                                14),
+                                                                        fontWeight:
+                                                                            FontWeight.w800),
+                                                                  ),
+                                                                ]),
+                                                            const SizedBox(
+                                                              height: 10,
+                                                            ),
+                                                            RowSuper(
+                                                                fill: true,
+                                                                children: [
+                                                                  Text(
+                                                                    'customer'
+                                                                        .tr(),
+                                                                    textAlign:
+                                                                        TextAlign
+                                                                            .start,
+                                                                    style: TextStyle(
+                                                                        color: ColorConstants
+                                                                            .primaryColorWSP,
+                                                                        fontSize:
+                                                                            Adaptive.sp(
+                                                                                14),
+                                                                        fontWeight:
+                                                                            FontWeight.w800),
+                                                                  ),
+                                                                  Text.rich(
+                                                                      textAlign:
+                                                                          TextAlign
+                                                                              .end,
+                                                                      TextSpan(
+                                                                        text:
+                                                                            '${dataList[index].userName}',
+                                                                        style: TextStyle(
+                                                                            color:
+                                                                                ColorConstants.primaryColorWSP,
+                                                                            fontSize: Adaptive.sp(14),
+                                                                            fontWeight: FontWeight.w800),
+                                                                      )),
+                                                                ]),
+                                                            const SizedBox(
+                                                              height: 10,
+                                                            ),
+                                                            RowSuper(
+                                                                fill: true,
+                                                                alignment:
+                                                                    Alignment
+                                                                        .center,
+                                                                children: [
+                                                                  Text(
+                                                                    'customerPhone'
+                                                                        .tr(),
+                                                                    textAlign:
+                                                                        TextAlign
+                                                                            .start,
+                                                                    style: TextStyle(
+                                                                        color: ColorConstants
+                                                                            .primaryColorWSP,
+                                                                        fontSize:
+                                                                            Adaptive.sp(
+                                                                                14),
+                                                                        fontWeight:
+                                                                            FontWeight.w800),
+                                                                  ),
+                                                                  Text(
+                                                                    '${dataList[index].userPhone}',
+                                                                    textAlign:
+                                                                        TextAlign
+                                                                            .end,
+                                                                    style: TextStyle(
+                                                                        color: ColorConstants
+                                                                            .primaryColorWSP,
+                                                                        fontSize:
+                                                                            Adaptive.sp(
+                                                                                14),
+                                                                        fontWeight:
+                                                                            FontWeight.w800),
+                                                                  ),
+                                                                ]),
+                                                            const SizedBox(
+                                                              height: 10,
+                                                            ),
+                                                            RowSuper(
+                                                                fill: true,
+                                                                alignment:
+                                                                    Alignment
+                                                                        .center,
+                                                                children: [
+                                                                  Text(
+                                                                    'ratePerQtl'
+                                                                        .tr(),
+                                                                    textAlign:
+                                                                        TextAlign
+                                                                            .start,
+                                                                    style: TextStyle(
+                                                                        color: ColorConstants
+                                                                            .primaryColorWSP,
+                                                                        fontSize:
+                                                                            Adaptive.sp(
+                                                                                14),
+                                                                        fontWeight:
+                                                                            FontWeight.w800),
+                                                                  ),
+                                                                  Text(
+                                                                    '${currencyFormat.format(num.parse("${dataList[index].rate ?? 0}"))} / perQtl'
+                                                                        .tr(),
+                                                                    textAlign:
+                                                                        TextAlign
+                                                                            .end,
+                                                                    style: TextStyle(
+                                                                        color: ColorConstants
+                                                                            .primaryColorWSP,
+                                                                        fontSize:
+                                                                            Adaptive.sp(
+                                                                                14),
+                                                                        fontWeight:
+                                                                            FontWeight.w800),
+                                                                  ),
+                                                                ]),
+                                                            const SizedBox(
+                                                              height: 10,
+                                                            ),
+                                                            RowSuper(
+                                                                fill: true,
+                                                                alignment:
+                                                                    Alignment
+                                                                        .center,
+                                                                children: [
+                                                                  Text(
+                                                                    'finalWeight'
+                                                                        .tr(),
+                                                                    textAlign:
+                                                                        TextAlign
+                                                                            .start,
+                                                                    style: TextStyle(
+                                                                        color: ColorConstants
+                                                                            .primaryColorWSP,
+                                                                        fontSize:
+                                                                            Adaptive.sp(
+                                                                                14),
+                                                                        fontWeight:
+                                                                            FontWeight.w800),
+                                                                  ),
+                                                                  Text(
+                                                                    '${dataList[index].weight ?? "pending".tr()}',
+                                                                    textAlign:
+                                                                        TextAlign
+                                                                            .end,
+                                                                    style: TextStyle(
+                                                                        color: ColorConstants
+                                                                            .primaryColorWSP,
+                                                                        fontSize:
+                                                                            Adaptive.sp(
+                                                                                14),
+                                                                        fontWeight:
+                                                                            FontWeight.w800),
+                                                                  ),
+                                                                ]),
+                                                            const SizedBox(
+                                                              height: 10,
+                                                            ),
+                                                            RowSuper(
+                                                                fill: true,
+                                                                alignment:
+                                                                    Alignment
+                                                                        .center,
+                                                                children: [
+                                                                  Text(
+                                                                    'finalNoOfBags'
+                                                                        .tr(),
+                                                                    textAlign:
+                                                                        TextAlign
+                                                                            .start,
+                                                                    style: TextStyle(
+                                                                        color: ColorConstants
+                                                                            .primaryColorWSP,
+                                                                        fontSize:
+                                                                            Adaptive.sp(
+                                                                                14),
+                                                                        fontWeight:
+                                                                            FontWeight.w800),
+                                                                  ),
+                                                                  Text(
+                                                                    '${dataList[index].noOfBags ?? "pending".tr()}',
+                                                                    textAlign:
+                                                                        TextAlign
+                                                                            .end,
+                                                                    style: TextStyle(
+                                                                        color: ColorConstants
+                                                                            .primaryColorWSP,
+                                                                        fontSize:
+                                                                            Adaptive.sp(
+                                                                                14),
+                                                                        fontWeight:
+                                                                            FontWeight.w800),
+                                                                  ),
+                                                                ]),
+                                                            const SizedBox(
+                                                              height: 10,
+                                                            ),
+                                                            RowSuper(
+                                                                fill: true,
+                                                                alignment:
+                                                                    Alignment
+                                                                        .center,
+                                                                children: [
+                                                                  Text(
+                                                                    'receivingWeight'
+                                                                        .tr(),
+                                                                    textAlign:
+                                                                        TextAlign
+                                                                            .start,
+                                                                    style: TextStyle(
+                                                                        color: ColorConstants
+                                                                            .primaryColorWSP,
+                                                                        fontSize:
+                                                                            Adaptive.sp(
+                                                                                14),
+                                                                        fontWeight:
+                                                                            FontWeight.w800),
+                                                                  ),
+                                                                  Text(
+                                                                    '${dataList[index].recevingWeight ?? "pending".tr()}',
+                                                                    textAlign:
+                                                                        TextAlign
+                                                                            .end,
+                                                                    style: TextStyle(
+                                                                        color: ColorConstants
+                                                                            .primaryColorWSP,
+                                                                        fontSize:
+                                                                            Adaptive.sp(
+                                                                                14),
+                                                                        fontWeight:
+                                                                            FontWeight.w800),
+                                                                  ),
+                                                                ]),
+                                                            const SizedBox(
+                                                              height: 10,
+                                                            ),
+                                                            RowSuper(
+                                                                fill: true,
+                                                                alignment:
+                                                                    Alignment
+                                                                        .center,
+                                                                children: [
+                                                                  Text(
+                                                                    'receivingBags'
+                                                                        .tr(),
+                                                                    textAlign:
+                                                                        TextAlign
+                                                                            .start,
+                                                                    style: TextStyle(
+                                                                        color: ColorConstants
+                                                                            .primaryColorWSP,
+                                                                        fontSize:
+                                                                            Adaptive.sp(
+                                                                                14),
+                                                                        fontWeight:
+                                                                            FontWeight.w800),
+                                                                  ),
+                                                                  Text(
+                                                                    '${dataList[index].recevingBags ?? "pending".tr()}',
+                                                                    textAlign:
+                                                                        TextAlign
+                                                                            .end,
+                                                                    style: TextStyle(
+                                                                        color: ColorConstants
+                                                                            .primaryColorWSP,
+                                                                        fontSize:
+                                                                            Adaptive.sp(
+                                                                                14),
+                                                                        fontWeight:
+                                                                            FontWeight.w800),
+                                                                  ),
+                                                                ]),
+                                                            const SizedBox(
+                                                              height: 10,
+                                                            ),
+                                                            // RowSuper(
+                                                            //     fill: true,
+                                                            //     alignment:
+                                                            //         Alignment
+                                                            //             .center,
+                                                            //     children: [
+                                                            //       Text(
+                                                            //         '${dataList?[index].weight == null ? 'provBilty'.tr() : "provBilty".tr()}',
+                                                            //         textAlign:
+                                                            //             TextAlign
+                                                            //                 .start,
+                                                            //         style: TextStyle(
+                                                            //             color: ColorConstants
+                                                            //                 .primaryColorWSP,
+                                                            //             fontSize:
+                                                            //                 Adaptive.sp(
+                                                            //                     14),
+                                                            //             fontWeight:
+                                                            //                 FontWeight.w800),
+                                                            //       ),
+                                                            //       Align(
+                                                            //         alignment:
+                                                            //             Alignment
+                                                            //                 .centerRight,
+                                                            //         child:
+                                                            //             InkWell(
+                                                            //           onTap:
+                                                            //               () async {
+                                                            //             ref.watch(tripDataProvider(tripRequestid: "${dataList[index].id}").future).then(
+                                                            //                 (value) {
+                                                            //               ref.watch(createBiltyPdfProvider(context: context, model: value).future).then(
+                                                            //                   (value) async {
+                                                            //                 if (value !=
+                                                            //                     null) {
+                                                            //                   PDFDocument doc = await PDFDocument.fromFile(value ?? File(''));
+                                                            //                   showBarModalBottomSheet(context: context, builder: (context) => PDFViewer(document: doc));
+                                                            //                 }
+                                                            //               });
+                                                            //             });
+                                                            //           },
+                                                            //           child:
+                                                            //               Icon(
+                                                            //             CupertinoIcons
+                                                            //                 .eye,
+                                                            //             color: ColorConstants
+                                                            //                 .primaryColorWSP,
+                                                            //           ),
+                                                            //         ),
+                                                            //       )
+                                                            //     ]),
+                                                            RowSuper(
+                                                              fill: true,
+                                                              alignment:
+                                                                  Alignment
+                                                                      .center,
+                                                              children: [
+                                                                Text(
+                                                                  '${dataList?[index].weight == null ? 'provBilty'.tr() : "provBilty".tr()}',
+                                                                  textAlign:
+                                                                      TextAlign
+                                                                          .start,
+                                                                  style:
+                                                                      TextStyle(
+                                                                    color: ColorConstants
+                                                                        .primaryColorWSP,
+                                                                    fontSize:
+                                                                        Adaptive.sp(
+                                                                            14),
+                                                                    fontWeight:
+                                                                        FontWeight
+                                                                            .w800,
+                                                                  ),
+                                                                ),
+                                                                Align(
+                                                                  alignment:
+                                                                      Alignment
+                                                                          .centerRight,
+                                                                  child:
+                                                                      InkWell(
+                                                                    onTap:
+                                                                        () async {
+                                                                      ref
+                                                                          .watch(tripDataProvider(tripRequestid: "${dataList[index].id}")
+                                                                              .future)
+                                                                          .then(
+                                                                              (value) {
+                                                                        ref.watch(createBiltyPdfProvider(context: context, model: value).future).then(
+                                                                            (file) async {
+                                                                          if (file !=
+                                                                              null) {
+                                                                            if (await Permission.storage.request().isGranted) {
+                                                                              Directory? downloadsDirectory = Directory('/storage/emulated/0/Download');
+                                                                              if (await downloadsDirectory.exists()) {
+                                                                                String path = '${downloadsDirectory.path}/bilty_report.pdf';
+
+                                                                                await file.copy(path);
+
+                                                                                PDFDocument doc = await PDFDocument.fromFile(File(path));
+                                                                                showBarModalBottomSheet(
+                                                                                  context: context,
+                                                                                  builder: (context) => PDFViewer(document: doc),
+                                                                                );
+
+                                                                                ScaffoldMessenger.of(context).showSnackBar(
+                                                                                  SnackBar(content: Text('PDF saved at $path')),
+                                                                                );
+                                                                              }
+                                                                            } else {
+                                                                              ScaffoldMessenger.of(context).showSnackBar(
+                                                                                SnackBar(content: Text('Permission denied to access storage')),
+                                                                              );
+                                                                            }
+                                                                          }
+                                                                        });
+                                                                      });
+                                                                    },
+                                                                    child: Icon(
+                                                                      CupertinoIcons
+                                                                          .eye,
+                                                                      color: ColorConstants
+                                                                          .primaryColorWSP,
+                                                                    ),
+                                                                  ),
+                                                                ),
+                                                              ],
+                                                            ),
+                                                            const SizedBox(
+                                                              height: 10,
+                                                            ),
+                                                            imageLayout(
+                                                                dataList[
+                                                                    index]),
+                                                            Divider(
+                                                              height: 2,
+                                                            ),
+                                                          ],
+                                                        ),
+                                                      ),
+                                                    ));
+                                          },
+                                      ),
+                                      textAlign: TextAlign.center,
+                                      style: TextStyle(
+                                          decoration: TextDecoration.underline,
+                                          color:
+                                              ColorConstants.secondaryColorWSP,
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: Adaptive.sp(14)),
+                                    )),
+                                    const VerticalDivider(),
+                                    Expanded(
+                                        child: Text(
+                                      "${dataList?[index].tripId ?? ""}",
+                                      textAlign: TextAlign.center,
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                          color: Colors.black,
+                                          fontSize: Adaptive.sp(14)),
+                                    )),
+                                    const VerticalDivider(),
+                                    Expanded(
+                                        child: Text(
+                                      "${dataList?[index].fromAddress}",
+                                      textAlign: TextAlign.center,
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                          color: Colors.black,
+                                          fontSize: Adaptive.sp(14)),
+                                    )),
+                                    const VerticalDivider(),
+                                    Expanded(
+                                        child: Text.rich(
+                                      TextSpan(
+                                        text: "${dataList?[index].toAddress}",
+                                      ),
+                                      textAlign: TextAlign.center,
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: Adaptive.sp(14)),
+                                    )),
+                                    const VerticalDivider(),
+                                    Expanded(
+                                        child: Text.rich(
+                                      TextSpan(
+                                        text: "${dataList?[index].commodity}",
+                                      ),
+                                      textAlign: TextAlign.center,
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: Adaptive.sp(14)),
+                                    )),
+                                    const VerticalDivider(),
+                                    Expanded(
+                                      child: actionLayout(dataList![index]),
+                                    )
+                                  ]),
+                                ),
+                              ),
+                            ),
+                            Divider()
+                          ],
+                        )
                       ],
                     );
                   },
@@ -372,7 +1097,7 @@ class _DashboardState extends ConsumerState<Dashboard> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         TextOneLine(
-                          "Start Trips",
+                          "startTrip".tr(),
                           style: TextStyle(
                               fontWeight: FontWeight.bold,
                               color: Colors.white,
@@ -420,7 +1145,7 @@ class _DashboardState extends ConsumerState<Dashboard> {
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          TextOneLine("End Trips",
+                          TextOneLine("endTrip".tr(),
                               style: TextStyle(
                                   color: Colors.white,
                                   fontWeight: FontWeight.bold,
@@ -1366,17 +2091,26 @@ class _DashboardState extends ConsumerState<Dashboard> {
 
   actionLayout(Datum dataList) {
     return dataList.truckNumber == null && dataList.driverName == null
-        ? AnimatedButton(
-            height: 35,
-            color: ColorConstants.primaryColorWSP,
-            width: MediaQuery.of(context).size.width / 1.2,
-            isOutline: true,
-            isMultiColor: true,
-            colors: [
-              ColorConstants.primaryColorWSP,
-              ColorConstants.primaryColorWSP,
-            ],
-            borderWidth: 1,
+        ? InkWell(
+            child: Container(
+              padding: EdgeInsets.symmetric(horizontal: 3),
+              child: Center(
+                child: Text(
+                  "${"selectTruck".tr()} / ${'selectDriver'.tr()}",
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                      color: Colors.white,
+                      fontSize: Adaptive.sp(14),
+                      fontWeight: FontWeight.w800),
+                ),
+              ),
+              height: 35,
+              decoration: BoxDecoration(
+                  color: ColorConstants.primaryColorDriver,
+                  borderRadius: BorderRadius.circular(4)),
+            ),
             onTap: () async {
               ref
                   .watch(truckDriverProvider.future)
@@ -1447,27 +2181,183 @@ class _DashboardState extends ConsumerState<Dashboard> {
                             ]),
                           ))));
             },
-            child: Text(
-              "${"selectTruck".tr()} / ${'selectDriver'.tr()}",
-              textAlign: TextAlign.center,
-              style: TextStyle(
-                  color: Colors.white,
-                  fontSize: Adaptive.sp(14),
-                  fontWeight: FontWeight.w800),
-            ),
           )
+        //  ElevatedButton(
+        //     style: ElevatedButton.styleFrom(
+        //         backgroundColor: ColorConstants.primaryColorDriver),
+        //     onPressed: () {
+        //       ref
+        //           .watch(truckDriverProvider.future)
+        //           .then((truckData) => showBarModalBottomSheet(
+        //               context: context,
+        //               builder: (modalContext) => SafeArea(
+        //                       child: Padding(
+        //                     padding: Pad(all: 10),
+        //                     child: ColumnSuper(children: [
+        //                       truckSelection(
+        //                           ref, context, truckData.truckData ?? []),
+        //                       SizedBox(
+        //                         height: 10,
+        //                       ),
+        //                       driverSelection(
+        //                           ref, context, truckData.driverData ?? []),
+        //                       SizedBox(
+        //                         height: 10,
+        //                       ),
+        //                       AnimatedButton(
+        //                         height: 35,
+        //                         color: ColorConstants.primaryColorWSP,
+        //                         width: MediaQuery.of(context).size.width / 1.2,
+        //                         isOutline: true,
+        //                         isMultiColor: true,
+        //                         colors: [
+        //                           ColorConstants.primaryColorWSP,
+        //                           ColorConstants.primaryColorWSP,
+        //                         ],
+        //                         borderWidth: 1,
+        //                         onTap: () async {
+        //                           if (ref.watch(truckProvider) == null) {
+        //                             errorToast(context, 'selectTruck'.tr());
+        //                           }
+        //                           if (ref.watch(driverProvider) == null) {
+        //                             errorToast(context, 'selectDriver'.tr());
+        //                           } else {
+        //                             ref
+        //                                 .watch(updateTruckDriverProvider(
+        //                                         driverId:
+        //                                             "${ref.watch(driverProvider)?.id ?? 0}",
+        //                                         truckId:
+        //                                             "${ref.watch(truckProvider)?.id ?? 0}",
+        //                                         tripRequestId: "${dataList.id}")
+        //                                     .future)
+        //                                 .then((value) {
+        //                               if (value['status'].toString() == "1") {
+        //                                 successToast(OneContext().context!,
+        //                                     "${value['message'] ?? value['Message']}");
+
+        //                                 ref.invalidate(tripsListProvider);
+        //                                 ref
+        //                                     .watch(goRouterProvider)
+        //                                     .pop(modalContext);
+        //                               }
+        //                             });
+        //                           }
+        //                         },
+        //                         child: Text(
+        //                           "submit".tr(),
+        //                           textAlign: TextAlign.center,
+        //                           style: TextStyle(
+        //                               color: Colors.white,
+        //                               fontSize: Adaptive.sp(14),
+        //                               fontWeight: FontWeight.w800),
+        //                         ),
+        //                       )
+        //                     ]),
+        //                   ))));
+        //     },
+        // child: Text(
+        //   "${"selectTruck".tr()} / ${'selectDriver'.tr()}",
+        //   maxLines: 1,
+        //   overflow: TextOverflow.ellipsis,
+        //   textAlign: TextAlign.center,
+        //   style: TextStyle(
+        //       color: Colors.white,
+        //       fontSize: Adaptive.sp(14),
+        //       fontWeight: FontWeight.w800),
+        // ),
+        //   )
+        //  AnimatedButton(
+        //     height: 35,
+        //     color: ColorConstants.primaryColorWSP,
+        //     width: MediaQuery.of(context).size.width / 1.2,
+        //     isOutline: true,
+        //     isMultiColor: true,
+        //     colors: [
+        //       ColorConstants.primaryColorWSP,
+        //       ColorConstants.primaryColorWSP,
+        //     ],
+        //     borderWidth: 1,
+        //     onTap: () async {
+        //       ref
+        //           .watch(truckDriverProvider.future)
+        //           .then((truckData) => showBarModalBottomSheet(
+        //               context: context,
+        //               builder: (modalContext) => SafeArea(
+        //                       child: Padding(
+        //                     padding: Pad(all: 10),
+        //                     child: ColumnSuper(children: [
+        //                       truckSelection(
+        //                           ref, context, truckData.truckData ?? []),
+        //                       SizedBox(
+        //                         height: 10,
+        //                       ),
+        //                       driverSelection(
+        //                           ref, context, truckData.driverData ?? []),
+        //                       SizedBox(
+        //                         height: 10,
+        //                       ),
+        //                       AnimatedButton(
+        //                         height: 35,
+        //                         color: ColorConstants.primaryColorWSP,
+        //                         width: MediaQuery.of(context).size.width / 1.2,
+        //                         isOutline: true,
+        //                         isMultiColor: true,
+        //                         colors: [
+        //                           ColorConstants.primaryColorWSP,
+        //                           ColorConstants.primaryColorWSP,
+        //                         ],
+        //                         borderWidth: 1,
+        //                         onTap: () async {
+        //                           if (ref.watch(truckProvider) == null) {
+        //                             errorToast(context, 'selectTruck'.tr());
+        //                           }
+        //                           if (ref.watch(driverProvider) == null) {
+        //                             errorToast(context, 'selectDriver'.tr());
+        //                           } else {
+        //                             ref
+        //                                 .watch(updateTruckDriverProvider(
+        //                                         driverId:
+        //                                             "${ref.watch(driverProvider)?.id ?? 0}",
+        //                                         truckId:
+        //                                             "${ref.watch(truckProvider)?.id ?? 0}",
+        //                                         tripRequestId: "${dataList.id}")
+        //                                     .future)
+        //                                 .then((value) {
+        //                               if (value['status'].toString() == "1") {
+        //                                 successToast(OneContext().context!,
+        //                                     "${value['message'] ?? value['Message']}");
+
+        //                                 ref.invalidate(tripsListProvider);
+        //                                 ref
+        //                                     .watch(goRouterProvider)
+        //                                     .pop(modalContext);
+        //                               }
+        //                             });
+        //                           }
+        //                         },
+        //                         child: Text(
+        //                           "submit".tr(),
+        //                           textAlign: TextAlign.center,
+        //                           style: TextStyle(
+        //                               color: Colors.white,
+        //                               fontSize: Adaptive.sp(14),
+        //                               fontWeight: FontWeight.w800),
+        //                         ),
+        //                       )
+        //                     ]),
+        //                   ))));
+        //     },
+        // child: Text(
+        //   "${"selectTruck".tr()} / ${'selectDriver'.tr()}",
+        //   textAlign: TextAlign.center,
+        //   style: TextStyle(
+        //       color: Colors.white,
+        //       fontSize: Adaptive.sp(14),
+        //       fontWeight: FontWeight.w800),
+        // ),
+        //   )
         : dataList.weight != null && dataList.tripStart == null
-            ? AnimatedButton(
-                height: 35,
-                color: ColorConstants.primaryColorWSP,
-                width: MediaQuery.of(context).size.width / 1.2,
-                isOutline: true,
-                isMultiColor: true,
-                colors: [
-                  ColorConstants.secondaryColorWSP,
-                  ColorConstants.secondaryColorWSP,
-                ],
-                borderWidth: 1,
+            ? InkWell(
                 onTap: () async {
                   ref
                       .watch(startTripProvider(tripRequestId: "${dataList.id}")
@@ -1478,15 +2368,74 @@ class _DashboardState extends ConsumerState<Dashboard> {
                     }
                   });
                 },
-                child: Text(
-                  "startTrip".tr(),
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                      color: Colors.white,
-                      fontSize: Adaptive.sp(14),
-                      fontWeight: FontWeight.w800),
+                child: Container(
+                  child: Center(
+                    child: Text(
+                      "startTrip".tr(),
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                          color: Colors.white,
+                          fontSize: Adaptive.sp(14),
+                          fontWeight: FontWeight.w800),
+                    ),
+                  ),
+                  height: 35,
+                  decoration: BoxDecoration(
+                      color: ColorConstants.secondaryColorWSP,
+                      borderRadius: BorderRadius.circular(5)),
                 ),
               )
+            //  ElevatedButton(
+            // onPressed: () async {
+            //   ref
+            //       .watch(startTripProvider(tripRequestId: "${dataList.id}")
+            //           .future)
+            //       .then((value) {
+            //     if (value['status'].toString() == "1") {
+            //       ref.invalidate(tripsListProvider);
+            //     }
+            //   });
+            // },
+            // child: Text(
+            //   "startTrip".tr(),
+            //   textAlign: TextAlign.center,
+            //   style: TextStyle(
+            //       color: Colors.white,
+            //       fontSize: Adaptive.sp(14),
+            //       fontWeight: FontWeight.w800),
+            // ),
+            //     style: StyleConstants.submitButtonStyle(),
+            //   )
+            // ? AnimatedButton(
+            //     height: 35,
+            //     color: ColorConstants.primaryColorWSP,
+            //     width: MediaQuery.of(context).size.width / 1.2,
+            //     isOutline: true,
+            //     isMultiColor: true,
+            //     colors: [
+            //       ColorConstants.secondaryColorWSP,
+            //       ColorConstants.secondaryColorWSP,
+            //     ],
+            //     borderWidth: 1,
+            // onTap: () async {
+            //   ref
+            //       .watch(startTripProvider(tripRequestId: "${dataList.id}")
+            //           .future)
+            //       .then((value) {
+            //     if (value['status'].toString() == "1") {
+            //       ref.invalidate(tripsListProvider);
+            //     }
+            //   });
+            // },
+            // child: Text(
+            //   "startTrip".tr(),
+            //   textAlign: TextAlign.center,
+            //   style: TextStyle(
+            //       color: Colors.white,
+            //       fontSize: Adaptive.sp(14),
+            //       fontWeight: FontWeight.w800),
+            // ),
+            //   )
             : dataList.paymentTo.toString() == "1" &&
                     dataList.tripStart != null &&
                     dataList.tripEnd == null
@@ -1501,31 +2450,71 @@ class _DashboardState extends ConsumerState<Dashboard> {
                 : dataList.weight != null &&
                         dataList.tripStart != null &&
                         dataList.tripEnd == null
-                    ? AnimatedButton(
-                        height: 35,
-                        color: ColorConstants.primaryColorWSP,
-                        width: MediaQuery.of(context).size.width / 1.2,
-                        isOutline: true,
-                        isMultiColor: true,
-                        colors: [
-                          ColorConstants.primaryColorDriver,
-                          ColorConstants.primaryColorDriver,
-                        ],
-                        borderWidth: 1,
+                    ? InkWell(
                         onTap: () async {
                           ref.watch(goRouterProvider).goNamed(
                               RoutesStrings.paotiEndTrip,
                               extra: dataList);
                         },
-                        child: Text(
-                          "endTrip".tr(),
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                              color: Colors.white,
-                              fontSize: Adaptive.sp(14),
-                              fontWeight: FontWeight.w800),
+                        child: Container(
+                          child: Center(
+                            child: Text(
+                              "endTrip".tr(),
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: Adaptive.sp(14),
+                                  fontWeight: FontWeight.w800),
+                            ),
+                          ),
+                          height: 35,
+                          decoration: BoxDecoration(
+                              color: ColorConstants.primaryColorDriver,
+                              borderRadius: BorderRadius.circular(5)),
                         ),
                       )
+                    // ElevatedButton(
+                    // onPressed: () async {
+                    //   ref.watch(goRouterProvider).goNamed(
+                    //       RoutesStrings.paotiEndTrip,
+                    //       extra: dataList);
+                    // },
+                    //     child: Text(
+                    //       "endTrip".tr(),
+                    //       textAlign: TextAlign.center,
+                    //       style: TextStyle(
+                    //           color: Colors.white,
+                    //           fontSize: Adaptive.sp(14),
+                    //           fontWeight: FontWeight.w800),
+                    //     ),
+                    //     style: ElevatedButton.styleFrom(
+                    //         backgroundColor: ColorConstants.primaryColorDriver),
+                    //   )
+                    //  AnimatedButton(
+                    //     height: 35,
+                    //     color: ColorConstants.primaryColorWSP,
+                    //     width: MediaQuery.of(context).size.width / 1.2,
+                    //     isOutline: true,
+                    //     isMultiColor: true,
+                    //     colors: [
+                    //       ColorConstants.primaryColorDriver,
+                    //       ColorConstants.primaryColorDriver,
+                    //     ],
+                    //     borderWidth: 1,
+                    //     onTap: () async {
+                    //       ref.watch(goRouterProvider).goNamed(
+                    //           RoutesStrings.paotiEndTrip,
+                    //           extra: dataList);
+                    //     },
+                    // child: Text(
+                    //   "endTrip".tr(),
+                    //   textAlign: TextAlign.center,
+                    //   style: TextStyle(
+                    //       color: Colors.white,
+                    //       fontSize: Adaptive.sp(14),
+                    //       fontWeight: FontWeight.w800),
+                    // ),
+                    //   )
                     : dataList.tripEnd != null && dataList.tripStart != null
                         ? Text(
                             "completed".tr(),

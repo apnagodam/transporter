@@ -190,7 +190,7 @@ class _PaotiendtripState extends ConsumerState<Paotiendtrip> {
                     height: 10,
                   ),
                   Text(
-                    "Receiving Weight(KG)",
+                    "Receiving Weight",
                     style: TextStyle(
                         fontSize: Adaptive.sp(16),
                         fontWeight: FontWeight.bold,
@@ -220,7 +220,7 @@ class _PaotiendtripState extends ConsumerState<Paotiendtrip> {
                     height: 10,
                   ),
                   Text(
-                    "Paotee Number",
+                    "Paotee(GetPass) Number",
                     style: TextStyle(
                         fontSize: Adaptive.sp(16),
                         fontWeight: FontWeight.bold,
@@ -519,7 +519,7 @@ class _PaotiendtripState extends ConsumerState<Paotiendtrip> {
                                       tripRequestId:
                                           '${widget.dataList?.id ?? 0}',
                                       kantaWeight:
-                                          '${num.parse(weightController.text.toString())}',
+                                          '${num.parse(weightController.text.toString()) * 100}',
                                       bags: "${bagsController.text.toString()}",
                                       kantaImage: img64,
                                       qualityImage: img642,

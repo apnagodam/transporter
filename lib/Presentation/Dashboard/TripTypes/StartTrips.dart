@@ -109,6 +109,52 @@ class _StarttripsState extends ConsumerState<Starttrips> {
                                     ),
                                     RowSuper(fill: true, children: [
                                       Text(
+                                        'Trip ID'.tr(),
+                                        textAlign: TextAlign.start,
+                                        style: TextStyle(
+                                            color: ColorConstants
+                                                .primaryColorDriver,
+                                            fontSize: Adaptive.sp(14),
+                                            fontWeight: FontWeight.w800),
+                                      ),
+                                      Text(
+                                        '${dataList.tripId ?? "--"}',
+                                        textAlign: TextAlign.end,
+                                        style: TextStyle(
+                                            color: ColorConstants
+                                                .primaryColorDriver,
+                                            fontSize: Adaptive.sp(14),
+                                            fontWeight: FontWeight.w800),
+                                      ),
+                                    ]),
+                                    const SizedBox(
+                                      height: 10,
+                                    ),
+                                    RowSuper(fill: true, children: [
+                                      Text(
+                                        'Truck number'.tr(),
+                                        textAlign: TextAlign.start,
+                                        style: TextStyle(
+                                            color:
+                                                ColorConstants.primaryColorWSP,
+                                            fontSize: Adaptive.sp(14),
+                                            fontWeight: FontWeight.w800),
+                                      ),
+                                      Text(
+                                        '${dataList.truckNumber ?? "--"}',
+                                        textAlign: TextAlign.end,
+                                        style: TextStyle(
+                                            color:
+                                                ColorConstants.primaryColorWSP,
+                                            fontSize: Adaptive.sp(14),
+                                            fontWeight: FontWeight.w800),
+                                      ),
+                                    ]),
+                                    const SizedBox(
+                                      height: 10,
+                                    ),
+                                    RowSuper(fill: true, children: [
+                                      Text(
                                         'transporterName'.tr(),
                                         textAlign: TextAlign.start,
                                         style: TextStyle(
@@ -146,6 +192,52 @@ class _StarttripsState extends ConsumerState<Starttrips> {
                                         style: TextStyle(
                                             color: ColorConstants
                                                 .primaryColorDriver,
+                                            fontSize: Adaptive.sp(14),
+                                            fontWeight: FontWeight.w800),
+                                      ),
+                                    ]),
+                                    const SizedBox(
+                                      height: 10,
+                                    ),
+                                    RowSuper(fill: true, children: [
+                                      Text(
+                                        'driverName'.tr(),
+                                        textAlign: TextAlign.start,
+                                        style: TextStyle(
+                                            color:
+                                                ColorConstants.primaryColorWSP,
+                                            fontSize: Adaptive.sp(14),
+                                            fontWeight: FontWeight.w800),
+                                      ),
+                                      Text(
+                                        '${dataList.driverName ?? "--"}',
+                                        textAlign: TextAlign.end,
+                                        style: TextStyle(
+                                            color:
+                                                ColorConstants.primaryColorWSP,
+                                            fontSize: Adaptive.sp(14),
+                                            fontWeight: FontWeight.w800),
+                                      ),
+                                    ]),
+                                    const SizedBox(
+                                      height: 10,
+                                    ),
+                                    RowSuper(fill: true, children: [
+                                      Text(
+                                        'driverPhone'.tr(),
+                                        textAlign: TextAlign.start,
+                                        style: TextStyle(
+                                            color:
+                                                ColorConstants.primaryColorWSP,
+                                            fontSize: Adaptive.sp(14),
+                                            fontWeight: FontWeight.w800),
+                                      ),
+                                      Text(
+                                        '${dataList.driverPhone ?? "--"}',
+                                        textAlign: TextAlign.end,
+                                        style: TextStyle(
+                                            color:
+                                                ColorConstants.primaryColorWSP,
                                             fontSize: Adaptive.sp(14),
                                             fontWeight: FontWeight.w800),
                                       ),

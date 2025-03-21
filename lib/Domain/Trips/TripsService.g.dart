@@ -19,6 +19,8 @@ final tripsListProvider = AutoDisposeFutureProvider<TripDataResponse>.internal(
   allTransitiveDependencies: null,
 );
 
+@Deprecated('Will be removed in 3.0. Use Ref instead')
+// ignore: unused_element
 typedef TripsListRef = AutoDisposeFutureProviderRef<TripDataResponse>;
 String _$truckDriverHash() => r'ce39ae8996d578c94d24a14bea9ebfd2a3cb4033';
 
@@ -34,6 +36,8 @@ final truckDriverProvider =
   allTransitiveDependencies: null,
 );
 
+@Deprecated('Will be removed in 3.0. Use Ref instead')
+// ignore: unused_element
 typedef TruckDriverRef = AutoDisposeFutureProviderRef<TruckDriverResponse>;
 String _$tripDataHash() => r'add8b20142a24bdf15a6e8697f749561d2011c27';
 
@@ -170,6 +174,8 @@ class TripDataProvider extends AutoDisposeFutureProvider<BiltyResponseData> {
   }
 }
 
+@Deprecated('Will be removed in 3.0. Use Ref instead')
+// ignore: unused_element
 mixin TripDataRef on AutoDisposeFutureProviderRef<BiltyResponseData> {
   /// The parameter `tripRequestid` of this provider.
   String? get tripRequestid;
@@ -198,6 +204,8 @@ final tripsHistoryProvider =
   allTransitiveDependencies: null,
 );
 
+@Deprecated('Will be removed in 3.0. Use Ref instead')
+// ignore: unused_element
 typedef TripsHistoryRef
     = AutoDisposeStreamProviderRef<TransporterTripHistoryModel>;
 String _$updateTruckDriverHash() => r'ceb6e8735ca0099ece2ac699991764a75cd390b8';
@@ -340,6 +348,8 @@ class UpdateTruckDriverProvider
   }
 }
 
+@Deprecated('Will be removed in 3.0. Use Ref instead')
+// ignore: unused_element
 mixin UpdateTruckDriverRef
     on AutoDisposeFutureProviderRef<Map<String, dynamic>> {
   /// The parameter `truckId` of this provider.
@@ -481,6 +491,8 @@ class StartTripProvider
   }
 }
 
+@Deprecated('Will be removed in 3.0. Use Ref instead')
+// ignore: unused_element
 mixin StartTripRef on AutoDisposeFutureProviderRef<Map<String, dynamic>> {
   /// The parameter `tripRequestId` of this provider.
   String? get tripRequestId;
@@ -687,6 +699,8 @@ class EndTripProvider extends AutoDisposeFutureProvider<Map<String, dynamic>> {
   }
 }
 
+@Deprecated('Will be removed in 3.0. Use Ref instead')
+// ignore: unused_element
 mixin EndTripRef on AutoDisposeFutureProviderRef<Map<String, dynamic>> {
   /// The parameter `tripRequestId` of this provider.
   String? get tripRequestId;
@@ -736,4 +750,4 @@ class _EndTripProviderElement
   int? get tripStatus => (origin as EndTripProvider).tripStatus;
 }
 // ignore_for_file: type=lint
-// ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member
+// ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, deprecated_member_use_from_same_package
