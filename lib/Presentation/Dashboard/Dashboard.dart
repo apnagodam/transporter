@@ -13,6 +13,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:insta_image_viewer/insta_image_viewer.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:one_context/one_context.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
 import 'package:restart_app/restart_app.dart';
 import 'package:transporter/Data/Model/TruckDriverResponse.dart';
@@ -20,7 +21,6 @@ import 'package:transporter/Domain/Trips/TripsService.dart';
 import 'package:transporter/Presentation/Routes/routes.dart';
 import 'package:transporter/Presentation/Utils/Widgets/Widgets.dart';
 import 'package:transporter/Presentation/Utils/height_wi.dart';
-import 'package:transporter/Presentation/Utils/style_constants.dart';
 import '../../Data/Model/TripDataResponse.dart';
 import '../Preferences/SharedPrefs/SharedUtility.dart';
 import '../Routes/routes_strings.dart';
@@ -42,7 +42,7 @@ class _DashboardState extends ConsumerState<Dashboard> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Dashboard'),
+        title: Text('Dashboard'.tr()),
       ),
       drawer: Drawer(
         child: Scaffold(
@@ -70,7 +70,7 @@ class _DashboardState extends ConsumerState<Dashboard> {
                       Height10,
                       RichText(
                           text: TextSpan(
-                              text: 'नाम:- ',
+                              text: '',
                               style: GoogleFonts.aBeeZee(
                                   fontSize: 14, fontWeight: FontWeight.w500),
                               children: [
@@ -82,7 +82,7 @@ class _DashboardState extends ConsumerState<Dashboard> {
                           ])),
                       RichText(
                           text: TextSpan(
-                              text: 'नंबर :- ',
+                              text: '',
                               style: GoogleFonts.aBeeZee(
                                   fontSize: 13, fontWeight: FontWeight.w500),
                               children: [
@@ -111,7 +111,7 @@ class _DashboardState extends ConsumerState<Dashboard> {
                   children: [
                     ListTile(
                       title: Text(
-                        'प्रोफ़ाइल'.tr(),
+                        'Profile'.tr(),
                         style: GoogleFonts.aBeeZee(
                             color: ColorConstants.primaryColorDriver,
                             fontWeight: FontWeight.w600,
@@ -221,7 +221,7 @@ class _DashboardState extends ConsumerState<Dashboard> {
                   ),
               child: Center(
                 child: Text(
-                  'Logout',
+                  'Logout'.tr(),
                   style: GoogleFonts.aBeeZee(
                       color: ColorConstants.secondaryColor,
                       fontWeight: FontWeight.w600,
@@ -248,7 +248,7 @@ class _DashboardState extends ConsumerState<Dashboard> {
                         Padding(
                           padding: Pad(all: 10),
                           child: Text(
-                            "Running Trip ID" + " :-",
+                            "Running Trip ID".tr() + " :-",
                             style: TextStyle(
                                 fontSize: Adaptive.sp(15),
                                 color: ColorConstants.primaryColorVendor,
@@ -274,7 +274,7 @@ class _DashboardState extends ConsumerState<Dashboard> {
                                   const VerticalDivider(),
                                   Expanded(
                                       child: Text(
-                                    'Trip ID'.tr(),
+                                    'tripId'.tr(),
                                     textAlign: TextAlign.center,
                                     style: TextStyle(
                                         fontWeight: FontWeight.bold,
@@ -342,776 +342,657 @@ class _DashboardState extends ConsumerState<Dashboard> {
                                             "${dataList![index].tripDate ?? "--"}",
                                         recognizer: TapGestureRecognizer()
                                           ..onTap = () {
-                                            showDialog(
-                                              // barrierColor: ColorConstants
-                                              //     .primaryColorDriver,
-                                              context: context,
-                                              builder: (context) {
-                                                return Dialog(
-                                                  backgroundColor:
-                                                      ColorConstants
-                                                          .secondaryColor,
-                                                  child: Padding(
-                                                    padding:
-                                                        const EdgeInsets.all(
-                                                            8.0),
-                                                    child: Column(
-                                                      mainAxisSize:
-                                                          MainAxisSize.min,
-                                                      children: [
-                                                        Text(
-                                                          "-: " +
-                                                              "tripDetails"
-                                                                  .tr() +
-                                                              " :-",
-                                                          style: TextStyle(
-                                                              fontWeight:
-                                                                  FontWeight
-                                                                      .bold,
-                                                              fontSize:
-                                                                  Adaptive.sp(
-                                                                      18),
-                                                              color: ColorConstants
-                                                                  .primaryColorDriver),
-                                                        ),
-                                                        const SizedBox(
-                                                          height: 10,
-                                                        ),
-                                                        RowSuper(
-                                                            fill: true,
-                                                            children: [
-                                                              Text(
-                                                                'tripId'.tr(),
-                                                                textAlign:
-                                                                    TextAlign
-                                                                        .start,
-                                                                style: TextStyle(
-                                                                    color: ColorConstants
-                                                                        .primaryColorDriver,
-                                                                    fontSize:
-                                                                        Adaptive.sp(
-                                                                            14),
-                                                                    fontWeight:
-                                                                        FontWeight
-                                                                            .w800),
-                                                              ),
-                                                              Text(
-                                                                '${dataList?[index].tripId ?? "--"}',
-                                                                textAlign:
-                                                                    TextAlign
-                                                                        .end,
-                                                                style: TextStyle(
-                                                                    color: ColorConstants
-                                                                        .primaryColorDriver,
-                                                                    fontSize:
-                                                                        Adaptive.sp(
-                                                                            14),
-                                                                    fontWeight:
-                                                                        FontWeight
-                                                                            .w800),
-                                                              ),
-                                                            ]),
-                                                        Height10,
-                                                        RowSuper(
-                                                            fill: true,
-                                                            children: [
-                                                              Text(
-                                                                'Truck Number'
-                                                                    .tr(),
-                                                                textAlign:
-                                                                    TextAlign
-                                                                        .start,
-                                                                style: TextStyle(
-                                                                    color: ColorConstants
-                                                                        .primaryColorDriver,
-                                                                    fontSize:
-                                                                        Adaptive.sp(
-                                                                            14),
-                                                                    fontWeight:
-                                                                        FontWeight
-                                                                            .w800),
-                                                              ),
-                                                              Text(
-                                                                '${dataList?[index].truckNumber ?? "--"}',
-                                                                textAlign:
-                                                                    TextAlign
-                                                                        .end,
-                                                                style: TextStyle(
-                                                                    color: ColorConstants
-                                                                        .primaryColorDriver,
-                                                                    fontSize:
-                                                                        Adaptive.sp(
-                                                                            14),
-                                                                    fontWeight:
-                                                                        FontWeight
-                                                                            .w800),
-                                                              ),
-                                                            ]),
-                                                        Height10,
-                                                        RowSuper(
-                                                            fill: true,
-                                                            children: [
-                                                              Text(
-                                                                'transporterName'
-                                                                    .tr(),
-                                                                textAlign:
-                                                                    TextAlign
-                                                                        .start,
-                                                                style: TextStyle(
-                                                                    color: ColorConstants
-                                                                        .primaryColorDriver,
-                                                                    fontSize:
-                                                                        Adaptive.sp(
-                                                                            14),
-                                                                    fontWeight:
-                                                                        FontWeight
-                                                                            .w800),
-                                                              ),
-                                                              Text(
-                                                                '${dataList?[index].transporterName ?? "--"}',
-                                                                textAlign:
-                                                                    TextAlign
-                                                                        .end,
-                                                                style: TextStyle(
-                                                                    color: ColorConstants
-                                                                        .primaryColorDriver,
-                                                                    fontSize:
-                                                                        Adaptive.sp(
-                                                                            14),
-                                                                    fontWeight:
-                                                                        FontWeight
-                                                                            .w800),
-                                                              ),
-                                                            ]),
-                                                        const SizedBox(
-                                                          height: 10,
-                                                        ),
-                                                        RowSuper(
-                                                            fill: true,
-                                                            children: [
-                                                              Text(
-                                                                'transporterPhone'
-                                                                    .tr(),
-                                                                textAlign:
-                                                                    TextAlign
-                                                                        .start,
-                                                                style: TextStyle(
-                                                                    color: ColorConstants
-                                                                        .primaryColorDriver,
-                                                                    fontSize:
-                                                                        Adaptive.sp(
-                                                                            14),
-                                                                    fontWeight:
-                                                                        FontWeight
-                                                                            .w800),
-                                                              ),
-                                                              Text(
-                                                                '${dataList?[index].transporterPhone ?? "--"}',
-                                                                textAlign:
-                                                                    TextAlign
-                                                                        .end,
-                                                                style: TextStyle(
-                                                                    color: ColorConstants
-                                                                        .primaryColorDriver,
-                                                                    fontSize:
-                                                                        Adaptive.sp(
-                                                                            14),
-                                                                    fontWeight:
-                                                                        FontWeight
-                                                                            .w800),
-                                                              ),
-                                                            ]),
-                                                        const SizedBox(
-                                                          height: 10,
-                                                        ),
-                                                        RowSuper(
-                                                            fill: true,
-                                                            children: [
-                                                              Text(
-                                                                'customer'.tr(),
-                                                                textAlign:
-                                                                    TextAlign
-                                                                        .start,
-                                                                style: TextStyle(
-                                                                    color: ColorConstants
-                                                                        .primaryColorDriver,
-                                                                    fontSize:
-                                                                        Adaptive.sp(
-                                                                            14),
-                                                                    fontWeight:
-                                                                        FontWeight
-                                                                            .w800),
-                                                              ),
-                                                              Text.rich(
-                                                                  textAlign:
-                                                                      TextAlign
-                                                                          .end,
-                                                                  TextSpan(
-                                                                    text:
-                                                                        '${dataList?[index].userName}',
+                                            showCupertinoModalBottomSheet(
+                                                context: context,
+                                                builder: (context) => Material(
+                                                      color: Colors.white,
+                                                      child: Padding(
+                                                        padding: Pad(all: 10),
+                                                        child: Column(
+                                                          mainAxisSize:
+                                                              MainAxisSize.min,
+                                                          children: [
+                                                            Text(
+                                                              "Trip Details"
+                                                                  .tr(),
+                                                              style: TextStyle(
+                                                                  fontWeight:
+                                                                      FontWeight
+                                                                          .bold,
+                                                                  fontSize:
+                                                                      Adaptive.sp(
+                                                                          18),
+                                                                  color: ColorConstants
+                                                                      .primaryColorDriver),
+                                                            ),
+                                                            const SizedBox(
+                                                              height: 10,
+                                                            ),
+                                                            RowSuper(
+                                                                fill: true,
+                                                                children: [
+                                                                  Text(
+                                                                    'tripId'
+                                                                        .tr(),
+                                                                    textAlign:
+                                                                        TextAlign
+                                                                            .start,
                                                                     style: TextStyle(
                                                                         color: ColorConstants
-                                                                            .primaryColorDriver,
+                                                                            .primaryColorWSP,
                                                                         fontSize:
                                                                             Adaptive.sp(
                                                                                 14),
                                                                         fontWeight:
                                                                             FontWeight.w800),
-                                                                  )),
-                                                            ]),
-                                                        const SizedBox(
-                                                          height: 10,
-                                                        ),
-                                                        RowSuper(
-                                                            fill: true,
-                                                            alignment: Alignment
-                                                                .center,
-                                                            children: [
-                                                              Text(
-                                                                'customerPhone'
-                                                                    .tr(),
-                                                                textAlign:
-                                                                    TextAlign
-                                                                        .start,
-                                                                style: TextStyle(
+                                                                  ),
+                                                                  Text(
+                                                                    '${dataList[index].tripId ?? "--"}',
+                                                                    textAlign:
+                                                                        TextAlign
+                                                                            .end,
+                                                                    style: TextStyle(
+                                                                        color: ColorConstants
+                                                                            .primaryColorWSP,
+                                                                        fontSize:
+                                                                            Adaptive.sp(
+                                                                                14),
+                                                                        fontWeight:
+                                                                            FontWeight.w800),
+                                                                  ),
+                                                                ]),
+                                                            const SizedBox(
+                                                              height: 10,
+                                                            ),
+                                                            RowSuper(
+                                                                fill: true,
+                                                                children: [
+                                                                  Text(
+                                                                    'Truck number'
+                                                                        .tr(),
+                                                                    textAlign:
+                                                                        TextAlign
+                                                                            .start,
+                                                                    style: TextStyle(
+                                                                        color: ColorConstants
+                                                                            .primaryColorWSP,
+                                                                        fontSize:
+                                                                            Adaptive.sp(
+                                                                                14),
+                                                                        fontWeight:
+                                                                            FontWeight.w800),
+                                                                  ),
+                                                                  Text(
+                                                                    '${dataList[index].truckNumber ?? "--"}',
+                                                                    textAlign:
+                                                                        TextAlign
+                                                                            .end,
+                                                                    style: TextStyle(
+                                                                        color: ColorConstants
+                                                                            .primaryColorWSP,
+                                                                        fontSize:
+                                                                            Adaptive.sp(
+                                                                                14),
+                                                                        fontWeight:
+                                                                            FontWeight.w800),
+                                                                  ),
+                                                                ]),
+                                                            const SizedBox(
+                                                              height: 10,
+                                                            ),
+                                                            RowSuper(
+                                                                fill: true,
+                                                                children: [
+                                                                  Text(
+                                                                    'Transporter Name'
+                                                                        .tr(),
+                                                                    textAlign:
+                                                                        TextAlign
+                                                                            .start,
+                                                                    style: TextStyle(
+                                                                        color: ColorConstants
+                                                                            .primaryColorWSP,
+                                                                        fontSize:
+                                                                            Adaptive.sp(
+                                                                                14),
+                                                                        fontWeight:
+                                                                            FontWeight.w800),
+                                                                  ),
+                                                                  Text(
+                                                                    '${dataList[index].transporterName ?? "--"}',
+                                                                    textAlign:
+                                                                        TextAlign
+                                                                            .end,
+                                                                    style: TextStyle(
+                                                                        color: ColorConstants
+                                                                            .primaryColorWSP,
+                                                                        fontSize:
+                                                                            Adaptive.sp(
+                                                                                14),
+                                                                        fontWeight:
+                                                                            FontWeight.w800),
+                                                                  ),
+                                                                ]),
+                                                            const SizedBox(
+                                                              height: 10,
+                                                            ),
+                                                            RowSuper(
+                                                                fill: true,
+                                                                children: [
+                                                                  Text(
+                                                                    'Transporter Number'
+                                                                        .tr(),
+                                                                    textAlign:
+                                                                        TextAlign
+                                                                            .start,
+                                                                    style: TextStyle(
+                                                                        color: ColorConstants
+                                                                            .primaryColorWSP,
+                                                                        fontSize:
+                                                                            Adaptive.sp(
+                                                                                14),
+                                                                        fontWeight:
+                                                                            FontWeight.w800),
+                                                                  ),
+                                                                  Text(
+                                                                    '${dataList[index].transporterPhone ?? "--"}',
+                                                                    textAlign:
+                                                                        TextAlign
+                                                                            .end,
+                                                                    style: TextStyle(
+                                                                        color: ColorConstants
+                                                                            .primaryColorWSP,
+                                                                        fontSize:
+                                                                            Adaptive.sp(
+                                                                                14),
+                                                                        fontWeight:
+                                                                            FontWeight.w800),
+                                                                  ),
+                                                                ]),
+                                                            const SizedBox(
+                                                              height: 10,
+                                                            ),
+                                                            RowSuper(
+                                                                fill: true,
+                                                                children: [
+                                                                  Text(
+                                                                    'driverName'
+                                                                        .tr(),
+                                                                    textAlign:
+                                                                        TextAlign
+                                                                            .start,
+                                                                    style: TextStyle(
+                                                                        color: ColorConstants
+                                                                            .primaryColorWSP,
+                                                                        fontSize:
+                                                                            Adaptive.sp(
+                                                                                14),
+                                                                        fontWeight:
+                                                                            FontWeight.w800),
+                                                                  ),
+                                                                  Text(
+                                                                    '${dataList[index].driverName ?? "--"}',
+                                                                    textAlign:
+                                                                        TextAlign
+                                                                            .end,
+                                                                    style: TextStyle(
+                                                                        color: ColorConstants
+                                                                            .primaryColorWSP,
+                                                                        fontSize:
+                                                                            Adaptive.sp(
+                                                                                14),
+                                                                        fontWeight:
+                                                                            FontWeight.w800),
+                                                                  ),
+                                                                ]),
+                                                            const SizedBox(
+                                                              height: 10,
+                                                            ),
+                                                            RowSuper(
+                                                                fill: true,
+                                                                children: [
+                                                                  Text(
+                                                                    'driverPhone'
+                                                                        .tr(),
+                                                                    textAlign:
+                                                                        TextAlign
+                                                                            .start,
+                                                                    style: TextStyle(
+                                                                        color: ColorConstants
+                                                                            .primaryColorWSP,
+                                                                        fontSize:
+                                                                            Adaptive.sp(
+                                                                                14),
+                                                                        fontWeight:
+                                                                            FontWeight.w800),
+                                                                  ),
+                                                                  Text(
+                                                                    '${dataList[index].driverPhone ?? "--"}',
+                                                                    textAlign:
+                                                                        TextAlign
+                                                                            .end,
+                                                                    style: TextStyle(
+                                                                        color: ColorConstants
+                                                                            .primaryColorWSP,
+                                                                        fontSize:
+                                                                            Adaptive.sp(
+                                                                                14),
+                                                                        fontWeight:
+                                                                            FontWeight.w800),
+                                                                  ),
+                                                                ]),
+                                                            const SizedBox(
+                                                              height: 10,
+                                                            ),
+                                                            RowSuper(
+                                                                fill: true,
+                                                                children: [
+                                                                  Text(
+                                                                    'customer'
+                                                                        .tr(),
+                                                                    textAlign:
+                                                                        TextAlign
+                                                                            .start,
+                                                                    style: TextStyle(
+                                                                        color: ColorConstants
+                                                                            .primaryColorWSP,
+                                                                        fontSize:
+                                                                            Adaptive.sp(
+                                                                                14),
+                                                                        fontWeight:
+                                                                            FontWeight.w800),
+                                                                  ),
+                                                                  Text.rich(
+                                                                      textAlign:
+                                                                          TextAlign
+                                                                              .end,
+                                                                      TextSpan(
+                                                                        text:
+                                                                            '${dataList[index].userName}',
+                                                                        style: TextStyle(
+                                                                            color:
+                                                                                ColorConstants.primaryColorWSP,
+                                                                            fontSize: Adaptive.sp(14),
+                                                                            fontWeight: FontWeight.w800),
+                                                                      )),
+                                                                ]),
+                                                            const SizedBox(
+                                                              height: 10,
+                                                            ),
+                                                            RowSuper(
+                                                                fill: true,
+                                                                alignment:
+                                                                    Alignment
+                                                                        .center,
+                                                                children: [
+                                                                  Text(
+                                                                    'customerPhone'
+                                                                        .tr(),
+                                                                    textAlign:
+                                                                        TextAlign
+                                                                            .start,
+                                                                    style: TextStyle(
+                                                                        color: ColorConstants
+                                                                            .primaryColorWSP,
+                                                                        fontSize:
+                                                                            Adaptive.sp(
+                                                                                14),
+                                                                        fontWeight:
+                                                                            FontWeight.w800),
+                                                                  ),
+                                                                  Text(
+                                                                    '${dataList[index].userPhone}',
+                                                                    textAlign:
+                                                                        TextAlign
+                                                                            .end,
+                                                                    style: TextStyle(
+                                                                        color: ColorConstants
+                                                                            .primaryColorWSP,
+                                                                        fontSize:
+                                                                            Adaptive.sp(
+                                                                                14),
+                                                                        fontWeight:
+                                                                            FontWeight.w800),
+                                                                  ),
+                                                                ]),
+                                                            const SizedBox(
+                                                              height: 10,
+                                                            ),
+                                                            RowSuper(
+                                                                fill: true,
+                                                                alignment:
+                                                                    Alignment
+                                                                        .center,
+                                                                children: [
+                                                                  Text(
+                                                                    'ratePerQtl'
+                                                                        .tr(),
+                                                                    textAlign:
+                                                                        TextAlign
+                                                                            .start,
+                                                                    style: TextStyle(
+                                                                        color: ColorConstants
+                                                                            .primaryColorWSP,
+                                                                        fontSize:
+                                                                            Adaptive.sp(
+                                                                                14),
+                                                                        fontWeight:
+                                                                            FontWeight.w800),
+                                                                  ),
+                                                                  Text(
+                                                                    '${currencyFormat.format(num.parse("${dataList[index].rate ?? 0}"))} / perQtl'
+                                                                        .tr(),
+                                                                    textAlign:
+                                                                        TextAlign
+                                                                            .end,
+                                                                    style: TextStyle(
+                                                                        color: ColorConstants
+                                                                            .primaryColorWSP,
+                                                                        fontSize:
+                                                                            Adaptive.sp(
+                                                                                14),
+                                                                        fontWeight:
+                                                                            FontWeight.w800),
+                                                                  ),
+                                                                ]),
+                                                            const SizedBox(
+                                                              height: 10,
+                                                            ),
+                                                            RowSuper(
+                                                                fill: true,
+                                                                alignment:
+                                                                    Alignment
+                                                                        .center,
+                                                                children: [
+                                                                  Text(
+                                                                    'finalWeight'
+                                                                        .tr(),
+                                                                    textAlign:
+                                                                        TextAlign
+                                                                            .start,
+                                                                    style: TextStyle(
+                                                                        color: ColorConstants
+                                                                            .primaryColorWSP,
+                                                                        fontSize:
+                                                                            Adaptive.sp(
+                                                                                14),
+                                                                        fontWeight:
+                                                                            FontWeight.w800),
+                                                                  ),
+                                                                  Text(
+                                                                    '${dataList[index].weight ?? "pending".tr()}',
+                                                                    textAlign:
+                                                                        TextAlign
+                                                                            .end,
+                                                                    style: TextStyle(
+                                                                        color: ColorConstants
+                                                                            .primaryColorWSP,
+                                                                        fontSize:
+                                                                            Adaptive.sp(
+                                                                                14),
+                                                                        fontWeight:
+                                                                            FontWeight.w800),
+                                                                  ),
+                                                                ]),
+                                                            const SizedBox(
+                                                              height: 10,
+                                                            ),
+                                                            RowSuper(
+                                                                fill: true,
+                                                                alignment:
+                                                                    Alignment
+                                                                        .center,
+                                                                children: [
+                                                                  Text(
+                                                                    'finalNoOfBags'
+                                                                        .tr(),
+                                                                    textAlign:
+                                                                        TextAlign
+                                                                            .start,
+                                                                    style: TextStyle(
+                                                                        color: ColorConstants
+                                                                            .primaryColorWSP,
+                                                                        fontSize:
+                                                                            Adaptive.sp(
+                                                                                14),
+                                                                        fontWeight:
+                                                                            FontWeight.w800),
+                                                                  ),
+                                                                  Text(
+                                                                    '${dataList[index].noOfBags ?? "pending".tr()}',
+                                                                    textAlign:
+                                                                        TextAlign
+                                                                            .end,
+                                                                    style: TextStyle(
+                                                                        color: ColorConstants
+                                                                            .primaryColorWSP,
+                                                                        fontSize:
+                                                                            Adaptive.sp(
+                                                                                14),
+                                                                        fontWeight:
+                                                                            FontWeight.w800),
+                                                                  ),
+                                                                ]),
+                                                            const SizedBox(
+                                                              height: 10,
+                                                            ),
+                                                            RowSuper(
+                                                                fill: true,
+                                                                alignment:
+                                                                    Alignment
+                                                                        .center,
+                                                                children: [
+                                                                  Text(
+                                                                    'receivingWeight'
+                                                                        .tr(),
+                                                                    textAlign:
+                                                                        TextAlign
+                                                                            .start,
+                                                                    style: TextStyle(
+                                                                        color: ColorConstants
+                                                                            .primaryColorWSP,
+                                                                        fontSize:
+                                                                            Adaptive.sp(
+                                                                                14),
+                                                                        fontWeight:
+                                                                            FontWeight.w800),
+                                                                  ),
+                                                                  Text(
+                                                                    '${dataList[index].recevingWeight ?? "pending".tr()}',
+                                                                    textAlign:
+                                                                        TextAlign
+                                                                            .end,
+                                                                    style: TextStyle(
+                                                                        color: ColorConstants
+                                                                            .primaryColorWSP,
+                                                                        fontSize:
+                                                                            Adaptive.sp(
+                                                                                14),
+                                                                        fontWeight:
+                                                                            FontWeight.w800),
+                                                                  ),
+                                                                ]),
+                                                            const SizedBox(
+                                                              height: 10,
+                                                            ),
+                                                            RowSuper(
+                                                                fill: true,
+                                                                alignment:
+                                                                    Alignment
+                                                                        .center,
+                                                                children: [
+                                                                  Text(
+                                                                    'receivingBags'
+                                                                        .tr(),
+                                                                    textAlign:
+                                                                        TextAlign
+                                                                            .start,
+                                                                    style: TextStyle(
+                                                                        color: ColorConstants
+                                                                            .primaryColorWSP,
+                                                                        fontSize:
+                                                                            Adaptive.sp(
+                                                                                14),
+                                                                        fontWeight:
+                                                                            FontWeight.w800),
+                                                                  ),
+                                                                  Text(
+                                                                    '${dataList[index].recevingBags ?? "pending".tr()}',
+                                                                    textAlign:
+                                                                        TextAlign
+                                                                            .end,
+                                                                    style: TextStyle(
+                                                                        color: ColorConstants
+                                                                            .primaryColorWSP,
+                                                                        fontSize:
+                                                                            Adaptive.sp(
+                                                                                14),
+                                                                        fontWeight:
+                                                                            FontWeight.w800),
+                                                                  ),
+                                                                ]),
+                                                            const SizedBox(
+                                                              height: 10,
+                                                            ),
+                                                            // RowSuper(
+                                                            //     fill: true,
+                                                            //     alignment:
+                                                            //         Alignment
+                                                            //             .center,
+                                                            //     children: [
+                                                            //       Text(
+                                                            //         '${dataList?[index].weight == null ? 'provBilty'.tr() : "provBilty".tr()}',
+                                                            //         textAlign:
+                                                            //             TextAlign
+                                                            //                 .start,
+                                                            //         style: TextStyle(
+                                                            //             color: ColorConstants
+                                                            //                 .primaryColorWSP,
+                                                            //             fontSize:
+                                                            //                 Adaptive.sp(
+                                                            //                     14),
+                                                            //             fontWeight:
+                                                            //                 FontWeight.w800),
+                                                            //       ),
+                                                            //       Align(
+                                                            //         alignment:
+                                                            //             Alignment
+                                                            //                 .centerRight,
+                                                            //         child:
+                                                            //             InkWell(
+                                                            //           onTap:
+                                                            //               () async {
+                                                            //             ref.watch(tripDataProvider(tripRequestid: "${dataList[index].id}").future).then(
+                                                            //                 (value) {
+                                                            //               ref.watch(createBiltyPdfProvider(context: context, model: value).future).then(
+                                                            //                   (value) async {
+                                                            //                 if (value !=
+                                                            //                     null) {
+                                                            //                   PDFDocument doc = await PDFDocument.fromFile(value ?? File(''));
+                                                            //                   showBarModalBottomSheet(context: context, builder: (context) => PDFViewer(document: doc));
+                                                            //                 }
+                                                            //               });
+                                                            //             });
+                                                            //           },
+                                                            //           child:
+                                                            //               Icon(
+                                                            //             CupertinoIcons
+                                                            //                 .eye,
+                                                            //             color: ColorConstants
+                                                            //                 .primaryColorWSP,
+                                                            //           ),
+                                                            //         ),
+                                                            //       )
+                                                            //     ]),
+                                                            RowSuper(
+                                                              fill: true,
+                                                              alignment:
+                                                                  Alignment
+                                                                      .center,
+                                                              children: [
+                                                                Text(
+                                                                  '${dataList?[index].weight == null ? 'provBilty'.tr() : "provBilty".tr()}',
+                                                                  textAlign:
+                                                                      TextAlign
+                                                                          .start,
+                                                                  style:
+                                                                      TextStyle(
                                                                     color: ColorConstants
-                                                                        .primaryColorDriver,
+                                                                        .primaryColorWSP,
                                                                     fontSize:
                                                                         Adaptive.sp(
                                                                             14),
                                                                     fontWeight:
                                                                         FontWeight
-                                                                            .w800),
-                                                              ),
-                                                              Text(
-                                                                '${dataList?[index].userPhone}',
-                                                                textAlign:
-                                                                    TextAlign
-                                                                        .end,
-                                                                style: TextStyle(
-                                                                    color: ColorConstants
-                                                                        .primaryColorDriver,
-                                                                    fontSize:
-                                                                        Adaptive.sp(
-                                                                            14),
-                                                                    fontWeight:
-                                                                        FontWeight
-                                                                            .w800),
-                                                              ),
-                                                            ]),
-                                                        const SizedBox(
-                                                          height: 10,
-                                                        ),
-                                                        RowSuper(
-                                                            fill: true,
-                                                            alignment: Alignment
-                                                                .center,
-                                                            children: [
-                                                              Text(
-                                                                'ratePerQtl'
-                                                                    .tr(),
-                                                                textAlign:
-                                                                    TextAlign
-                                                                        .start,
-                                                                style: TextStyle(
-                                                                    color: ColorConstants
-                                                                        .primaryColorDriver,
-                                                                    fontSize:
-                                                                        Adaptive.sp(
-                                                                            14),
-                                                                    fontWeight:
-                                                                        FontWeight
-                                                                            .w800),
-                                                              ),
-                                                              Text(
-                                                                '${currencyFormat.format(num.parse("${dataList?[index].rate ?? 0}"))} / perQtl'
-                                                                    .tr(),
-                                                                textAlign:
-                                                                    TextAlign
-                                                                        .end,
-                                                                style: TextStyle(
-                                                                    color: ColorConstants
-                                                                        .primaryColorDriver,
-                                                                    fontSize:
-                                                                        Adaptive.sp(
-                                                                            14),
-                                                                    fontWeight:
-                                                                        FontWeight
-                                                                            .w800),
-                                                              ),
-                                                            ]),
-                                                        const SizedBox(
-                                                          height: 10,
-                                                        ),
-                                                        RowSuper(
-                                                            fill: true,
-                                                            alignment: Alignment
-                                                                .center,
-                                                            children: [
-                                                              Text(
-                                                                'finalWeight'
-                                                                    .tr(),
-                                                                textAlign:
-                                                                    TextAlign
-                                                                        .start,
-                                                                style: TextStyle(
-                                                                    color: ColorConstants
-                                                                        .primaryColorDriver,
-                                                                    fontSize:
-                                                                        Adaptive.sp(
-                                                                            14),
-                                                                    fontWeight:
-                                                                        FontWeight
-                                                                            .w800),
-                                                              ),
-                                                              Text(
-                                                                '${dataList?[index].weight ?? "pending".tr()}',
-                                                                textAlign:
-                                                                    TextAlign
-                                                                        .end,
-                                                                style: TextStyle(
-                                                                    color: ColorConstants
-                                                                        .primaryColorDriver,
-                                                                    fontSize:
-                                                                        Adaptive.sp(
-                                                                            14),
-                                                                    fontWeight:
-                                                                        FontWeight
-                                                                            .w800),
-                                                              ),
-                                                            ]),
-                                                        const SizedBox(
-                                                          height: 10,
-                                                        ),
-                                                        RowSuper(
-                                                            fill: true,
-                                                            alignment: Alignment
-                                                                .center,
-                                                            children: [
-                                                              Text(
-                                                                'finalNoOfBags'
-                                                                    .tr(),
-                                                                textAlign:
-                                                                    TextAlign
-                                                                        .start,
-                                                                style: TextStyle(
-                                                                    color: ColorConstants
-                                                                        .primaryColorDriver,
-                                                                    fontSize:
-                                                                        Adaptive.sp(
-                                                                            14),
-                                                                    fontWeight:
-                                                                        FontWeight
-                                                                            .w800),
-                                                              ),
-                                                              Text(
-                                                                '${dataList?[index].noOfBags ?? "pending".tr()}',
-                                                                textAlign:
-                                                                    TextAlign
-                                                                        .end,
-                                                                style: TextStyle(
-                                                                    color: ColorConstants
-                                                                        .primaryColorDriver,
-                                                                    fontSize:
-                                                                        Adaptive.sp(
-                                                                            14),
-                                                                    fontWeight:
-                                                                        FontWeight
-                                                                            .w800),
-                                                              ),
-                                                            ]),
-                                                        const SizedBox(
-                                                          height: 10,
-                                                        ),
-                                                        RowSuper(
-                                                            fill: true,
-                                                            alignment: Alignment
-                                                                .center,
-                                                            children: [
-                                                              Text(
-                                                                'receivingWeight'
-                                                                    .tr(),
-                                                                textAlign:
-                                                                    TextAlign
-                                                                        .start,
-                                                                style: TextStyle(
-                                                                    color: ColorConstants
-                                                                        .primaryColorDriver,
-                                                                    fontSize:
-                                                                        Adaptive.sp(
-                                                                            14),
-                                                                    fontWeight:
-                                                                        FontWeight
-                                                                            .w800),
-                                                              ),
-                                                              Text(
-                                                                '${dataList?[index].recevingWeight ?? "pending".tr()}',
-                                                                textAlign:
-                                                                    TextAlign
-                                                                        .end,
-                                                                style: TextStyle(
-                                                                    color: ColorConstants
-                                                                        .primaryColorDriver,
-                                                                    fontSize:
-                                                                        Adaptive.sp(
-                                                                            14),
-                                                                    fontWeight:
-                                                                        FontWeight
-                                                                            .w800),
-                                                              ),
-                                                            ]),
-                                                        const SizedBox(
-                                                          height: 10,
-                                                        ),
-                                                        RowSuper(
-                                                            fill: true,
-                                                            alignment: Alignment
-                                                                .center,
-                                                            children: [
-                                                              Text(
-                                                                'receivingBags'
-                                                                    .tr(),
-                                                                textAlign:
-                                                                    TextAlign
-                                                                        .start,
-                                                                style: TextStyle(
-                                                                    color: ColorConstants
-                                                                        .primaryColorDriver,
-                                                                    fontSize:
-                                                                        Adaptive.sp(
-                                                                            14),
-                                                                    fontWeight:
-                                                                        FontWeight
-                                                                            .w800),
-                                                              ),
-                                                              Text(
-                                                                '${dataList?[index].recevingBags ?? "pending".tr()}',
-                                                                textAlign:
-                                                                    TextAlign
-                                                                        .end,
-                                                                style: TextStyle(
-                                                                    color: ColorConstants
-                                                                        .primaryColorDriver,
-                                                                    fontSize:
-                                                                        Adaptive.sp(
-                                                                            14),
-                                                                    fontWeight:
-                                                                        FontWeight
-                                                                            .w800),
-                                                              ),
-                                                            ]),
-                                                        const SizedBox(
-                                                          height: 10,
-                                                        ),
-                                                        RowSuper(
-                                                            fill: true,
-                                                            alignment: Alignment
-                                                                .center,
-                                                            children: [
-                                                              Text(
-                                                                '${dataList?[index].weight == null ? 'provBilty'.tr() : "provBilty".tr()}',
-                                                                textAlign:
-                                                                    TextAlign
-                                                                        .start,
-                                                                style: TextStyle(
-                                                                    color: ColorConstants
-                                                                        .primaryColorDriver,
-                                                                    fontSize:
-                                                                        Adaptive.sp(
-                                                                            14),
-                                                                    fontWeight:
-                                                                        FontWeight
-                                                                            .w800),
-                                                              ),
-                                                              Align(
-                                                                alignment: Alignment
-                                                                    .centerRight,
-                                                                child: InkWell(
-                                                                  onTap:
-                                                                      () async {
-                                                                    ref
-                                                                        .watch(tripDataProvider(tripRequestid: "${dataList?[index].id}")
-                                                                            .future)
-                                                                        .then(
-                                                                            (value) {
+                                                                            .w800,
+                                                                  ),
+                                                                ),
+                                                                Align(
+                                                                  alignment:
+                                                                      Alignment
+                                                                          .centerRight,
+                                                                  child:
+                                                                      InkWell(
+                                                                    onTap:
+                                                                        () async {
                                                                       ref
-                                                                          .watch(createBiltyPdfProvider(context: context, model: value)
+                                                                          .watch(tripDataProvider(tripRequestid: "${dataList[index].id}")
                                                                               .future)
                                                                           .then(
-                                                                              (value) async {
-                                                                        if (value !=
-                                                                            null) {
-                                                                          PDFDocument
-                                                                              doc =
-                                                                              await PDFDocument.fromFile(value ?? File(''));
-                                                                          showBarModalBottomSheet(
-                                                                              context: context,
-                                                                              builder: (context) => PDFViewer(document: doc));
-                                                                        }
-                                                                      });
-                                                                    });
-                                                                  },
-                                                                  child: Icon(
-                                                                    CupertinoIcons
-                                                                        .eye,
-                                                                    color: ColorConstants
-                                                                        .primaryColorDriver,
-                                                                  ),
-                                                                ),
-                                                              )
-                                                            ]),
-                                                        Height10,
-                                                        Row(
-                                                            mainAxisAlignment:
-                                                                MainAxisAlignment
-                                                                    .spaceBetween,
-                                                            children: [
-                                                              Text(
-                                                                'KantaImage'
-                                                                    .tr(),
-                                                                textAlign:
-                                                                    TextAlign
-                                                                        .start,
-                                                                style: TextStyle(
-                                                                    color: ColorConstants
-                                                                        .primaryColorDriver,
-                                                                    fontSize:
-                                                                        Adaptive.sp(
-                                                                            14),
-                                                                    fontWeight:
-                                                                        FontWeight
-                                                                            .w800),
-                                                              ),
-                                                              Container(
-                                                                // height: 60,
-                                                                // width: 60,
-                                                                decoration:
-                                                                    BoxDecoration(
-                                                                  shape: BoxShape
-                                                                      .circle,
-                                                                ),
-                                                                child:
-                                                                    GestureDetector(
-                                                                  onTap: () {
-                                                                    showDialog(
-                                                                      context:
-                                                                          context,
-                                                                      builder:
-                                                                          (BuildContext
-                                                                              context) {
-                                                                        return Dialog(
-                                                                          backgroundColor:
-                                                                              ColorConstants.secondaryColor,
-                                                                          child:
-                                                                              Container(
-                                                                            height:
-                                                                                200,
-                                                                            width:
-                                                                                MediaQuery.of(context).size.width,
-                                                                            child:
-                                                                                Image.network(
-                                                                              dataList?[index].kantaImage ?? "",
-                                                                              errorBuilder: (context, error, stackTrace) {
-                                                                                return Center(
-                                                                                    child: Text(
-                                                                                  "Image Not Found !",
-                                                                                  textAlign: TextAlign.center,
-                                                                                ));
-                                                                              },
-                                                                            ),
-                                                                          ),
-                                                                        );
-                                                                      },
-                                                                    );
-                                                                  },
-                                                                  child: Icon(
-                                                                    CupertinoIcons
-                                                                        .eye,
-                                                                    color: ColorConstants
-                                                                        .primaryColorVendor,
-                                                                  ),
-                                                                ),
-                                                              )
-                                                            ]),
-                                                        Row(
-                                                            mainAxisAlignment:
-                                                                MainAxisAlignment
-                                                                    .spaceBetween,
-                                                            children: [
-                                                              Text(
-                                                                'biltyImage'
-                                                                    .tr(),
-                                                                textAlign:
-                                                                    TextAlign
-                                                                        .start,
-                                                                style: TextStyle(
-                                                                    color: ColorConstants
-                                                                        .primaryColorDriver,
-                                                                    fontSize:
-                                                                        Adaptive.sp(
-                                                                            14),
-                                                                    fontWeight:
-                                                                        FontWeight
-                                                                            .w800),
-                                                              ),
-                                                              Container(
-                                                                decoration:
-                                                                    BoxDecoration(
-                                                                  shape: BoxShape
-                                                                      .circle,
-                                                                ),
-                                                                child:
-                                                                    GestureDetector(
-                                                                  onTap: () {
-                                                                    showDialog(
-                                                                      context:
-                                                                          context,
-                                                                      builder:
-                                                                          (BuildContext
-                                                                              context) {
-                                                                        return Dialog(
-                                                                          backgroundColor:
-                                                                              ColorConstants.secondaryColor,
-                                                                          child:
-                                                                              Container(
-                                                                            height:
-                                                                                200,
-                                                                            width:
-                                                                                MediaQuery.of(context).size.width,
-                                                                            child:
-                                                                                Image.network(
-                                                                              dataList?[index].biltyImage ?? "",
-                                                                              errorBuilder: (context, error, stackTrace) {
-                                                                                return Center(child: Text('Image Not Found!'));
-                                                                              },
-                                                                            ),
-                                                                          ),
-                                                                        );
-                                                                      },
-                                                                    );
-                                                                  },
-                                                                  child: Icon(
-                                                                    CupertinoIcons
-                                                                        .eye,
-                                                                    color: ColorConstants
-                                                                        .primaryColorVendor,
-                                                                  ),
-                                                                ),
-                                                              )
-                                                            ]),
+                                                                              (value) {
+                                                                        ref.watch(createBiltyPdfProvider(context: context, model: value).future).then(
+                                                                            (file) async {
+                                                                          if (file !=
+                                                                              null) {
+                                                                            if (await Permission.storage.request().isGranted) {
+                                                                              Directory? downloadsDirectory = Directory('/storage/emulated/0/Download');
+                                                                              if (await downloadsDirectory.exists()) {
+                                                                                String path = '${downloadsDirectory.path}/bilty_report.pdf';
 
-                                                        Row(
-                                                            mainAxisAlignment:
-                                                                MainAxisAlignment
-                                                                    .spaceBetween,
-                                                            children: [
-                                                              Text(
-                                                                'PaotiImage'
-                                                                    .tr(),
-                                                                textAlign:
-                                                                    TextAlign
-                                                                        .start,
-                                                                style: TextStyle(
-                                                                    color: ColorConstants
-                                                                        .primaryColorDriver,
-                                                                    fontSize:
-                                                                        Adaptive.sp(
-                                                                            14),
-                                                                    fontWeight:
-                                                                        FontWeight
-                                                                            .w800),
-                                                              ),
-                                                              Container(
-                                                                decoration:
-                                                                    BoxDecoration(
-                                                                  shape: BoxShape
-                                                                      .circle,
-                                                                ),
-                                                                child:
-                                                                    GestureDetector(
-                                                                  onTap: () {
-                                                                    showDialog(
-                                                                      context:
-                                                                          context,
-                                                                      builder:
-                                                                          (BuildContext
-                                                                              context) {
-                                                                        return Dialog(
-                                                                          backgroundColor:
-                                                                              ColorConstants.secondaryColor,
-                                                                          child:
-                                                                              Container(
-                                                                            height:
-                                                                                200,
-                                                                            width:
-                                                                                MediaQuery.of(context).size.width,
-                                                                            child:
-                                                                                Image.network(
-                                                                              dataList?[index].paotiImage ?? "",
-                                                                              errorBuilder: (context, error, stackTrace) {
-                                                                                return Center(child: Text('Image Not Found!'));
-                                                                              },
-                                                                            ),
-                                                                          ),
-                                                                        );
-                                                                      },
-                                                                    );
-                                                                  },
-                                                                  child: Icon(
-                                                                    CupertinoIcons
-                                                                        .eye,
-                                                                    color: ColorConstants
-                                                                        .primaryColorVendor,
+                                                                                await file.copy(path);
+
+                                                                                PDFDocument doc = await PDFDocument.fromFile(File(path));
+                                                                                showBarModalBottomSheet(
+                                                                                  context: context,
+                                                                                  builder: (context) => PDFViewer(document: doc),
+                                                                                );
+
+                                                                                ScaffoldMessenger.of(context).showSnackBar(
+                                                                                  SnackBar(content: Text('PDF saved at $path')),
+                                                                                );
+                                                                              }
+                                                                            } else {
+                                                                              ScaffoldMessenger.of(context).showSnackBar(
+                                                                                SnackBar(content: Text('Permission denied to access storage')),
+                                                                              );
+                                                                            }
+                                                                          }
+                                                                        });
+                                                                      });
+                                                                    },
+                                                                    child: Icon(
+                                                                      CupertinoIcons
+                                                                          .eye,
+                                                                      color: ColorConstants
+                                                                          .primaryColorWSP,
+                                                                    ),
                                                                   ),
                                                                 ),
-                                                              )
-                                                            ]),
-                                                        Row(
-                                                          mainAxisAlignment:
-                                                              MainAxisAlignment
-                                                                  .spaceAround,
-                                                          children: [
-                                                            MaterialButton(
-                                                                color: ColorConstants
-                                                                    .primaryColorVendor,
-                                                                child: Text(
-                                                                    'Cancel',
-                                                                    style: GoogleFonts
-                                                                        .aBeeZee(
-                                                                            color:
-                                                                                ColorConstants.secondaryColor)),
-                                                                onPressed: () {
-                                                                  Navigator.pop(
-                                                                      context);
-                                                                }),
-                                                            MaterialButton(
-                                                                color: ColorConstants
-                                                                    .secondaryColorWSP,
-                                                                child: Text(
-                                                                    'ok',
-                                                                    style: GoogleFonts
-                                                                        .aBeeZee(
-                                                                            color:
-                                                                                ColorConstants.secondaryColor)),
-                                                                onPressed: () {
-                                                                  Navigator.pop(
-                                                                      context);
-                                                                }),
+                                                              ],
+                                                            ),
+                                                            const SizedBox(
+                                                              height: 10,
+                                                            ),
+                                                            imageLayout(
+                                                                dataList[
+                                                                    index]),
+                                                            Divider(
+                                                              height: 2,
+                                                            ),
                                                           ],
-                                                        )
-                                                        // const SizedBox(
-                                                        //   height: 10,
-                                                        // ),
-                                                        // //imageLayout(dataList),
-                                                        // Divider(
-                                                        //   height: 2,
-                                                        // ),
-                                                      ],
-                                                    ),
-                                                  ),
-                                                );
-                                              },
-                                            );
+                                                        ),
+                                                      ),
+                                                    ));
                                           },
                                       ),
                                       textAlign: TextAlign.center,
@@ -1216,7 +1097,7 @@ class _DashboardState extends ConsumerState<Dashboard> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         TextOneLine(
-                          "Start Trips",
+                          "startTrip".tr(),
                           style: TextStyle(
                               fontWeight: FontWeight.bold,
                               color: Colors.white,
@@ -1264,7 +1145,7 @@ class _DashboardState extends ConsumerState<Dashboard> {
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          TextOneLine("End Trips",
+                          TextOneLine("endTrip".tr(),
                               style: TextStyle(
                                   color: Colors.white,
                                   fontWeight: FontWeight.bold,

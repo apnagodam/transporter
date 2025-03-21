@@ -153,6 +153,8 @@ class VerifyOtpProvider extends AutoDisposeFutureProvider<LoginResponseModel> {
   }
 }
 
+@Deprecated('Will be removed in 3.0. Use Ref instead')
+// ignore: unused_element
 mixin VerifyOtpRef on AutoDisposeFutureProviderRef<LoginResponseModel> {
   /// The parameter `number` of this provider.
   String? get number;
@@ -286,6 +288,8 @@ class SendOtpProvider extends AutoDisposeFutureProvider<Map<String, dynamic>> {
   }
 }
 
+@Deprecated('Will be removed in 3.0. Use Ref instead')
+// ignore: unused_element
 mixin SendOtpRef on AutoDisposeFutureProviderRef<Map<String, dynamic>> {
   /// The parameter `number` of this provider.
   String? get number;
@@ -416,6 +420,8 @@ class RegisterUserProvider
   }
 }
 
+@Deprecated('Will be removed in 3.0. Use Ref instead')
+// ignore: unused_element
 mixin RegisterUserRef on AutoDisposeFutureProviderRef<Map<String, dynamic>> {
   /// The parameter `data` of this provider.
   Map<String, dynamic>? get data;
@@ -430,4 +436,4 @@ class _RegisterUserProviderElement
   Map<String, dynamic>? get data => (origin as RegisterUserProvider).data;
 }
 // ignore_for_file: type=lint
-// ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member
+// ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, deprecated_member_use_from_same_package

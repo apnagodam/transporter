@@ -20,6 +20,8 @@ final stateListProvider =
   allTransitiveDependencies: null,
 );
 
+@Deprecated('Will be removed in 3.0. Use Ref instead')
+// ignore: unused_element
 typedef StateListRef = AutoDisposeFutureProviderRef<StatesResponseModel>;
 String _$districtListHash() => r'2bb37e71dceb85bd4e44669fb5c18f22e86ed79e';
 
@@ -158,6 +160,8 @@ class DistrictListProvider
   }
 }
 
+@Deprecated('Will be removed in 3.0. Use Ref instead')
+// ignore: unused_element
 mixin DistrictListRef on AutoDisposeFutureProviderRef<DistrictsResponseModel> {
   /// The parameter `code` of this provider.
   String? get code;
@@ -172,4 +176,4 @@ class _DistrictListProviderElement
   String? get code => (origin as DistrictListProvider).code;
 }
 // ignore_for_file: type=lint
-// ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member
+// ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, deprecated_member_use_from_same_package

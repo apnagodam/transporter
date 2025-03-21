@@ -149,7 +149,7 @@ class _TripshistoryState extends ConsumerState<Tripshistory> {
                                                             MainAxisSize.min,
                                                         children: [
                                                           Text(
-                                                            "tripDetails".tr(),
+                                                            "Trip Details".tr(),
                                                             style: TextStyle(
                                                                 fontWeight:
                                                                     FontWeight
@@ -163,6 +163,40 @@ class _TripshistoryState extends ConsumerState<Tripshistory> {
                                                           const SizedBox(
                                                             height: 10,
                                                           ),
+                                                          RowSuper(
+                                                              fill: true,
+                                                              children: [
+                                                                Text(
+                                                                  'tripId'.tr(),
+                                                                  textAlign:
+                                                                      TextAlign
+                                                                          .start,
+                                                                  style: TextStyle(
+                                                                      color: ColorConstants
+                                                                          .primaryColorDriver,
+                                                                      fontSize:
+                                                                          Adaptive.sp(
+                                                                              14),
+                                                                      fontWeight:
+                                                                          FontWeight
+                                                                              .w800),
+                                                                ),
+                                                                Text(
+                                                                  '${dataList?[index].tripId ?? "--"}',
+                                                                  textAlign:
+                                                                      TextAlign
+                                                                          .end,
+                                                                  style: TextStyle(
+                                                                      color: ColorConstants
+                                                                          .primaryColorDriver,
+                                                                      fontSize:
+                                                                          Adaptive.sp(
+                                                                              14),
+                                                                      fontWeight:
+                                                                          FontWeight
+                                                                              .w800),
+                                                                ),
+                                                              ]),
                                                           RowSuper(
                                                               fill: true,
                                                               children: [

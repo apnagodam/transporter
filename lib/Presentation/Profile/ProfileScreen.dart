@@ -84,19 +84,19 @@ class _ProfilescreenState extends ConsumerState<Profilescreen> {
                     ),
                     CupertinoButton(
                         onPressed: null,
-                        child: Text('-: ' + 'Personal Details'.tr() + ' :-',
+                        child: Text('-: ' + 'PersonalDetails'.tr() + ' :-',
                             style: GoogleFonts.aBeeZee(
                                 decoration: TextDecoration.underline,
                                 color: ColorConstants.secondaryColor,
                                 fontWeight: FontWeight.bold,
                                 fontSize: Adaptive.sp(17)))),
                     Text(
-                      'Firm Name'.tr() +
+                      'Firm Name :-  '.tr() +
                           '${ref.watch(sharedUtilityProvider).getUser()?.firmName ?? ""},',
                       style: StyleConstants.Googleprofile(),
                     ),
                     Text(
-                      'Mobile Number'.tr() +
+                      'Mobile Number :- '.tr() +
                           "" +
                           '${ref.watch(sharedUtilityProvider).getUser()?.phone ?? ""}',
                       style: StyleConstants.Googleprofile(),
@@ -127,7 +127,7 @@ class _ProfilescreenState extends ConsumerState<Profilescreen> {
                       children: [
                         CupertinoButton(
                             onPressed: null,
-                            child: Text('-: Details :-',
+                            child: Text('-: Details :-'.tr(),
                                 style: GoogleFonts.aBeeZee(
                                     decoration: TextDecoration.underline,
                                     color: ColorConstants.primaryColorVendor,
@@ -135,7 +135,7 @@ class _ProfilescreenState extends ConsumerState<Profilescreen> {
                                     fontSize: Adaptive.sp(17)))),
                         Height20,
                         Text(
-                          'प्रथम नाम और अंतिम नाम*',
+                          'fistAndLastName'.tr(),
                           style: StyleConstants.GoogleprofileTextFeild(),
                         ),
                         Height10,
@@ -155,7 +155,7 @@ class _ProfilescreenState extends ConsumerState<Profilescreen> {
                         ),
                         Height10,
                         Text(
-                          'मोबाइल नंबर*',
+                          'phoneNumber'.tr(),
                           style: StyleConstants.GoogleprofileTextFeild(),
                         ),
                         Height10,
@@ -175,7 +175,7 @@ class _ProfilescreenState extends ConsumerState<Profilescreen> {
                         ),
                         Height10,
                         Text(
-                          'पैन कार्ड नंबर*',
+                          'PenCardNumber'.tr(),
                           style: StyleConstants.GoogleprofileTextFeild(),
                         ),
                         Height10,
@@ -195,7 +195,7 @@ class _ProfilescreenState extends ConsumerState<Profilescreen> {
                         ),
                         Height10,
                         Text(
-                          'आधार कार्ड नंबर.*',
+                          'adharNumber'.tr(),
                           style: StyleConstants.GoogleprofileTextFeild(),
                         ),
                         Height10,
@@ -215,7 +215,7 @@ class _ProfilescreenState extends ConsumerState<Profilescreen> {
                         ),
                         Height10,
                         Text(
-                          'पता*',
+                          'address'.tr(),
                           style: StyleConstants.GoogleprofileTextFeild(),
                         ),
                         Height10,
@@ -238,12 +238,12 @@ class _ProfilescreenState extends ConsumerState<Profilescreen> {
                           children: [
                             Expanded(
                                 child: Text(
-                              'राज्य का नाम*',
+                              'state'.tr(),
                               style: StyleConstants.GoogleprofileTextFeild(),
                             )),
                             Expanded(
                                 child: Text(
-                              '   शहर का नाम*',
+                              'city'.tr(),
                               style: StyleConstants.GoogleprofileTextFeild(),
                             )),
                           ],
@@ -290,7 +290,7 @@ class _ProfilescreenState extends ConsumerState<Profilescreen> {
                         ),
                         Height10,
                         Text(
-                          'बैंक का नाम*',
+                          'bankName'.tr(),
                           style: StyleConstants.GoogleprofileTextFeild(),
                         ),
                         Height10,
@@ -310,7 +310,7 @@ class _ProfilescreenState extends ConsumerState<Profilescreen> {
                         ),
                         Height10,
                         Text(
-                          'बैंक शाखा का पता*',
+                          'bankAddress'.tr(),
                           style: StyleConstants.GoogleprofileTextFeild(),
                         ),
                         Height10,
@@ -330,7 +330,7 @@ class _ProfilescreenState extends ConsumerState<Profilescreen> {
                         ),
                         Height10,
                         Text(
-                          'बैंक खाता संख्या*',
+                          'bankAccountNumber'.tr(),
                           style: StyleConstants.GoogleprofileTextFeild(),
                         ),
                         Height10,
@@ -350,7 +350,7 @@ class _ProfilescreenState extends ConsumerState<Profilescreen> {
                         ),
                         Height10,
                         Text(
-                          'बैंक IFSC कोड*',
+                          'bankIFCe'.tr(),
                           style: StyleConstants.GoogleprofileTextFeild(),
                         ),
                         Height10,
