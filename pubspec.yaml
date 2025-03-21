@@ -128,7 +128,10 @@ flutter:
         - asset: assets/fonts/Roboto-Regular.ttf 
     - family: krutidev
       fonts:
-        - asset: assets/fonts/KRDEV.ttf           
+        - asset: assets/fonts/KRDEV.ttf
+    - family: notosansdev
+      fonts:
+        - asset: assets/fonts/notosansdev.ttf
   #   - family: Trajan Pro
   #     fonts:
   #       - asset: fonts/TrajanPro.ttf

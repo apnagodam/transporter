@@ -944,26 +944,24 @@ class _DashboardState extends ConsumerState<Dashboard> {
                                                                             (file) async {
                                                                           if (file !=
                                                                               null) {
-                                                                            if (await Permission.storage.request().isGranted) {
-                                                                              Directory? downloadsDirectory = Directory('/storage/emulated/0/Download');
-                                                                              if (await downloadsDirectory.exists()) {
-                                                                                String path = '${downloadsDirectory.path}/bilty_report.pdf';
+                                                                            Directory? downloadsDirectory = Directory('/storage/emulated/0/Download');
+                                                                            if (await downloadsDirectory.exists()) {
+                                                                              String path = '${downloadsDirectory.path}/bilty_report.pdf';
+                                                                              var existingFile = File(path);
 
-                                                                                await file.copy(path);
-
-                                                                                PDFDocument doc = await PDFDocument.fromFile(File(path));
-                                                                                showBarModalBottomSheet(
-                                                                                  context: context,
-                                                                                  builder: (context) => PDFViewer(document: doc),
-                                                                                );
-
-                                                                                ScaffoldMessenger.of(context).showSnackBar(
-                                                                                  SnackBar(content: Text('PDF saved at $path')),
-                                                                                );
+                                                                              if(existingFile.existsSync()){
+                                                                                existingFile.deleteSync();
                                                                               }
-                                                                            } else {
+                                                                              await file.copy(path);
+
+                                                                              PDFDocument doc = await PDFDocument.fromFile(File(path));
+                                                                              showBarModalBottomSheet(
+                                                                                context: context,
+                                                                                builder: (context) => PDFViewer(document: doc),
+                                                                              );
+
                                                                               ScaffoldMessenger.of(context).showSnackBar(
-                                                                                SnackBar(content: Text('Permission denied to access storage')),
+                                                                                SnackBar(content: Text('PDF saved at $path')),
                                                                               );
                                                                             }
                                                                           }

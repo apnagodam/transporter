@@ -648,15 +648,7 @@ class _TripshistoryState extends ConsumerState<Tripshistory> {
                                   )),
                                   const VerticalDivider(),
                                   Expanded(
-                                      child: Text.rich(
-                                    TextSpan(
-                                      text: "${dataList?[index].toAddress}",
-                                    ),
-                                    textAlign: TextAlign.center,
-                                    style: TextStyle(
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: Adaptive.sp(14)),
-                                  )),
+                                      child: Text("${dataList?[index].toAddress}")),
                                   const VerticalDivider(),
                                   Expanded(
                                       child: Text.rich(
@@ -676,7 +668,6 @@ class _TripshistoryState extends ConsumerState<Tripshistory> {
                               ),
                             ),
                           ),
-                          Divider()
                           // tripRequestLayout(dataList?[index])
                         ],
                       ),
